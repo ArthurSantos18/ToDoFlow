@@ -1,0 +1,6 @@
+@ToDoFlow.API_HostAddress = http://localhost:5282
+
+GET {{ToDoFlow.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
