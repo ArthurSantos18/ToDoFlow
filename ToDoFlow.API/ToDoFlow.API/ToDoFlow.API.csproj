@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ToDoFlow.Infrastructure\ToDoFlow.Infrastructure.csproj" />
     <ProjectReference Include="..\ToDoFlow.Services\ToDoFlow.Services.csproj" />
   </ItemGroup>

@@ -9,7 +9,7 @@ namespace ToDoFlow.Domain.Models
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
-        public Profile Profile { get; set; }
-        public List<TaskItem> Tasks { get; set; }
+        public Profile Profile { get; set; } = Profile.Padrão;
+        public List<Category> Categories { get; set; }
     }
 }

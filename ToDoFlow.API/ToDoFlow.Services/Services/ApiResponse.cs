@@ -1,6 +1,6 @@
 ﻿namespace ToDoFlow.Services.Services
 {
-    public class Response<T> (T data, bool success, string message, int httpStatus)
+    public class ApiResponse<T> (T data, bool success, string message, int httpStatus)
     {
         public T Data { get; set; } = data;
         public bool Success { get; set; } = success;

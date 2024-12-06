@@ -10,10 +10,8 @@ namespace ToDoFlow.Domain.Models
         public Status Status { get; set; } = Status.Pendente;
         public Priority Priority { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? CompleteAt { get; set; } = new DateTime();
+        public DateTime? CompleteAt { get; set; } = null;
         public int CategoryId { get; set; }
         public Category Category { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
     }
 }

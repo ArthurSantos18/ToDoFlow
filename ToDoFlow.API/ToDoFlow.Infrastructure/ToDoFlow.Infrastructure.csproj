@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\Interface\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -24,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ToDoFlow.Application\ToDoFlow.Application.csproj" />
     <ProjectReference Include="..\ToDoFlow.Domain\ToDoFlow.Domain.csproj" />
+    <ProjectReference Include="..\ToDoFlow.Services\ToDoFlow.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using ToDoFlow.Domain.Models;
 
 namespace ToDoFlow.Infrastructure.Context
@@ -17,6 +16,5 @@ namespace ToDoFlow.Infrastructure.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
-
     }
 }

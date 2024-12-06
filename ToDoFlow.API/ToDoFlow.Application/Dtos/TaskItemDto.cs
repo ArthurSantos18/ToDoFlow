@@ -6,10 +6,13 @@ namespace ToDoFlow.Application.Dtos
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public Priority Priority { get; set; }
+        public Priority Priority { get; set; }        
     }
 
-    public class TaskItemCreateDto : TaskItemBaseDto { }
+    public class TaskItemCreateDto : TaskItemBaseDto
+    {
+        public int CategoryId { get; set; }
+    }
 
     public class TaskItemReadDto : TaskItemBaseDto
     {
@@ -19,8 +22,9 @@ namespace ToDoFlow.Application.Dtos
         public Status Status { get; set; }
     }
 
-    public class TaskItemUpdateDto : TaskItemBaseDto
+    public class TaskItemUpdateDto : TaskItemBaseDto    
     {
+        public int Id { get; set; }
         public Status? Status { get; set; }
     }
 }

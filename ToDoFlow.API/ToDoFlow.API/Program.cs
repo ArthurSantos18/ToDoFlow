@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoFlow.Infrastructure.Context;
+using ToDoFlow.Infrastructure.Repositories;
+using ToDoFlow.Infrastructure.Repositories.Interface;
 using ToDoFlow.Services.Services;
 
 namespace ToDoFlow.API
@@ -24,6 +26,10 @@ namespace ToDoFlow.API
                     builder.Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("ToDoFlow.Infrastructure"));
             });
+
+            builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             var app = builder.Build();
 

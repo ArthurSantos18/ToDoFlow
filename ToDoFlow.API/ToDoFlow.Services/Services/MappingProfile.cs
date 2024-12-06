@@ -15,14 +15,13 @@ namespace ToDoFlow.Services.Services
 
             // CategoryMap
             CreateMap<CategoryCreateDto, Category>();
-            CreateMap<Category, CategoryReadDto>();
+            CreateMap<Category, CategoryReadDto>().ForMember(dest => dest.Tasks, opt => opt.MapFrom(src => src.Tasks));
             CreateMap<CategoryUpdateDto, Category>();
 
             // UserMap
-            CreateMap<UserReadDto, User>();
-            CreateMap<User, UserReadDto>();
+            CreateMap<UserCreateDto, User>();
+            CreateMap<User, UserReadDto>().ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories));
             CreateMap<UserUpdateDto, User>();
         }
-
     }
 }

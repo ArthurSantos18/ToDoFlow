@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoFlow.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using ToDoFlow.Infrastructure.Context;
 namespace ToDoFlow.Infrastructure.Migrations
 {
     [DbContext(typeof(ToDoFlowContext))]
-    partial class ToDoFlowContextModelSnapshot : ModelSnapshot
+    [Migration("20241206200049_AtualizaçaoDB4")]
+    partial class AtualizaçaoDB4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

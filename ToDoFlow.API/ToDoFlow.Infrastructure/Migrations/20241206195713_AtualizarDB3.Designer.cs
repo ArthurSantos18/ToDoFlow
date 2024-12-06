@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoFlow.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using ToDoFlow.Infrastructure.Context;
 namespace ToDoFlow.Infrastructure.Migrations
 {
     [DbContext(typeof(ToDoFlowContext))]
-    partial class ToDoFlowContextModelSnapshot : ModelSnapshot
+    [Migration("20241206195713_AtualizarDB3")]
+    partial class AtualizarDB3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,7 +149,7 @@ namespace ToDoFlow.Infrastructure.Migrations
                     b.HasOne("ToDoFlow.Domain.Models.Category", "Category")
                         .WithMany("Tasks")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");

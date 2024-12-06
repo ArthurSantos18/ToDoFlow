@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoFlow.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using ToDoFlow.Infrastructure.Context;
 namespace ToDoFlow.Infrastructure.Migrations
 {
     [DbContext(typeof(ToDoFlowContext))]
-    partial class ToDoFlowContextModelSnapshot : ModelSnapshot
+    [Migration("20241203163704_Atualizando-DB")]
+    partial class AtualizandoDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,9 +89,15 @@ namespace ToDoFlow.Infrastructure.Migrations
                         .HasColumnType("tinyint")
                         .HasColumnName("status");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("task_items", (string)null);
                 });
@@ -146,10 +155,18 @@ namespace ToDoFlow.Infrastructure.Migrations
                     b.HasOne("ToDoFlow.Domain.Models.Category", "Category")
                         .WithMany("Tasks")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ToDoFlow.Domain.Models.User", "User")
+                        .WithMany("Tasks")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ToDoFlow.Domain.Models.Category", b =>
@@ -160,6 +177,8 @@ namespace ToDoFlow.Infrastructure.Migrations
             modelBuilder.Entity("ToDoFlow.Domain.Models.User", b =>
                 {
                     b.Navigation("Categories");
+
+                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

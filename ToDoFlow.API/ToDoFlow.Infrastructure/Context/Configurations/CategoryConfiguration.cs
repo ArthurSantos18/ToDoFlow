@@ -14,6 +14,9 @@ namespace ToDoFlow.Infrastructure.Context.Configurations
 
             builder.Property(c => c.Id).HasColumnName("id").HasColumnType("int");
             builder.Property(c => c.Name).HasColumnName("name").HasColumnType("varchar(40)");
+
+            builder.Property(t => t.UserId).HasColumnName("user_id");
+            builder.HasOne(u => u.User).WithMany(u => u.Categories).HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

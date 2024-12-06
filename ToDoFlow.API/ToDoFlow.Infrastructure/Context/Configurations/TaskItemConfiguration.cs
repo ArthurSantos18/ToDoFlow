@@ -21,10 +21,7 @@ namespace ToDoFlow.Infrastructure.Context.Configurations
             builder.Property(t => t.CompleteAt).HasColumnName("complete_at").HasColumnType("datetime");
 
             builder.Property(t => t.CategoryId).HasColumnName("category_id").HasColumnType("int");
-            builder.HasOne(c => c.Category).WithMany(c => c.Tasks).HasForeignKey(t => t.CategoryId);
-
-            builder.Property(t => t.UserId).HasColumnName("user_id");
-            builder.HasOne(u => u.User).WithMany(u => u.Tasks).HasForeignKey(u => u.UserId);
+            builder.HasOne(c => c.Category).WithMany(c => c.Tasks).HasForeignKey(t => t.CategoryId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

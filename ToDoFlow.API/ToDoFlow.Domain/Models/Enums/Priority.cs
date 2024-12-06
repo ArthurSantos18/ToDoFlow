@@ -1,5 +1,8 @@
-﻿namespace ToDoFlow.Domain.Models.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace ToDoFlow.Domain.Models.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Priority
     {
         Baixa = 0,

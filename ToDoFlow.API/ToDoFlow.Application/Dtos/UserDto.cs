@@ -1,4 +1,5 @@
-﻿using ToDoFlow.Domain.Models.Enums;
+﻿using ToDoFlow.Domain.Models;
+using ToDoFlow.Domain.Models.Enums;
 
 namespace ToDoFlow.Application.Dtos
 {
@@ -10,19 +11,19 @@ namespace ToDoFlow.Application.Dtos
 
     public class UserCreateDto : UserBaseDto
     {
-        public string Password { get; set; }
-        public Profile Profile { get; set; }
+        public string PasswordHash { get; set; }
     }
 
     public class UserReadDto : UserBaseDto
     {
         public int Id { get; set; }
-        public List<TaskItemReadDto> Tasks { get; set; }
+        public List<CategoryReadDto> Categories { get; set; }
+        public Profile? Profile { get; set; }
     }
 
     public class UserUpdateDto : UserBaseDto
     {
+        public int Id { get; set; }
         public Profile? Profile { get; set; }
     }
-
 }
