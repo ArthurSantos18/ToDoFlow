@@ -22,7 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ToDoFlow.Application\ToDoFlow.Application.csproj" />
     <ProjectReference Include="..\ToDoFlow.Domain\ToDoFlow.Domain.csproj" />
-    <ProjectReference Include="..\ToDoFlow.Services\ToDoFlow.Services.csproj" />
   </ItemGroup>
 
 </Project>

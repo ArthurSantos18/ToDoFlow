@@ -1,14 +1,13 @@
-﻿using ToDoFlow.Application.Dtos;
-using ToDoFlow.Services.Services;
+﻿using ToDoFlow.Domain.Models;
 
 namespace ToDoFlow.Infrastructure.Repositories.Interface
 {
     public interface ICategoryRepository
     {
-        Task<ApiResponse<List<CategoryReadDto>>> CreateCategoryAsync(CategoryCreateDto categoryCreateDto);
-        Task<ApiResponse<List<CategoryReadDto>>> ReadCategoryAsync();
-        Task<ApiResponse<CategoryReadDto>> ReadCategoryAsync(int id);
-        Task<ApiResponse<List<CategoryReadDto>>> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto);
-        Task<ApiResponse<List<CategoryReadDto>>> DeleteCategoryAsync(int id);
+        public Task<List<Category>> CreateCategoryAsync(Category category);
+        public Task<List<Category>> ReadCategoryAsync();
+        public Task<Category> ReadCategoryAsync(int id);
+        public Task<List<Category>> UpdateCategoryAsync(Category category);
+        public Task<List<Category>> DeleteCategoryAsync(int id);
     }
 }

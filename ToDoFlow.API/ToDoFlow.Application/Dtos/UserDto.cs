@@ -24,6 +24,7 @@ namespace ToDoFlow.Application.Dtos
     public class UserUpdateDto : UserBaseDto
     {
         public int Id { get; set; }
+        public string PasswordHash { get; set; }
         public Profile? Profile { get; set; }
     }
 }

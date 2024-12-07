@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
-using ToDoFlow.Infrastructure.Repositories.Interface;
+using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.API.Controllers
 {
@@ -9,41 +8,41 @@ namespace ToDoFlow.API.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+        public CategoryController(ICategoryService categoryService)
         {
-            _categoryRepository = categoryRepository;
+            _categoryService = categoryService;
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateCategoryAsync(CategoryCreateDto categoryCreateDto)
         {
-            return Ok(await _categoryRepository.CreateCategoryAsync(categoryCreateDto));
+            return Ok(await _categoryService.CreateCategoryAsync(categoryCreateDto));
         }
         
         [HttpGet]
         public async Task<ActionResult> ReadCategoryAsync()
         {
-            return Ok(await _categoryRepository.ReadCategoryAsync());
+            return Ok(await _categoryService.ReadCategoryAsync());
         }
 
         [HttpGet("Id")]
         public async Task<ActionResult> ReadCategoryAsync(int id)
         {
-            return Ok(await _categoryRepository.ReadCategoryAsync(id));
+            return Ok(await _categoryService.ReadCategoryAsync(id));
         }
 
         [HttpPut]
         public async Task<ActionResult> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto)
         {
-            return Ok(await _categoryRepository.UpdateCategoryAsync(categoryUpdateDto));
+            return Ok(await _categoryService.UpdateCategoryAsync(categoryUpdateDto));
         }
 
         [HttpDelete("Id")]
         public async Task<ActionResult> DeleteCategoryAsync(int id)
         {
-            return Ok(await _categoryRepository.DeleteCategoryAsync(id));
+            return Ok(await _categoryService.DeleteCategoryAsync(id));
         }
     }
 }

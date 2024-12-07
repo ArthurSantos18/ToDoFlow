@@ -3,6 +3,7 @@ using ToDoFlow.Infrastructure.Context;
 using ToDoFlow.Infrastructure.Repositories;
 using ToDoFlow.Infrastructure.Repositories.Interface;
 using ToDoFlow.Services.Services;
+using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.API
 {
@@ -12,10 +13,7 @@ namespace ToDoFlow.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -31,9 +29,14 @@ namespace ToDoFlow.API
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<ITaskItemService, TaskItemService>();
+
+            builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

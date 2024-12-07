@@ -1,14 +1,13 @@
-﻿using ToDoFlow.Application.Dtos;
-using ToDoFlow.Services.Services;
+﻿using ToDoFlow.Domain.Models;
 
 namespace ToDoFlow.Infrastructure.Repositories.Interface
 {
     public interface ITaskItemRepository
     {
-        Task<ApiResponse<List<TaskItemReadDto>>> CreateTaskItemAsync(TaskItemCreateDto TaskItemCreateDto);
-        Task<ApiResponse<List<TaskItemReadDto>>> ReadTaskItemAsync();
-        Task<ApiResponse<TaskItemReadDto>> ReadTaskItemAsync(int id);
-        Task<ApiResponse<List<TaskItemReadDto>>> UpdateTaskItemAsync(TaskItemUpdateDto taskItemUpdateDto);
-        Task<ApiResponse<List<TaskItemReadDto>>> DeleteTaskItemAsync(int id);
+        public Task<List<TaskItem>> CreateTaskItemAsync(TaskItem taskItem);
+        public Task<List<TaskItem>> ReadTaskItemAsync();
+        public Task<TaskItem> ReadTaskItemAsync(int id);
+        public Task<List<TaskItem>> UpdateTaskItemAsync(TaskItem taskItem);
+        public Task<List<TaskItem>> DeleteTaskItemAsync(int id);
     }
 }
