@@ -24,7 +24,7 @@ namespace ToDoFlow.Services.Services
             try
             {
                 User user = _mapper.Map<User>(userCreateDto);
-                user.PasswordHash = _encryptionService.HashPassword(user.PasswordHash);
+                user.Password = _encryptionService.HashPassword(user.Password);
                 await _userRepository.CreateUserAsync(user);
 
                 List<User> users = await _userRepository.ReadUserAsync();
@@ -34,7 +34,7 @@ namespace ToDoFlow.Services.Services
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null, false, $"Erro: ${ex.Message}", 500);
+                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: ${ex.Message}", 500);
             }
         }
 
@@ -49,7 +49,7 @@ namespace ToDoFlow.Services.Services
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: {ex.Message}", 500);
             }
         }
 
@@ -64,7 +64,7 @@ namespace ToDoFlow.Services.Services
             }
             catch (Exception ex)
             {
-                return new ApiResponse<UserReadDto>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<UserReadDto>(null!, false, $"Erro: {ex.Message}", 500);
             }
         }
 
@@ -74,7 +74,7 @@ namespace ToDoFlow.Services.Services
             {
                 User user = await _userRepository.ReadUserAsync(userUpdateDto.Id);
                 _mapper.Map(userUpdateDto, user);
-                user.PasswordHash = _encryptionService.HashPassword(userUpdateDto.PasswordHash);
+                user.Password = _encryptionService.HashPassword(userUpdateDto.Password);
                 await _userRepository.UpdateUserAsync(user);
 
                 List<User> users = await _userRepository.ReadUserAsync();
@@ -85,7 +85,7 @@ namespace ToDoFlow.Services.Services
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: {ex.Message}", 500);
             }
         }
 
@@ -102,7 +102,7 @@ namespace ToDoFlow.Services.Services
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: {ex.Message}", 500);
             }
         }
     }

@@ -1,10 +1,8 @@
-﻿using ToDoFlow.Domain.Models;
-
-namespace ToDoFlow.Application.Dtos
+﻿namespace ToDoFlow.Application.Dtos
 {
     public abstract class CategoryBaseDto
     {
-        public string Name { get; set; }
+        public required string Name { get; set; }
     }
     public class CategoryCreateDto : CategoryBaseDto
     {
@@ -13,7 +11,7 @@ namespace ToDoFlow.Application.Dtos
     public class CategoryReadDto : CategoryBaseDto
     {
         public int Id { get; set; }
-        public List<TaskItemReadDto> Tasks { get; set; }
+        public List<TaskItemReadDto>? Tasks { get; set; }
     }
     public class CategoryUpdateDto : CategoryBaseDto
     {
