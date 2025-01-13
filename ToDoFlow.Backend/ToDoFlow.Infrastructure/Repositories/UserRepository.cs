@@ -32,6 +32,11 @@ namespace ToDoFlow.Infrastructure.Repositories
             return await _context.Users.Include(c => c.Categories).FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task<User> ReadUserAsync(string email)
+        {
+            return await _context.Users.Include(c => c.Categories).FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<List<User>> UpdateUserAsync(User user)
         {
 

@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 using ToDoFlow.Infrastructure.Context;
 using ToDoFlow.Infrastructure.Repositories;
 using ToDoFlow.Infrastructure.Repositories.Interface;
@@ -15,11 +19,37 @@ namespace ToDoFlow.API
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(
+                c =>
+                {
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = "Exemplo: 'bearer {token}'",
+                        Type = SecuritySchemeType.ApiKey,
+                        Name = "Authorization",
+                        In = ParameterLocation.Header
+                    });
+
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[]{}
+                        }
+                    });
+                });
 
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
-            builder.Services.AddDbContext<ToDoFlowContext>(options => {
+            builder.Services.AddDbContext<ToDoFlowContext>(options =>
+            {
                 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("ToDoFlow.Infrastructure"));
@@ -33,7 +63,41 @@ namespace ToDoFlow.API
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
 
+            builder.Services.AddScoped<IAccountService, AccountService>();
+
             builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                    ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"])),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalHost", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowCredentials().AllowAnyMethod();
+                });
+            });
 
             var app = builder.Build();
 
@@ -45,8 +109,10 @@ namespace ToDoFlow.API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("AllowLocalHost");
 
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 

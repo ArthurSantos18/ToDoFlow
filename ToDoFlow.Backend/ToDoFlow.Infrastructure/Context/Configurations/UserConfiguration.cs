@@ -15,7 +15,7 @@ namespace ToDoFlow.Infrastructure.Context.Configurations
             builder.Property(u => u.Id).HasColumnName("id").HasColumnType("int");
             builder.Property(u => u.Name).HasColumnName("name").HasColumnType("varchar(100)");
             builder.Property(u => u.Email).HasColumnName("email").HasColumnType("varchar(100)");
-            builder.Property(u => u.PasswordHash).HasColumnName("password_hash").HasColumnType("varchar(60)");
+            builder.Property(u => u.Password).HasColumnName("password_hash").HasColumnType("varchar(60)");
             builder.Property(u => u.CreateAt).HasColumnName("create_at").HasColumnType("datetime");
             builder.Property(u => u.Profile).HasColumnName("profile").HasColumnType("tinyint");
         }

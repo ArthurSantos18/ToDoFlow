@@ -22,6 +22,9 @@ namespace ToDoFlow.Services.Services
             CreateMap<UserCreateDto, User>();
             CreateMap<User, UserReadDto>().ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories));
             CreateMap<UserUpdateDto, User>();
+
+            //AccountAuthMap
+            CreateMap<RegisterRequestDto, User>();
         }
     }
 }

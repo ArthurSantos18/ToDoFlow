@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Services.Services.Interface;
 
@@ -6,6 +7,7 @@ namespace ToDoFlow.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
