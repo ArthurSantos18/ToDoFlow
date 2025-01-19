@@ -6,7 +6,7 @@ namespace ToDoFlow.Application.Dtos
     {
         public required string Name { get; set; }
         public required string Description { get; set; }
-        public Priority Priority { get; set; }        
+        public Priority Priority { get; set; }
     }
 
     public class TaskItemCreateDto : TaskItemBaseDto
@@ -17,8 +17,8 @@ namespace ToDoFlow.Application.Dtos
     public class TaskItemReadDto : TaskItemBaseDto
     {
         public int Id { get; set; }
-        public DateTime CreateAt { get; set; }
-        public DateTime? CompleteAt { get; set; } = new DateTime();
+        public DateTime CreatedAt { get; set; }
+        public DateTime? CompleteAt { get; set; }
         public Status Status { get; set; }
     }
 

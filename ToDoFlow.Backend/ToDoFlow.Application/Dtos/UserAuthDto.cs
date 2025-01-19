@@ -11,11 +11,7 @@ namespace ToDoFlow.Application.Dtos
 
     public class RegisterRequestDto : UserAuthDtoBase
     {
-        public required string UserName { get; set; }
-    }
-
-    public class TokenRequestDto : UserAuthDtoBase
-    {
-        public required Profile Profile { get; set; } = Profile.Padrão;
+        public required string Name { get; set; }
+        public required string ConfirmPassword { get; set; }
     }
 }

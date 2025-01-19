@@ -7,29 +7,27 @@ namespace ToDoFlow.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
-    public class UserController : ControllerBase
+    //[Authorize]
+    public class UserController(IUserService userService) : ControllerBase
     {
-        private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
-        {
-            _userService = userService;
-        }
+        private readonly IUserService _userService = userService;
 
         [HttpPost]
+        //[Authorize (Roles = "Adm")]
         public async Task<ActionResult> CreateUserAsync(UserCreateDto userCreateDto)
         {
             return Ok(await _userService.CreateUserAsync(userCreateDto));
         }
 
         [HttpGet]
+        //[Authorize(Roles = "Adm")]
         public async Task<ActionResult> ReadUserAsync()
         {
             return Ok(await _userService.ReadUserAsync());
         }
 
         [HttpGet("id")]
+       //[Authorize(Roles = "Adm")]
         public async Task<ActionResult> ReadUserAsync(int id)
         {
             return Ok(await _userService.ReadUserAsync(id));
@@ -42,6 +40,7 @@ namespace ToDoFlow.API.Controllers
         }
 
         [HttpDelete("id")]
+        //[Authorize(Roles = "Adm")]
         public async Task<ActionResult> DeleteUserAsync(int id)
         {
             return Ok(await _userService.DeleteUserAsync(id));

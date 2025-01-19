@@ -5,31 +5,26 @@ using ToDoFlow.Infrastructure.Repositories.Interface;
 
 namespace ToDoFlow.Infrastructure.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository(ToDoFlowContext context) : ICategoryRepository
     {
-        private readonly ToDoFlowContext _context;
-
-        public CategoryRepository(ToDoFlowContext context)
-        {
-            _context = context;
-        }
+        private readonly ToDoFlowContext _context = context;
 
         public async Task<List<Category>> CreateCategoryAsync(Category category)
         {
             await _context.AddAsync(category);
             await _context.SaveChangesAsync();
 
-            return await _context.Categories.Include(t => t.Tasks).ToListAsync();
+            return await _context.Categories.Where(u => u.UserId == category.UserId).ToListAsync();
         }
 
-        public async Task<List<Category>> ReadCategoryAsync()
+        public async Task<List<Category>> ReadCategoryByUserAsync(int userId)
         {
-            return await _context.Categories.Include(t => t.Tasks).ToListAsync();
+            return await _context.Categories.Where(u => u.UserId == userId).ToListAsync();
         }
 
         public async Task<Category> ReadCategoryAsync(int id)
         {
-            return await _context.Categories.Include(t => t.Tasks).FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<List<Category>> UpdateCategoryAsync(Category category)
@@ -38,16 +33,15 @@ namespace ToDoFlow.Infrastructure.Repositories
             _context.Categories.Update(category);
             await _context.SaveChangesAsync();
 
-            return await _context.Categories.Include(t => t.Tasks).ToListAsync();
+            return await _context.Categories.Where(u => u.UserId == category.UserId).Include(t => t.Tasks).ToListAsync();
         }
 
-        public async Task<List<Category>> DeleteCategoryAsync(int id)
+        public async Task<List<Category>> DeleteCategoryAsync(int id, int userId)
         {
-            Category category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
-            _context.Categories.Remove(category);
+            _context.Categories.Remove(await _context.Categories.FirstOrDefaultAsync(c => c.Id == id));
             await _context.SaveChangesAsync();
 
-            return await _context.Categories.Include(t => t.Tasks).ToListAsync(); ;
+            return await _context.Categories.Where(u => u.UserId == userId).ToListAsync();
         }
 
     }

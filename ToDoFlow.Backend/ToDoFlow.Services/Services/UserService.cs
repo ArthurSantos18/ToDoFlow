@@ -6,18 +6,11 @@ using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.Services.Services
 {
-    public class UserService : IUserService
+    public class UserService(IUserRepository userRepository, IMapper mapper, IEncryptionService encryptionService) : IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
-        private readonly IEncryptionService _encryptionService;
-
-        public UserService(IUserRepository userRepository, IMapper mapper, IEncryptionService encryptionService)
-        {
-            _userRepository = userRepository;
-            _mapper = mapper;
-            _encryptionService = encryptionService;
-        }
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IMapper _mapper = mapper;
+        private readonly IEncryptionService _encryptionService = encryptionService;
 
         public async Task<ApiResponse<List<UserReadDto>>> CreateUserAsync(UserCreateDto userCreateDto)
         {

@@ -5,26 +5,21 @@ using ToDoFlow.Infrastructure.Repositories.Interface;
 
 namespace ToDoFlow.Infrastructure.Repositories
 {
-    public class TaskItemRepository : ITaskItemRepository
+    public class TaskItemRepository(ToDoFlowContext context) : ITaskItemRepository
     {
-        private readonly ToDoFlowContext _context;
-
-        public TaskItemRepository(ToDoFlowContext context)
-        {
-            _context = context;
-        }
+        private readonly ToDoFlowContext _context = context;
 
         public async Task<List<TaskItem>> CreateTaskItemAsync(TaskItem taskItem)
         {
             await _context.AddAsync(taskItem);
             await _context.SaveChangesAsync();
 
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks.Where(t => t.CategoryId == taskItem.CategoryId).ToListAsync();
         }
 
-        public async Task<List<TaskItem>> ReadTaskItemAsync()
+        public async Task<List<TaskItem>> ReadTaskItemByCategoryAsync(int categoryId)
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks.Where(t => t.CategoryId == categoryId).ToListAsync();
         }
 
         public async Task<TaskItem> ReadTaskItemAsync(int id)
@@ -37,16 +32,15 @@ namespace ToDoFlow.Infrastructure.Repositories
             _context.Tasks.Update(taskItem);
             await _context.SaveChangesAsync();
 
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks.Where(t => t.CategoryId == taskItem.CategoryId).ToListAsync();
         }
 
-        public async Task<List<TaskItem>> DeleteTaskItemAsync(int id)
+        public async Task<List<TaskItem>> DeleteTaskItemAsync(int id, int categoryId)
         {
-            TaskItem taskItem = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
-            _context.Tasks.Remove(taskItem);
+            _context.Tasks.Remove(await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id));
             await _context.SaveChangesAsync();
 
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks.Where(t => t.CategoryId == categoryId).ToListAsync();
         }
     }
 }

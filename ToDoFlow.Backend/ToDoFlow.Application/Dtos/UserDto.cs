@@ -16,7 +16,6 @@
         public class UserReadDto : UserBaseDto
         {
             public int Id { get; set; }
-            public List<CategoryReadDto>? Categories { get; set; }
             public Profile Profile { get; set; }
         }
 

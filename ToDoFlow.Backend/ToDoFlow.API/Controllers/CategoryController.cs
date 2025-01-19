@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Services.Services.Interface;
 
@@ -6,14 +7,10 @@ namespace ToDoFlow.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    //[Authorize]
+    public class CategoryController(ICategoryService categoryService) : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
-
-        public CategoryController(ICategoryService categoryService)
-        {
-            _categoryService = categoryService;
-        }
+        private readonly ICategoryService _categoryService = categoryService;
 
         [HttpPost]
         public async Task<ActionResult> CreateCategoryAsync(CategoryCreateDto categoryCreateDto)
@@ -21,10 +18,10 @@ namespace ToDoFlow.API.Controllers
             return Ok(await _categoryService.CreateCategoryAsync(categoryCreateDto));
         }
         
-        [HttpGet]
-        public async Task<ActionResult> ReadCategoryAsync()
+        [HttpGet("UserId")]
+        public async Task<ActionResult> ReadCategoryByUserAsync(int userId)
         {
-            return Ok(await _categoryService.ReadCategoryAsync());
+            return Ok(await _categoryService.ReadCategoryByUserAsync(userId));
         }
 
         [HttpGet("Id")]
@@ -40,9 +37,9 @@ namespace ToDoFlow.API.Controllers
         }
 
         [HttpDelete("Id")]
-        public async Task<ActionResult> DeleteCategoryAsync(int id)
+        public async Task<ActionResult> DeleteCategoryAsync(int id, int userId)
         {
-            return Ok(await _categoryService.DeleteCategoryAsync(id));
+            return Ok(await _categoryService.DeleteCategoryAsync(id, userId));
         }
     }
 }

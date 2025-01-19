@@ -6,16 +6,10 @@ using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.Services.Services
 {
-    public class TaskItemService : ITaskItemService
+    public class TaskItemService(ITaskItemRepository taskItemRepository, IMapper mapper) : ITaskItemService
     {
-        private readonly ITaskItemRepository _taskItemRepository;
-        private readonly IMapper _mapper;
-
-        public TaskItemService(ITaskItemRepository taskItemRepository, IMapper mapper)
-        {
-            _taskItemRepository = taskItemRepository;
-            _mapper = mapper;
-        }
+        private readonly ITaskItemRepository _taskItemRepository = taskItemRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<ApiResponse<List<TaskItemReadDto>>> CreateTaskItemAsync(TaskItemCreateDto taskItemCreateDto)
         {
@@ -24,7 +18,7 @@ namespace ToDoFlow.Services.Services
                 TaskItem taskItem = _mapper.Map<TaskItem>(taskItemCreateDto);
                 await _taskItemRepository.CreateTaskItemAsync(taskItem);
 
-                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemAsync();
+                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(taskItem.CategoryId);
                 List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
 
                 return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Tarefa criada com sucesso", 200);
@@ -35,11 +29,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<TaskItemReadDto>>> ReadTaskItemAsync()
+        public async Task<ApiResponse<List<TaskItemReadDto>>> ReadTaskItemByCategoryAsync(int categoryId)
         {
             try
             {
-                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemAsync(); 
+                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(categoryId); 
                 List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
 
                 return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operação realizada com sucesso", 200);
@@ -73,7 +67,7 @@ namespace ToDoFlow.Services.Services
                 _mapper.Map(taskItemUpdateDto, taskItem);
                 await _taskItemRepository.UpdateTaskItemAsync(taskItem);
 
-                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemAsync();
+                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(taskItem.CategoryId);
                 List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
 
                 return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Tarefa editada com sucesso", 200);
@@ -83,13 +77,11 @@ namespace ToDoFlow.Services.Services
                 return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
-        public async Task<ApiResponse<List<TaskItemReadDto>>> DeleteTaskItemAsync(int id)
+        public async Task<ApiResponse<List<TaskItemReadDto>>> DeleteTaskItemAsync(int id, int categoryId)
         {
             try
             {
-                await _taskItemRepository.DeleteTaskItemAsync(id);
-
-                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemAsync();
+                List<TaskItem> taskItems = await _taskItemRepository.DeleteTaskItemAsync(id, categoryId);
                 List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
 
                 return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operação realizada com sucesso", 200);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Services.Services.Interface;
 
@@ -6,14 +7,10 @@ namespace ToDoFlow.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskItemController : ControllerBase
+    //[Authorize]
+    public class TaskItemController(ITaskItemService taskItemService) : ControllerBase
     {
-        private readonly ITaskItemService _taskItemService;
-
-        public TaskItemController(ITaskItemService taskItemService)
-        {
-            _taskItemService = taskItemService;
-        }
+        private readonly ITaskItemService _taskItemService = taskItemService;
 
         [HttpPost]
         public async Task<ActionResult> CreateTaskItemAsync(TaskItemCreateDto taskItemCreateDto)
@@ -21,10 +18,10 @@ namespace ToDoFlow.API.Controllers
             return Ok(await _taskItemService.CreateTaskItemAsync(taskItemCreateDto));
         }
 
-        [HttpGet]
-        public async Task<ActionResult> ReadTaskItemAsync()
+        [HttpGet("CategoryId")]
+        public async Task<ActionResult> ReadTaskItemByCategoryAsync(int categoryId)
         {
-            return Ok(await _taskItemService.ReadTaskItemAsync());
+            return Ok(await _taskItemService.ReadTaskItemByCategoryAsync(categoryId));
         }
 
         [HttpGet("Id")]
@@ -40,9 +37,9 @@ namespace ToDoFlow.API.Controllers
         }
 
         [HttpDelete("Id")]
-        public async Task<ActionResult> DeleteTaskItemAsync(int id)
+        public async Task<ActionResult> DeleteTaskItemAsync(int id, int categoryId)
         {
-            return Ok(await _taskItemService.DeleteTaskItemAsync(id));
+            return Ok(await _taskItemService.DeleteTaskItemAsync(id, categoryId));
         }
     }
 }

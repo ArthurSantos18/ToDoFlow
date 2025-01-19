@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
 using ToDoFlow.Infrastructure.Repositories.Interface;
@@ -11,20 +13,12 @@ using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.Services.Services
 {
-    public class AccountService : IAccountService
+    public class AccountService(IConfiguration configuration, IEncryptionService encryptionService, IUserRepository userRepository, IMapper mapper) : IAccountService
     {
-        private readonly IConfiguration _configuration;
-        private readonly IEncryptionService _encryptionService;
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
-
-        public AccountService(IConfiguration configuration, IEncryptionService encryptionService, IUserRepository userRepository, IMapper mapper)
-        {
-            _configuration = configuration;
-            _encryptionService = encryptionService;
-            _userRepository = userRepository;
-            _mapper = mapper;
-        }
+        private readonly IConfiguration _configuration = configuration;
+        private readonly IEncryptionService _encryptionService = encryptionService;
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<ApiResponse<string>> LoginAsync(LoginRequestDto loginRequestDto)
         {
@@ -52,6 +46,11 @@ namespace ToDoFlow.Services.Services
                 return new ApiResponse<string>(null, false, "Erro: Usuário já existe", 400);
             }
 
+            if (registerRequestDto.Password != registerRequestDto.ConfirmPassword)
+            {
+                return new ApiResponse<string>(null, false, "Erro: As senhas não coincidem", 400);
+            }
+
             try
             {
                 User user = _mapper.Map<User>(registerRequestDto);
@@ -61,9 +60,9 @@ namespace ToDoFlow.Services.Services
 
                 return new ApiResponse<string>(GenerateToken(user), true, "Registro efetuado com sucesso", 200);
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-                return new ApiResponse<string>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<string>(null, false, $"Erro: {ex.InnerException?.Message}", 500);
             }
         }
 
@@ -72,19 +71,20 @@ namespace ToDoFlow.Services.Services
             IConfigurationSection jwtSettings = _configuration.GetSection("JwtSettings");
 
             Claim[] claims =
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim (ClaimTypes.Role, user.Profile.ToString())
-            };
+            [
+                new(JwtRegisteredClaimNames.Sub, user.Email),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimTypes.Role, user.Profile.ToString())
+            ];
 
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            JwtSecurityToken token = new JwtSecurityToken(
+            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? string.Empty));
+            SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
+
+            JwtSecurityToken token = new(
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
-                expires: DateTime.UtcNow.AddMinutes(int.Parse(jwtSettings["ExpirationMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(int.Parse(jwtSettings["ExpirationMinutes"] ?? string.Empty)),
                 claims: claims,
                 signingCredentials: creds);
 

@@ -1,8 +1,7 @@
 ﻿using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
-using ToDoFlow.Services.Services;
 
-namespace ToDoFlow.Infrastructure.Repositories.Interface
+namespace ToDoFlow.Services.Services.Interface
 {
     public interface IAccountService
     {

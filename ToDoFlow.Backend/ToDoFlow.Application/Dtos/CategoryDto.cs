@@ -11,7 +11,6 @@
     public class CategoryReadDto : CategoryBaseDto
     {
         public int Id { get; set; }
-        public List<TaskItemReadDto>? Tasks { get; set; }
     }
     public class CategoryUpdateDto : CategoryBaseDto
     {
