@@ -6,7 +6,7 @@ using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AccountController(IAccountService accountService) : ControllerBase
     {

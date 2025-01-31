@@ -5,7 +5,7 @@ using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     //[Authorize]
     public class UserController(IUserService userService) : ControllerBase
@@ -13,34 +13,34 @@ namespace ToDoFlow.API.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpPost]
-        //[Authorize (Roles = "Adm")]
+        //[Authorize (Roles = "Administrator")]
         public async Task<ActionResult> CreateUserAsync(UserCreateDto userCreateDto)
         {
             return Ok(await _userService.CreateUserAsync(userCreateDto));
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Adm")]
+        //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult> ReadUserAsync()
         {
             return Ok(await _userService.ReadUserAsync());
         }
 
-        [HttpGet("id")]
-       //[Authorize(Roles = "Adm")]
+        [HttpGet("{id}")]
+       //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult> ReadUserAsync(int id)
         {
             return Ok(await _userService.ReadUserAsync(id));
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateUserAsync(UserUpdateDto userUpdateDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
         {
-            return Ok(await _userService.UpdateUserAsync(userUpdateDto));
+            return Ok(await _userService.UpdateUserAsync(id, userUpdateDto));
         }
 
-        [HttpDelete("id")]
-        //[Authorize(Roles = "Adm")]
+        [HttpDelete("{id}")]
+        //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult> DeleteUserAsync(int id)
         {
             return Ok(await _userService.DeleteUserAsync(id));

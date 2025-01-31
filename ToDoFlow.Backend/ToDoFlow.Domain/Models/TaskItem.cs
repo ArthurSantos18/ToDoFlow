@@ -7,7 +7,7 @@ namespace ToDoFlow.Domain.Models
         public int Id { get; set; }
         public required string Name { get; set; } 
         public required string Description { get; set; } 
-        public Status Status { get; set; } = Status.Pendente;
+        public Status Status { get; set; } = Status.InProgress;
         public Priority Priority { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now.ToLocalTime();
         public DateTime? CompleteAt { get; set; }

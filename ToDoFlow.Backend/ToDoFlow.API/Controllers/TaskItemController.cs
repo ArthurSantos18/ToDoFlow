@@ -5,7 +5,7 @@ using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/taskitems")]
     [ApiController]
     //[Authorize]
     public class TaskItemController(ITaskItemService taskItemService) : ControllerBase
@@ -18,25 +18,31 @@ namespace ToDoFlow.API.Controllers
             return Ok(await _taskItemService.CreateTaskItemAsync(taskItemCreateDto));
         }
 
-        [HttpGet("CategoryId")]
+        [HttpGet]
+        public async Task<ActionResult> ReadTaskItemAsync()
+        {
+            return Ok(await _taskItemService.ReadTaskItemAsync());
+        }
+
+        [HttpGet("category/{categoryId}")]
         public async Task<ActionResult> ReadTaskItemByCategoryAsync(int categoryId)
         {
             return Ok(await _taskItemService.ReadTaskItemByCategoryAsync(categoryId));
         }
 
-        [HttpGet("Id")]
-        public async Task<ActionResult> ReadTaskItemAsync(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult> ReadTaskItemByIdAsync(int id)
         {
-            return Ok(await _taskItemService.ReadTaskItemAsync(id));
+            return Ok(await _taskItemService.ReadTaskItemByIdAsync(id));
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateTaskItemAsync(TaskItemUpdateDto taskItemUpdateDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateTaskItemAsync(int id, TaskItemUpdateDto taskItemUpdateDto)
         {
-            return Ok(await _taskItemService.UpdateTaskItemAsync(taskItemUpdateDto));
+            return Ok(await _taskItemService.UpdateTaskItemAsync(id, taskItemUpdateDto));
         }
 
-        [HttpDelete("Id")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTaskItemAsync(int id, int categoryId)
         {
             return Ok(await _taskItemService.DeleteTaskItemAsync(id, categoryId));

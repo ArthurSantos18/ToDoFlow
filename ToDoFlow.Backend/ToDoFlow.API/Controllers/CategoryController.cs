@@ -5,7 +5,7 @@ using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/categories")]
     [ApiController]
     //[Authorize]
     public class CategoryController(ICategoryService categoryService) : ControllerBase
@@ -17,26 +17,32 @@ namespace ToDoFlow.API.Controllers
         {
             return Ok(await _categoryService.CreateCategoryAsync(categoryCreateDto));
         }
-        
-        [HttpGet("UserId")]
+
+        [HttpGet]
+        public async Task<ActionResult> ReadCategoryAsync()
+        {
+            return Ok(await _categoryService.ReadCategoryAsync());
+        }
+
+        [HttpGet("user/{userId}")]
         public async Task<ActionResult> ReadCategoryByUserAsync(int userId)
         {
             return Ok(await _categoryService.ReadCategoryByUserAsync(userId));
         }
 
-        [HttpGet("Id")]
-        public async Task<ActionResult> ReadCategoryAsync(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult> ReadCategoryByIdAsync(int id)
         {
-            return Ok(await _categoryService.ReadCategoryAsync(id));
+            return Ok(await _categoryService.ReadCategoryByIdAsync(id));
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateCategoryAsync(int id, CategoryUpdateDto categoryUpdateDto)
         {
-            return Ok(await _categoryService.UpdateCategoryAsync(categoryUpdateDto));
+            return Ok(await _categoryService.UpdateCategoryAsync(id, categoryUpdateDto));
         }
 
-        [HttpDelete("Id")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCategoryAsync(int id, int userId)
         {
             return Ok(await _categoryService.DeleteCategoryAsync(id, userId));

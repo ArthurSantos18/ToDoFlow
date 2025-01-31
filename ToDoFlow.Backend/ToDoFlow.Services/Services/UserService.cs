@@ -23,7 +23,7 @@ namespace ToDoFlow.Services.Services
                 List<User> users = await _userRepository.ReadUserAsync();
                 List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
 
-                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "Usuário criado com sucesso", 201);
+                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "User created successfully", 201);
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace ToDoFlow.Services.Services
                 List<User> users = await _userRepository.ReadUserAsync();
                 List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
 
-                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "Operação realizada com sucesso", 200);
+                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
@@ -53,7 +53,7 @@ namespace ToDoFlow.Services.Services
                 User user = await _userRepository.ReadUserAsync(id);
                 UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
 
-                return new ApiResponse<UserReadDto>(userReadDto, true, "Operação realizada com sucesso", 200);
+                return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
@@ -61,11 +61,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<UserReadDto>>> UpdateUserAsync(UserUpdateDto userUpdateDto)
+        public async Task<ApiResponse<List<UserReadDto>>> UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
         {
             try
             {
-                User user = await _userRepository.ReadUserAsync(userUpdateDto.Id);
+                User user = await _userRepository.ReadUserAsync(id);
                 _mapper.Map(userUpdateDto, user);
                 user.Password = _encryptionService.HashPassword(userUpdateDto.Password);
                 await _userRepository.UpdateUserAsync(user);
@@ -73,7 +73,7 @@ namespace ToDoFlow.Services.Services
                 List<User> users = await _userRepository.ReadUserAsync();
                 List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
 
-                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "Usuário editado com sucesso", 200);
+                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "User edited successfully", 200);
 
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace ToDoFlow.Services.Services
                 List<User> users = await _userRepository.ReadUserAsync();
                 List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
 
-                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "Usuário deletado com sucesso", 200);
+                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "User deleted successfully", 200);
             }
             catch (Exception ex)
             {

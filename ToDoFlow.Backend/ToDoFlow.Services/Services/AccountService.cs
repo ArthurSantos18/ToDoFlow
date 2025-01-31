@@ -26,15 +26,15 @@ namespace ToDoFlow.Services.Services
 
             if (user == null) 
             {
-                return new ApiResponse<string>(null, false, "Erro: Usuário não encontrado", 404);
+                return new ApiResponse<string>(null, false, "Erro: User not found", 404);
             }
 
             if (!_encryptionService.VerifyPassword(loginRequestDto.Password, user.Password))
             {
-                return new ApiResponse<string>(null, false, "Erro: Credenciais inválidas", 401);
+                return new ApiResponse<string>(null, false, "Erro: Invalid credentials", 401);
             }
 
-            return new ApiResponse<string>(GenerateToken(user), true, "Login efetuado com sucesso", 200);
+            return new ApiResponse<string>(GenerateToken(user), true, "Login successfully", 200);
         }
 
         public async Task<ApiResponse<string>> RegisterAsync(RegisterRequestDto registerRequestDto)
@@ -43,12 +43,12 @@ namespace ToDoFlow.Services.Services
             
             if (existingUser != null)
             {
-                return new ApiResponse<string>(null, false, "Erro: Usuário já existe", 400);
+                return new ApiResponse<string>(null, false, "Erro: User already exists", 400);
             }
 
             if (registerRequestDto.Password != registerRequestDto.ConfirmPassword)
             {
-                return new ApiResponse<string>(null, false, "Erro: As senhas não coincidem", 400);
+                return new ApiResponse<string>(null, false, "Erro: Passwords do not match", 400);
             }
 
             try
@@ -58,7 +58,7 @@ namespace ToDoFlow.Services.Services
 
                 await _userRepository.CreateUserAsync(user);
 
-                return new ApiResponse<string>(GenerateToken(user), true, "Registro efetuado com sucesso", 200);
+                return new ApiResponse<string>(GenerateToken(user), true, "Registration completed successfully", 200);
             }
             catch (DbUpdateException ex)
             {
@@ -72,7 +72,8 @@ namespace ToDoFlow.Services.Services
 
             Claim[] claims =
             [
-                new(JwtRegisteredClaimNames.Sub, user.Email),
+                new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new(JwtRegisteredClaimNames.Email, user.Email),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new(ClaimTypes.Role, user.Profile.ToString())
             ];

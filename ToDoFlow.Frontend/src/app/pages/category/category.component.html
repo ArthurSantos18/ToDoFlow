@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-center align-items-center">
+  <button class="btn-success btn mt-4" style="font-size: 1.5em; min-width: 10em; border: solid rgba(0, 0, 0, 0.37);" (click)="OpenCategoryCreateModal()">New Category</button>
+</div>
+
+<div class="d-flex justify-content-center align-items-center">
+  <section class="card mt-5 p-2" style="border: solid rgba(0, 0, 0, 0.262); width: 50%;">
+    <div class="table-responsive" id="tablecategory">
+      <table class="table align-middle table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Category Name</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr>
+            <td>Tarefa doméstica</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-primary me-2" (click)="OpenCategoryEditModal()">Rename</button>
+                <button type="button" class="btn btn-danger me-2" (click)="OpenCategoryDeleteModal()">Delete</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Exercícios</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-primary me-2" (click)="OpenCategoryEditModal()">Rename</button>
+                <button type="button" class="btn btn-danger me-2" (click)="OpenCategoryDeleteModal()">Delete</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Trabalho</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-primary me-2" (click)="OpenCategoryEditModal()">Rename</button>
+                <button type="button" class="btn btn-danger me-2" (click)="OpenCategoryDeleteModal()">Delete</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<app-category-create-modal></app-category-create-modal>
+<app-category-edit-modal></app-category-edit-modal>
+<app-category-delete-modal></app-category-delete-modal>

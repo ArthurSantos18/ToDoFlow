@@ -21,7 +21,22 @@ namespace ToDoFlow.Services.Services
                 List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(taskItem.CategoryId);
                 List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Tarefa criada com sucesso", 200);
+                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Task created successfully", 200);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+            }
+        }
+
+        public async Task<ApiResponse<List<TaskItemReadDto>>> ReadTaskItemAsync()
+        {
+            try
+            {
+                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemAsync();
+                List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
+
+                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
@@ -36,7 +51,7 @@ namespace ToDoFlow.Services.Services
                 List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(categoryId); 
                 List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operação realizada com sucesso", 200);
+                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
@@ -44,14 +59,14 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<TaskItemReadDto>> ReadTaskItemAsync(int id)
+        public async Task<ApiResponse<TaskItemReadDto>> ReadTaskItemByIdAsync(int id)
         {
             try
             {
-                TaskItem taskItem = await _taskItemRepository.ReadTaskItemAsync(id);
+                TaskItem taskItem = await _taskItemRepository.ReadTaskItemByIdAsync(id);
                 TaskItemReadDto taskItemReadDto = _mapper.Map<TaskItemReadDto>(taskItem);
 
-                return new ApiResponse<TaskItemReadDto>(taskItemReadDto, true, "Operação realizada com sucesso", 200);
+                return new ApiResponse<TaskItemReadDto>(taskItemReadDto, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
@@ -59,18 +74,18 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<TaskItemReadDto>>> UpdateTaskItemAsync(TaskItemUpdateDto taskItemUpdateDto)
+        public async Task<ApiResponse<List<TaskItemReadDto>>> UpdateTaskItemAsync(int id, TaskItemUpdateDto taskItemUpdateDto)
         {
             try
             {
-                TaskItem taskItem = await _taskItemRepository.ReadTaskItemAsync(taskItemUpdateDto.Id);
+                TaskItem taskItem = await _taskItemRepository.ReadTaskItemByIdAsync(id);
                 _mapper.Map(taskItemUpdateDto, taskItem);
                 await _taskItemRepository.UpdateTaskItemAsync(taskItem);
 
                 List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(taskItem.CategoryId);
                 List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Tarefa editada com sucesso", 200);
+                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Task edited successfully", 200);
             }
             catch (Exception ex)
             {
@@ -84,7 +99,7 @@ namespace ToDoFlow.Services.Services
                 List<TaskItem> taskItems = await _taskItemRepository.DeleteTaskItemAsync(id, categoryId);
                 List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operação realizada com sucesso", 200);
+                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Task deleted successfully", 200);
             }
             catch (Exception ex)
             {

@@ -1,0 +1,64 @@
+<button class="btn-success btn mt-4" style="font-size: 1.5em; min-width: 10em; border: solid rgba(0, 0, 0, 0.37);">New Task</button>
+
+<section class="card mt-5 p-2" style="border: solid rgba(0, 0, 0, 0.262);">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h4>Tarefa de Casa</h4>
+    <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#tabletarefadecasa" aria-expanded="false" aria-controls="tablecollapse">
+      Recolher/Expandir
+    </button>
+  </div>
+
+  <div class="collapse show table-responsive" id="tabletarefadecasa">
+    <table class="table align-middle table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Task Name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Priority</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <tr>
+          <td>Lavar a louça</td>
+          <td>Andamento</td>
+          <td>Média</td>
+          <td class="text-center">
+            <div class="d-flex justify-content-center">
+              <button type="button" class="btn btn-primary me-2" (click)="OpenTaskItemDetailsModal()">Details</button>
+              <button type="button" class="btn btn-success me-2">Edit</button>
+              <button type="button" class="btn btn-danger me-2" (click)="OpenTaskItemDeleteModal()">Delete</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Lavar o banheiro</td>
+          <td>Pendente</td>
+          <td>Alta</td>
+          <td class="text-center">
+            <div class="d-flex justify-content-center">
+              <button type="button" class="btn btn-primary me-2" (click)="OpenTaskItemDetailsModal()">Details</button>
+              <button type="button" class="btn btn-success me-2">Edit</button>
+              <button type="button" class="btn btn-danger me-2" (click)="OpenTaskItemDeleteModal()">Delete</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Fazer a comida</td>
+          <td>Pendente</td>
+          <td>Baixa</td>
+          <td class="text-center">
+            <div class="d-flex justify-content-center">
+              <button type="button" class="btn btn-primary me-2" (click)="OpenTaskItemDetailsModal()">Details</button>
+              <button type="button" class="btn btn-success me-2">Edit</button>
+              <button type="button" class="btn btn-danger me-2" (click)="OpenTaskItemDeleteModal()">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<app-task-item-details-modal></app-task-item-details-modal>
+<app-task-item-delete-modal></app-task-item-delete-modal>
