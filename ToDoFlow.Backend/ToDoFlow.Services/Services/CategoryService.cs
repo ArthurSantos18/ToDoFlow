@@ -93,11 +93,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<CategoryReadDto>>> DeleteCategoryAsync(int id, int userId)
+        public async Task<ApiResponse<List<CategoryReadDto>>> DeleteCategoryAsync(int id)
         {
             try
             {
-                List<Category> categories = await _categoryRepository.DeleteCategoryAsync(id, userId);
+                List<Category> categories = await _categoryRepository.DeleteCategoryAsync(id);
                 List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
 
                 return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Category deleted successfully", 200);

@@ -1,30 +1,33 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, signal } from '@angular/core';
 import { LoginRequest, RegisterRequest } from '../../../models/auth-response';
-import { catchError, map, Observable } from 'rxjs';
+import { catchError, map, tap } from 'rxjs';
 import { ApiResponse } from '../../../models/api-response';
 import { API_ENDPOINTS } from '../../constants/api-config';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private tokenCheckInterval = 60000;
+
   isLoggedIn = signal<boolean>(this.hasToken());
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {
+    //this.startTokenAutoCheck()
+  }
 
   login(loginRequest: LoginRequest) {
-    return this.http.post<any>(`${API_ENDPOINTS.AUTH.LOGIN}`,loginRequest)
+    return this.http.post<ApiResponse<string>>(`${API_ENDPOINTS.AUTH.LOGIN}`,loginRequest)
     .pipe(
       catchError((error) => {
         throw new Error(error.message);
       }),
-      map((response) => {
+      tap((response) => {
         if (response.data && response.success) {
           this.saveToken(response.data);
           this.isLoggedIn.update(() => true);
-          this.router.navigate(['home']);
         }
       })
     );
@@ -36,13 +39,11 @@ export class AuthService {
       catchError((error) => {
         throw new Error(error.message);
       }),
-      map((response) => {
+      tap((response) => {
         if (response.data && response.success) {
           this.saveToken(response.data);
           this.isLoggedIn.update(() => true);
-          this.router.navigate(['home'])
         }
-
       })
     )
   }
@@ -50,7 +51,6 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('USER_TOKEN');
     this.isLoggedIn.update(() => false);
-    this.router.navigate(['login']);
   }
 
   saveToken(token: string): void {
@@ -58,14 +58,50 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('USER_TOKEN');
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      return localStorage.getItem('USER_TOKEN');
+    }
+    return null;
   }
 
+  getSubFromToken(): string | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const decoded = this.jwtHelper.decodeToken(token);
+      return decoded.sub;
+    }
+    catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  }
+
+  /*isTokenExpired(): boolean {
+    const token = localStorage.getItem('USER_TOKEN');
+    return this.jwtHelper.isTokenExpired(token);
+  }*/
+
   private hasToken(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    return !token;
   }
 
   getLoggedIn() {
     return this.isLoggedIn()
   }
+
+  /*startTokenAutoCheck() {
+    if(this.getLoggedIn()) {
+      setInterval(() => {
+        if (this.isTokenExpired()) {
+          console.log(this.isTokenExpired())
+          this.logout();
+        }
+      }, this.tokenCheckInterval);
+    }
+  }*/
 }

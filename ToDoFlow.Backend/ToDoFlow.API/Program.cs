@@ -62,6 +62,7 @@ namespace ToDoFlow.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
+            builder.Services.AddScoped<IEnumService, EnumService>();
 
             builder.Services.AddScoped<IAccountService, AccountService>();
 

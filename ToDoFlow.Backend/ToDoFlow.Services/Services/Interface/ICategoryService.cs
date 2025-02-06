@@ -9,6 +9,6 @@ namespace ToDoFlow.Services.Services.Interface
         public Task<ApiResponse<List<CategoryReadDto>>> ReadCategoryByUserAsync(int userId);
         public Task<ApiResponse<CategoryReadDto>> ReadCategoryByIdAsync(int id);
         public Task<ApiResponse<List<CategoryReadDto>>> UpdateCategoryAsync(int id, CategoryUpdateDto categoryUpdateDto);
-        public Task<ApiResponse<List<CategoryReadDto>>> DeleteCategoryAsync(int id, int userId);
+        public Task<ApiResponse<List<CategoryReadDto>>> DeleteCategoryAsync(int id);
     }
 }

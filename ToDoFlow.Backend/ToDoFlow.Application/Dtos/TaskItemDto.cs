@@ -7,12 +7,10 @@ namespace ToDoFlow.Application.Dtos
         public required string Name { get; set; }
         public required string Description { get; set; }
         public Priority Priority { get; set; }
-    }
-
-    public class TaskItemCreateDto : TaskItemBaseDto
-    {
         public int CategoryId { get; set; }
     }
+
+    public class TaskItemCreateDto : TaskItemBaseDto { }
 
     public class TaskItemReadDto : TaskItemBaseDto
     {

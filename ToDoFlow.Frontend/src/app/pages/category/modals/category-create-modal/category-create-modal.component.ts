@@ -1,18 +1,31 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, output, Output, OutputEmitterRef, ViewChild } from '@angular/core';
+import { CategoryService } from '../../../../core/services/category/category.service';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../../../core/services/auth/auth.service';
+import { EventEmitter } from 'stream';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-category-create-modal',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './category-create-modal.component.html',
   styleUrl: './category-create-modal.component.css'
 })
 export class CategoryCreateModalComponent {
-  @ViewChild('IcategoryCreateModal') modalElement !: ElementRef
+  @ViewChild('IcategoryCreateModal') modalElement !: ElementRef;
 
-  OpenCategoryCreateModal(): void {
+  categoryCreateForm: FormGroup
+
+  constructor(private categoryService: CategoryService, private authService: AuthService, private fb: FormBuilder) {
+    this.categoryCreateForm = this.fb.group({
+      userId: new FormControl(Number(authService.getSubFromToken())),
+      name: new FormControl('', [Validators.required])
+    })
+  }
+
+  openCategoryCreateModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
       const modal = new bootstrap.Modal(this.modalElement.nativeElement);
       modal.show();
@@ -22,7 +35,7 @@ export class CategoryCreateModalComponent {
     }
   }
 
-  CloseCategoryCreateModal(): void {
+  closeCategoryCreateModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
       const modal = new bootstrap.Modal(this.modalElement.nativeElement);
       modal.hide();
@@ -30,5 +43,14 @@ export class CategoryCreateModalComponent {
     else {
       console.error('Modal element not found!')
     }
+  }
+
+  createCategory(): void {
+    this.categoryService.createCategory(this.categoryCreateForm.value).subscribe({
+      next: () => {
+        location.reload()
+      },
+      error: (error) => console.error('')
+    })
   }
 }

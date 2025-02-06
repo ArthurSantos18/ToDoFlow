@@ -8,6 +8,6 @@ namespace ToDoFlow.Domain.Models.Enums
         Low = 0,
         Medium = 1,
         High = 2,
-        Crítical = 3
+        Critical = 3
     }
 }

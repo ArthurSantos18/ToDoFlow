@@ -6,11 +6,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h5 class="text-danger">Deseja deletar a categoria?</h5>
+        <h5 class="text-danger">Do you want to delete the category {{categoryName}}?</h5>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="CloseCategoryDeleteModal()">Close</button>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeCategoryDeleteModal()">Close</button>
+        <button type="button" (click)="deleteCategory()" class="btn btn-danger">Delete</button>
       </div>
     </div>
   </div>

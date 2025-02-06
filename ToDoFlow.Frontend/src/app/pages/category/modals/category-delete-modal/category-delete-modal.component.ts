@@ -1,4 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { AuthService } from '../../../../core/services/auth/auth.service';
+import { CategoryService } from '../../../../core/services/category/category.service';
 
 declare var bootstrap: any;
 
@@ -10,9 +13,14 @@ declare var bootstrap: any;
   styleUrl: './category-delete-modal.component.css'
 })
 export class CategoryDeleteModalComponent {
-  @ViewChild('IcategoryDeleteModal') modalElement !: ElementRef
+  @ViewChild('IcategoryDeleteModal') modalElement !: ElementRef;
 
-  OpenCategoryDeleteModal(): void {
+  @Input() categoryId: number | null = null;
+  @Input() categoryName: string | null = null;
+
+  constructor(private categoryService: CategoryService, private fb: FormBuilder) {}
+
+  openCategoryDeleteModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
       const modal = new bootstrap.Modal(this.modalElement.nativeElement);
       modal.show();
@@ -22,7 +30,7 @@ export class CategoryDeleteModalComponent {
     }
   }
 
-  CloseCategoryDeleteModal(): void {
+  closeCategoryDeleteModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
       const modal = new bootstrap.Modal(this.modalElement.nativeElement);
       modal.hide();
@@ -30,5 +38,14 @@ export class CategoryDeleteModalComponent {
     else {
       console.error('Modal element not found!')
     }
+  }
+
+  deleteCategory(): void {
+    this.categoryService.deleteCategory(Number(this.categoryId)).subscribe({
+      next: () => {
+        location.reload()
+      },
+      error: (error) => console.error('')
+    })
   }
 }

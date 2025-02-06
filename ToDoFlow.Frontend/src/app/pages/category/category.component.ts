@@ -1,29 +1,53 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CategoryCreateModalComponent } from './modals/category-create-modal/category-create-modal.component';
 import { CategoryEditModalComponent } from './modals/category-edit-modal/category-edit-modal.component';
 import { CategoryDeleteModalComponent } from './modals/category-delete-modal/category-delete-modal.component';
+import { CategoryService } from '../../core/services/category/category.service';
+import { AuthService } from '../../core/services/auth/auth.service';
+import { CommonModule } from '@angular/common';
+import { CategoryReadDto } from '../../models/category';
 
 @Component({
   selector: 'app-category',
   standalone: true,
-  imports: [CategoryCreateModalComponent, CategoryEditModalComponent, CategoryDeleteModalComponent],
+  imports: [CategoryCreateModalComponent, CategoryEditModalComponent, CategoryDeleteModalComponent, CommonModule],
   templateUrl: './category.component.html',
   styleUrl: './category.component.css'
 })
-export class CategoryComponent {
+export class CategoryComponent implements OnInit {
   @ViewChild (CategoryCreateModalComponent) categoryCreateModal!: CategoryCreateModalComponent
   @ViewChild (CategoryEditModalComponent) categoryEditModal!: CategoryEditModalComponent
   @ViewChild (CategoryDeleteModalComponent) categoryDeleteModal!: CategoryDeleteModalComponent
 
-  OpenCategoryCreateModal() {
-    this.categoryCreateModal.OpenCategoryCreateModal();
+  userId: number | null = null;
+  categoriesByUserId: CategoryReadDto[] = []
+
+  constructor(private categoryService: CategoryService, private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.userId = Number(this.authService.getSubFromToken());
+    this.loadCategory(this.userId)
+  };
+
+  loadCategory(userId: number): void {
+    this.categoryService.getCategoryByUser(userId).subscribe((request) => {
+      this.categoriesByUserId = request.data
+    })
   }
 
-  OpenCategoryEditModal() {
-    this.categoryEditModal.OpenCategoryEditModal();
+  openCategoryCreateModal(): void {
+    this.categoryCreateModal.openCategoryCreateModal();
   }
 
-  OpenCategoryDeleteModal() {
-    this.categoryDeleteModal.OpenCategoryDeleteModal();
+  openCategoryEditModal(categoryId: number, categoryName: string): void {
+    this.categoryEditModal.categoryId = categoryId;
+    this.categoryEditModal.categoryName = categoryName;
+    this.categoryEditModal.openCategoryEditModal();
+  }
+
+  openCategoryDeleteModal(categoryId: number, categoryName: string): void {
+    this.categoryDeleteModal.categoryId = categoryId
+    this.categoryDeleteModal.categoryName = categoryName
+    this.categoryDeleteModal.openCategoryDeleteModal();
   }
 }

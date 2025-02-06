@@ -10,6 +10,6 @@ namespace ToDoFlow.Infrastructure.Repositories.Interface
         public Task<List<Category>> ReadCategoryByUserAsync(int userId);
         public Task<Category> ReadCategoryByIdAsync(int id);
         public Task<List<Category>> UpdateCategoryAsync(Category category);
-        public Task<List<Category>> DeleteCategoryAsync(int id, int userId);
+        public Task<List<Category>> DeleteCategoryAsync(int userId);
     }
 }

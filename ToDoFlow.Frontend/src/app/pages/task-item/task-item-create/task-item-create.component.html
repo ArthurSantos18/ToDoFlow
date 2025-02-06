@@ -2,29 +2,29 @@
   <div class="card mt-5 p-2" style="width: 30em; border: solid rgba(0, 0, 0, 0.262);">
     <div class="card-body">
       <h5 class="card-title mb-3">Create Task</h5>
-      <form class="row g-3">
+      <form class="row g-3" [formGroup]="taskItemCreateForm">
         <div class="col-12">
           <label for="ItaskName" class="form-label">Task Name</label>
-          <input type="text" class="form-control" id="ItaskName">
-      </div>
-        <div class="col-md-6">
-          <label for="Icategory" class="form-label">Category</label>
-          <select class="form-select" id="Icategory">
-            <option value="teste">teste</option>
-          </select>
+          <input type="text" formControlName="name" class="form-control" id="ItaskName" maxlength="60">
         </div>
         <div class="col-md-6">
+          <label for="Icategory" class="form-label">Category</label>
+          <select  class="form-select" formControlName="categoryId" id="Icategory">
+            <option *ngFor="let category of categoriesByUserId" value="{{category.id}}">{{category.name}}</option>
+          </select>
+          </div>
+        <div class="col-md-6">
           <label for="Ipriority" class="form-label">Priority</label>
-          <select class="form-select" id="Ipriority">
-            <option value="teste">teste</option>
+          <select class="form-select" formControlName="priority" id="Ipriority">
+            <option *ngFor="let priority of priorities | keyvalue" value="{{priority.value}}">{{priority.value}}</option>
           </select>
         </div>
         <div class="col-12">
           <label for="Idescription">Description</label>
-          <textarea id="Idescription" rows="3" class="form-control"></textarea>
+          <textarea id="Idescription" formControlName="description" rows="3" class="form-control" maxlength="300"></textarea>
         </div>
         <div class="col-12">
-          <button type="submit" class="btn btn-success">Create</button>
+          <button type="submit" (click)="createTaskItem()" [disabled]="!taskItemCreateForm.valid" class="btn btn-success">Create</button>
         </div>
       </form>
     </div>

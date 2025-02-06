@@ -14,7 +14,7 @@ namespace ToDoFlow.Infrastructure.Context.Configurations
 
             builder.Property(t => t.Id).HasColumnName("id").HasColumnType("int").ValueGeneratedOnAdd();
             builder.Property(t => t.Name).HasColumnName("name").HasColumnType("varchar(60)");
-            builder.Property(t => t.Description).HasColumnName("description").HasColumnType("varchar(100)");
+            builder.Property(t => t.Description).HasColumnName("description").HasColumnType("varchar(300)");
             builder.Property(t => t.Status).HasColumnName("status").HasColumnType("tinyint");
             builder.Property(t => t.Priority).HasColumnName("priority").HasColumnType("tinyint");
             builder.Property(t => t.CreatedAt).HasColumnName("created_at").HasColumnType("datetime");

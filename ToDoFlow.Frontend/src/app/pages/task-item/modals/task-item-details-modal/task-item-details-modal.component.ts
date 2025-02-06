@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input,  ViewChild } from '@angular/core';
+import { TaskItemReadDto } from '../../../../models/task-item';
 
 declare const bootstrap: any;
 
@@ -11,8 +12,12 @@ declare const bootstrap: any;
 })
 export class TaskItemDetailsModalComponent {
   @ViewChild('ItaskItemDetailsModal') modalElement !: ElementRef
+  @Input() taskItemDetails: TaskItemReadDto | null = null;
+  @Input() formattedCreatedData: string | null = null;
+  @Input() formattedCompletedData: string | null = null;
+  @Input() categoryName: string | null = null;
 
-  OpenTaskItemDetailsModal(): void {
+  openTaskItemDetailsModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
       const modal = new bootstrap.Modal(this.modalElement.nativeElement);
       modal.show();
@@ -22,7 +27,7 @@ export class TaskItemDetailsModalComponent {
     }
   };
 
-  CloseTaskItemDetailsModal(): void {
+  closeTaskItemDetailsModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
       const modal = new bootstrap.Modal(this.modalElement.nativeElement);
       modal.hide();

@@ -2,48 +2,48 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Task Details</h5>
+        <h5 class="modal-title">{{taskItemDetails?.name}} Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form class="row g-3">
           <div class="col-12">
             <label for="ItaskName" class="form-label">Task Name</label>
-            <input type="text" value="TesteNome" class="form-control" id="itaskName" disabled readonly>
-        </div>
+            <input type="text" value="{{taskItemDetails?.name}}" class="form-control" id="itaskName" disabled readonly>
+          </div>
           <div class="col-md-6">
             <label for="Icategory" class="form-label">Category</label>
-            <input type="text" value="TesteCategory" class="form-control" id="Icategory" disabled readonly>
+            <input type="text" value="{{categoryName}}" class="form-control" id="Icategory" disabled readonly>
           </div>
           <div class="col-md-6">
             <label for="Ipriority" class="form-label">Priority</label>
-            <input type="text" value="TestePriority" class="form-control" id="Ipriority" disabled readonly>
+            <input type="text" value="{{taskItemDetails?.priority}}" class="form-control" id="Ipriority" disabled readonly>
           </div>
           <div class="col-md-6">
-            <label for="IcreateAt" class="form-label">CreateAt</label>
-            <input type="text" value="20/01/2025" class="form-control" id="Icategory" disabled readonly>
+            <label for="IcreateAt" class="form-label">Created At</label>
+            <input type="text" value="{{formattedCreatedData}}" class="form-control" id="IcreateAt" disabled readonly>
           </div>
           <div class="col-md-6">
-            <label for="IcompleteAt" class="form-label">CompleteAt</label>
-            <input type="text" value="27/01/2025" class="form-control" id="Ipriority" disabled readonly>
+            <label for="IcompleteAt" class="form-label">Completed At</label>
+            <input type="text" value="{{formattedCompletedData == null ? 'Incompleted' : formattedCompletedData}}" class="form-control" id="IcompleteAt" disabled readonly>
           </div>
           <div class="col-12">
             <label for="Istatus" class="form-label">Status</label>
             <div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="status" id="IstatusPending" value="Pending" disabled checked>
+                <input class="form-check-input" type="radio" name="status" id="IstatusPending" value="Pending" [checked]="taskItemDetails?.status === 'Pending'" disabled>
                 <label class="form-check-label" for="IstatusPending">
                   Pending
                 </label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="status" id="IstatusInProgress" value="InProgress" disabled>
+                <input class="form-check-input" type="radio" name="status" id="IstatusInProgress" value="InProgress" [checked]="taskItemDetails?.status === 'InProgress'" disabled>
                 <label class="form-check-label" for="IstatusInProgress">
                   InProgress
                 </label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="status" id="IstatusComplete" value="Complete" disabled>
+                <input class="form-check-input" type="radio" name="status" id="IstatusComplete" value="Complete" [checked]="taskItemDetails?.status === 'Complete'" disabled>
                 <label class="form-check-label" for="IstatusComplete">
                   Complete
                 </label>
@@ -52,12 +52,12 @@
           </div>
           <div class="col-12">
             <label for="Idescription">Description</label>
-            <textarea id="Idescription"rows="3" class="form-control" disabled readonly>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nam repudiandae in! Exercitationem praesentium odio nemo magni? Suscipit sapiente laudantium eum est dolor ducimus odit dolore tenetur ipsum! Hic, eveniet?</textarea>
+            <textarea id="Idescription" rows="3" class="form-control" disabled readonly>{{taskItemDetails?.description}}</textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="CloseTaskItemDetailsModal()">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeTaskItemDetailsModal()">Close</button>
       </div>
     </div>
   </div>

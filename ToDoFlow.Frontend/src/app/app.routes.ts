@@ -19,7 +19,7 @@ export const routes: Routes = [
       { path: 'login', canActivate:[guestGuard], component: LoginComponent },
       { path: 'register', canActivate:[guestGuard], component: RegisterComponent },
       { path: 'taskitem', canActivate:[authGuard], component: TaskItemComponent},
-      { path: 'taskitem/edit', canActivate:[authGuard], component: TaskItemEditComponent },
+      { path: 'taskitem/edit/:id', canActivate:[authGuard], component: TaskItemEditComponent },
       { path: 'taskitem/create', canActivate:[authGuard], component: TaskItemCreateComponent },
       { path: 'category', canActivate:[authGuard], component: CategoryComponent},
     ]

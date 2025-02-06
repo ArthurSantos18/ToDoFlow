@@ -41,12 +41,14 @@ namespace ToDoFlow.Infrastructure.Repositories
             return await _context.Categories.Where(u => u.UserId == category.UserId).Include(t => t.Tasks).ToListAsync();
         }
 
-        public async Task<List<Category>> DeleteCategoryAsync(int id, int userId)
+        public async Task<List<Category>> DeleteCategoryAsync(int id)
         {
+            Category category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+
             _context.Categories.Remove(await _context.Categories.FirstOrDefaultAsync(c => c.Id == id));
             await _context.SaveChangesAsync();
 
-            return await _context.Categories.Where(u => u.UserId == userId).ToListAsync();
+            return await _context.Categories.Where(u => u.UserId == category.Id).ToListAsync();
         }
 
     }

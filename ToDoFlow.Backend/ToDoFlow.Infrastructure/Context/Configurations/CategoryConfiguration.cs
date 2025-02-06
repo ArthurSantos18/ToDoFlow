@@ -13,7 +13,7 @@ namespace ToDoFlow.Infrastructure.Context.Configurations
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Id).HasColumnName("id").HasColumnType("int");
-            builder.Property(c => c.Name).HasColumnName("name").HasColumnType("varchar(40)");
+            builder.Property(c => c.Name).HasColumnName("name").HasColumnType("varchar(30)");
 
             builder.Property(t => t.UserId).HasColumnName("user_id");
             builder.HasOne(u => u.User).WithMany(u => u.Categories).HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.Cascade);

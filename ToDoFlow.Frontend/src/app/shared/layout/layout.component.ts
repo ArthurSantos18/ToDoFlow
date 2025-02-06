@@ -1,5 +1,5 @@
 import { Component, effect, inject, Injector, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +14,7 @@ export class LayoutComponent {
   isLoggedIn = this.authService.getLoggedIn()
   injector = inject(Injector)
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     effect(() => {
@@ -24,5 +24,6 @@ export class LayoutComponent {
 
   onLogout() {
     this.authService.logout()
+    this.router.navigate(['login']);
   }
 }

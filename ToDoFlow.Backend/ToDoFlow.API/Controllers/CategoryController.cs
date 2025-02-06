@@ -43,9 +43,9 @@ namespace ToDoFlow.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCategoryAsync(int id, int userId)
+        public async Task<ActionResult> DeleteCategoryAsync(int id)
         {
-            return Ok(await _categoryService.DeleteCategoryAsync(id, userId));
+            return Ok(await _categoryService.DeleteCategoryAsync(id));
         }
     }
 }

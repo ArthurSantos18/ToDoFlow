@@ -8,6 +8,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService)
   const router = inject(Router)
 
+  /*if(authService.getToken() && authService.isTokenExpired()) {
+    authService.logout();
+    router.navigate(['/login']);
+    return throwError(() => 'Token expirado');
+  }*/
+
+
   if(authService.isLoggedIn()) {
     req = req.clone({
       setHeaders: {

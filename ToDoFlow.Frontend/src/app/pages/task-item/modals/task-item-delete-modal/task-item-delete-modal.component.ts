@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { TaskItemService } from '../../../../core/services/task-item/task-item.service';
 
 declare const bootstrap: any;
 
@@ -10,9 +11,14 @@ declare const bootstrap: any;
   styleUrl: './task-item-delete-modal.component.css'
 })
 export class TaskITemDeleteModalComponent {
-  @ViewChild('ItaskItemDeleteModal') modalElement!: ElementRef
+  @ViewChild('ItaskItemDeleteModal') modalElement!: ElementRef;
 
-  OpenTaskItemDeleteModal(): void {
+  @Input() taskItemName: string | null = null;
+  @Input() taskItemId: number | null = null;
+
+  constructor(private taskItemService: TaskItemService) { }
+
+  openTaskItemDeleteModal(): void {
     if(this.modalElement && this.modalElement.nativeElement) {
       const modal = new bootstrap.Modal(this.modalElement.nativeElement);
       modal.show();
@@ -22,7 +28,7 @@ export class TaskITemDeleteModalComponent {
     }
   };
 
-  CloseTaskItemDeleteModal(): void {
+  closeTaskItemDeleteModal(): void {
     if(this.modalElement && this.modalElement.nativeElement) {
       const modal = new bootstrap.Modal(this.modalElement.nativeElement);
       modal.hide();
@@ -31,4 +37,13 @@ export class TaskITemDeleteModalComponent {
       console.error('Modal element not found!');
     }
   };
+
+  deleteTaskItem(): void {
+    this.taskItemService.deleteTaskItem(Number(this.taskItemId)).subscribe({
+      next: () => {
+        location.reload()
+      },
+      error: (error) => console.error('')
+    })
+  }
 }

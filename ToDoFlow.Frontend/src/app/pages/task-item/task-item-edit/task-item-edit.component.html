@@ -1,41 +1,41 @@
-<section class="d-flex justify-content-center">
+<section class="d-flex justify-content-center" *ngIf="taskItemUpdate">
   <div class="card mt-5 p-2" style="width: 30em; border: solid rgba(0, 0, 0, 0.262);">
     <div class="card-body">
-      <h5 class="card-title mb-3">Edit Task</h5>
-      <form class="row g-3">
+      <h5 class="card-title mb-3">Edit {{taskItemUpdate.name}}</h5>
+      <form class="row g-3" [formGroup]="taskItemUpdateForm">
         <div class="col-12">
           <label for="ItaskName" class="form-label">Task Name</label>
-          <input type="text" class="form-control" id="ItaskName">
+          <input type="text" formControlName="name" class="form-control" id="ItaskName">
       </div>
         <div class="col-md-6">
           <label for="Icategory" class="form-label">Category</label>
-          <select class="form-select" id="Icategory">
-            <option value="teste">teste</option>
+          <select class="form-select" id="Icategory" formControlName="categoryId">
+            <option *ngFor="let category of categoriesByUserId" [value]="category.id">{{category.name}}</option>
           </select>
         </div>
         <div class="col-md-6">
           <label for="Ipriority" class="form-label">Priority</label>
-          <select class="form-select" id="Ipriority">
-            <option value="teste">teste</option>
+          <select class="form-select" id="Ipriority" formControlName="priority">
+            <option *ngFor="let priority of priorities | keyvalue" value="{{priority.value}}">{{priority.value}}</option>
           </select>
         </div>
         <div class="col-12">
           <label for="Istatus" class="form-label">Status</label>
           <div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="status" id="IstatusPending" value="Pending">
+              <input class="form-check-input" type="radio" name="status" id="IstatusPending" value="Pending" formControlName="status">
               <label class="form-check-label" for="IstatusPending">
                 Pending
               </label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="status" id="IstatusInProgress" value="InProgress">
+              <input class="form-check-input" type="radio" name="status" id="IstatusInProgress" value="InProgress" formControlName="status">
               <label class="form-check-label" for="IstatusInProgress">
                 InProgress
               </label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="status" id="IstatusComplete" value="Complete">
+              <input class="form-check-input" type="radio" name="status" id="IstatusComplete" value="Complete" formControlName="status">
               <label class="form-check-label" for="IstatusComplete">
                 Complete
               </label>
@@ -44,10 +44,10 @@
         </div>
         <div class="col-12">
           <label for="Idescription">Description</label>
-          <textarea id="Idescription" rows="3" class="form-control"></textarea>
+          <textarea id="Idescription" formControlName="description" rows="3" class="form-control">{{taskItemUpdate.description}}</textarea>
         </div>
         <div class="col-12">
-          <button type="submit" class="btn btn-success">Create</button>
+          <button type="submit" (click)="updateTaskItem()" [disabled]="!taskItemUpdateForm.valid" class="btn btn-success">Edit</button>
         </div>
       </form>
     </div>

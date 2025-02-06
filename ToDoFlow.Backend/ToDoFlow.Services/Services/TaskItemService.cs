@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
+using ToDoFlow.Domain.Models.Enums;
 using ToDoFlow.Infrastructure.Repositories.Interface;
 using ToDoFlow.Services.Services.Interface;
 
@@ -80,6 +81,15 @@ namespace ToDoFlow.Services.Services
             {
                 TaskItem taskItem = await _taskItemRepository.ReadTaskItemByIdAsync(id);
                 _mapper.Map(taskItemUpdateDto, taskItem);
+                if (taskItem.Status == Status.Complete)
+                {
+                    taskItem.CompleteAt = DateTime.Now;
+                }
+                else
+                {
+                    taskItem.CompleteAt = null;
+                }
+
                 await _taskItemRepository.UpdateTaskItemAsync(taskItem);
 
                 List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(taskItem.CategoryId);
@@ -103,7 +113,7 @@ namespace ToDoFlow.Services.Services
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.InnerException}", 500);
             }
         }
     }

@@ -78,17 +78,16 @@ namespace ToDoFlow.Services.Services
                 new(ClaimTypes.Role, user.Profile.ToString())
             ];
 
-
             SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? string.Empty));
             SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken token = new(
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
-                expires: DateTime.UtcNow.AddMinutes(int.Parse(jwtSettings["ExpirationMinutes"] ?? string.Empty)),
+                expires: DateTime.UtcNow.AddMinutes(5),
                 claims: claims,
                 signingCredentials: creds);
-
+            
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

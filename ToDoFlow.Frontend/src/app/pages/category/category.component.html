@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center align-items-center">
-  <button class="btn-success btn mt-4" style="font-size: 1.5em; min-width: 10em; border: solid rgba(0, 0, 0, 0.37);" (click)="OpenCategoryCreateModal()">New Category</button>
+  <button class="btn-success btn mt-4" style="font-size: 1.5em; min-width: 10em; border: solid rgba(0, 0, 0, 0.37);" (click)="openCategoryCreateModal()">New Category</button>
 </div>
 
 <div class="d-flex justify-content-center align-items-center">
@@ -13,33 +13,14 @@
           </tr>
         </thead>
         <tbody class="table-group-divider">
-          <tr>
-            <td>Tarefa doméstica</td>
+          <tr *ngFor="let category of categoriesByUserId">
+            <td>{{category.name}}</td>
             <td class="text-center">
               <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-primary me-2" (click)="OpenCategoryEditModal()">Rename</button>
-                <button type="button" class="btn btn-danger me-2" (click)="OpenCategoryDeleteModal()">Delete</button>
+                <button type="button" class="btn btn-primary me-2" (click)="openCategoryEditModal(category.id, category.name)">Rename</button>
+                <button type="button" class="btn btn-danger me-2" (click)="openCategoryDeleteModal(category.id, category.name)">Delete</button>
               </div>
             </td>
-          </tr>
-          <tr>
-            <td>Exercícios</td>
-            <td class="text-center">
-              <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-primary me-2" (click)="OpenCategoryEditModal()">Rename</button>
-                <button type="button" class="btn btn-danger me-2" (click)="OpenCategoryDeleteModal()">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Trabalho</td>
-            <td class="text-center">
-              <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-primary me-2" (click)="OpenCategoryEditModal()">Rename</button>
-                <button type="button" class="btn btn-danger me-2" (click)="OpenCategoryDeleteModal()">Delete</button>
-              </div>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>

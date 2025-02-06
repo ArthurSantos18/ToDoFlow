@@ -7,7 +7,7 @@ export const API_ENDPOINTS = {
   },
 
   USER: {
-    POST: `${environment.apiUrl}/users`,
+    CREATE: `${environment.apiUrl}/users`,
     GET: `${environment.apiUrl}/users`,
     GET_BY_ID: `${environment.apiUrl}/users/{id}`,
     PUT: `${environment.apiUrl}/users/{id}`,
@@ -15,20 +15,24 @@ export const API_ENDPOINTS = {
   },
 
   CATEGORY: {
-    POST: `${environment.apiUrl}/categories`,
-    GET: `${environment.apiUrl}/categories`,
-    GET_BY_ID: `${environment.apiUrl}/categories/{id}`,
-    GET_BY_USER: `${environment.apiUrl}/categories/user/{id}`,
-    PUT: `${environment.apiUrl}/categories/{id}`,
-    DELETE: `${environment.apiUrl}/categories/{id}`,
+    CREATE: `${environment.apiUrl}/categories`,
+    GET_ALL: `${environment.apiUrl}/categories`,
+    GET_BY_ID: `${environment.apiUrl}/categories`,
+    GET_BY_USER_ID: `${environment.apiUrl}/categories/user`,
+    UPDATE: `${environment.apiUrl}/categories`,
+    DELETE: `${environment.apiUrl}/categories`,
   },
 
   TASKITEM: {
-    POST: `${environment.apiUrl}/taskitems`,
-    GET: `${environment.apiUrl}/taskitems`,
-    GET_BY_ID: `${environment.apiUrl}/taskitems/{id}`,
-    GET_BY_CATEGORY: `${environment.apiUrl}/taskitems/category/{id}`,
-    PUT: `${environment.apiUrl}/taskitems/{id}`,
-    DELETE: `${environment.apiUrl}/taskitems/{id}`,
+    CREATE: `${environment.apiUrl}/taskitems`,
+    GET_ALL: `${environment.apiUrl}/taskitems`,
+    GET_BY_ID: `${environment.apiUrl}/taskitems`,
+    GET_BY_CATEGORY_ID: `${environment.apiUrl}/taskitems/category`,
+    UPDATE: `${environment.apiUrl}/taskitems`,
+    DELETE: `${environment.apiUrl}/taskitems`,
+  },
+
+  ENUM: {
+    GET_PRIORITY: `${environment.apiUrl}/enums/priorities`
   }
 };
