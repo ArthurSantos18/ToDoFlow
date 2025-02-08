@@ -87,7 +87,10 @@ export class AuthService {
 
   private hasToken(): boolean {
     const token = this.getToken();
-    return !token;
+    if (token) {
+      return true
+    }
+    return false;
   }
 
   getLoggedIn() {
