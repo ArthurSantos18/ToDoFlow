@@ -15,6 +15,11 @@
         </li>
       }
       @else {
+        @if (userRole == "Administrator") {
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#" routerLink="user">Users</a>
+          </li>
+        }
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#" routerLink="taskitem">Tasks</a>
         </li>

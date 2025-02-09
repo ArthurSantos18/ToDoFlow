@@ -16,7 +16,10 @@
         public class UserReadDto : UserBaseDto
         {
             public int Id { get; set; }
+            public int CategoryCount { get; set; }
+            public int TaskItemCount { get; set; }
             public Profile Profile { get; set; }
+
         }
 
         public class UserUpdateDto : UserBaseDto

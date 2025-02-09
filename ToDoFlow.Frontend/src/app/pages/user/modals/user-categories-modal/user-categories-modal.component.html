@@ -1,0 +1,29 @@
+<div class="modal fade" tabindex="-1" id="IUserCategoriesModal" #IUserCategoriesModal>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{userName}}'s categories</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table align-middle table-bordered table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let category of categoriesByUserId">
+              <th scope="row">{{category.id}}</th>
+              <td>{{category.name}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="closeUserCategoriesModal()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

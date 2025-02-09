@@ -18,12 +18,14 @@ export class CategoryDeleteModalComponent {
   @Input() categoryId: number | null = null;
   @Input() categoryName: string | null = null;
 
+  modal: any
+
   constructor(private categoryService: CategoryService, private fb: FormBuilder) {}
 
   openCategoryDeleteModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
-      const modal = new bootstrap.Modal(this.modalElement.nativeElement);
-      modal.show();
+      this.modal = new bootstrap.Modal(this.modalElement.nativeElement);
+      this.modal.show();
     }
     else {
       console.error('Modal element not found!');
@@ -32,8 +34,7 @@ export class CategoryDeleteModalComponent {
 
   closeCategoryDeleteModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
-      const modal = new bootstrap.Modal(this.modalElement.nativeElement);
-      modal.hide();
+      this.modal.hide();
     }
     else {
       console.error('Modal element not found!')

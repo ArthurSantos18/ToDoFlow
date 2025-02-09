@@ -60,6 +60,21 @@ namespace ToDoFlow.Services.Services
             }
         }
 
+        public async Task<ApiResponse<List<TaskItemReadDto>>> ReadTaskItemByUserAsync(int userId)
+        {
+            try
+            {
+                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByUserAsync(userId);
+                List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
+
+                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+            }
+        }
+            
         public async Task<ApiResponse<TaskItemReadDto>> ReadTaskItemByIdAsync(int id)
         {
             try

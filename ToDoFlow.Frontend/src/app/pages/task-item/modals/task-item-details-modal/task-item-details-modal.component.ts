@@ -17,10 +17,12 @@ export class TaskItemDetailsModalComponent {
   @Input() formattedCompletedData: string | null = null;
   @Input() categoryName: string | null = null;
 
+  modal: any
+
   openTaskItemDetailsModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
-      const modal = new bootstrap.Modal(this.modalElement.nativeElement);
-      modal.show();
+      this.modal = new bootstrap.Modal(this.modalElement.nativeElement);
+      this.modal.show();
     }
     else {
       console.error('Modal element not found!');
@@ -29,8 +31,7 @@ export class TaskItemDetailsModalComponent {
 
   closeTaskItemDetailsModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
-      const modal = new bootstrap.Modal(this.modalElement.nativeElement);
-      modal.hide();
+      this.modal.hide();
     }
     else {
       console.error('Modal element not found!');

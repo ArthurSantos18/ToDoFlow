@@ -17,6 +17,7 @@ export class CategoryEditModalComponent {
   @Input() categoryId: number | null = null;
   @Input() categoryName: string | null = null;
 
+  modal: any
   categoryUpdateForm: FormGroup;
 
   constructor(private categoryService: CategoryService, private fb: FormBuilder) {
@@ -29,8 +30,8 @@ export class CategoryEditModalComponent {
 
   openCategoryEditModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
-      const modal = new bootstrap.Modal(this.modalElement.nativeElement);
-      modal.show();
+      this.modal = new bootstrap.Modal(this.modalElement.nativeElement);
+      this.modal.show();
 
       if (this.categoryId !== null) {
         this.categoryUpdateForm.patchValue({
@@ -45,8 +46,7 @@ export class CategoryEditModalComponent {
 
   closeCategoryEditModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
-      const modal = new bootstrap.Modal(this.modalElement.nativeElement);
-      modal.hide();
+      this.modal.hide();
     }
     else {
       console.error('Modal element not found!')

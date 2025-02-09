@@ -9,6 +9,7 @@ import { CategoryComponent } from './pages/category/category.component';
 import { TaskItemCreateComponent } from './pages/task-item/task-item-create/task-item-create.component';
 import { authGuard } from './core/guards/auth/auth.guard';
 import { guestGuard } from './core/guards/guest/guest.guard';
+import { UserComponent } from './pages/user/user.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
       { path: 'taskitem', canActivate:[authGuard], component: TaskItemComponent},
       { path: 'taskitem/edit/:id', canActivate:[authGuard], component: TaskItemEditComponent },
       { path: 'taskitem/create', canActivate:[authGuard], component: TaskItemCreateComponent },
+      { path: 'user', canActivate:[authGuard], data:{ role: 'Administrator'} ,component: UserComponent},
       { path: 'category', canActivate:[authGuard], component: CategoryComponent},
     ]
   }

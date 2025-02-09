@@ -30,6 +30,12 @@ namespace ToDoFlow.API.Controllers
             return Ok(await _taskItemService.ReadTaskItemByCategoryAsync(categoryId));
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult> ReadTaskItemByUserAsync(int userId)
+        {
+            return Ok(await _taskItemService.ReadTaskItemByUserAsync(userId));
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> ReadTaskItemByIdAsync(int id)
         {

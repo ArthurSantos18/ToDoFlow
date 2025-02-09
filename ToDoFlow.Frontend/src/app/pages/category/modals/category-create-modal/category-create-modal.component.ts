@@ -16,6 +16,7 @@ declare var bootstrap: any;
 export class CategoryCreateModalComponent {
   @ViewChild('IcategoryCreateModal') modalElement !: ElementRef;
 
+  modal: any
   categoryCreateForm: FormGroup
 
   constructor(private categoryService: CategoryService, private authService: AuthService, private fb: FormBuilder) {
@@ -27,8 +28,8 @@ export class CategoryCreateModalComponent {
 
   openCategoryCreateModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
-      const modal = new bootstrap.Modal(this.modalElement.nativeElement);
-      modal.show();
+      this.modal = new bootstrap.Modal(this.modalElement.nativeElement);
+      this.modal.show();
     }
     else {
       console.error('Modal element not found!');
@@ -37,8 +38,7 @@ export class CategoryCreateModalComponent {
 
   closeCategoryCreateModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
-      const modal = new bootstrap.Modal(this.modalElement.nativeElement);
-      modal.hide();
+      this.modal.hide();
     }
     else {
       console.error('Modal element not found!')

@@ -11,7 +11,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
-  isLoggedIn = this.authService.getLoggedIn()
+  isLoggedIn: Boolean = false
+  userRole: string | null = null
+
   injector = inject(Injector)
 
   constructor(private authService: AuthService, private router: Router) { }
@@ -19,7 +21,9 @@ export class LayoutComponent {
   ngOnInit(): void {
     effect(() => {
       this.isLoggedIn = this.authService.isLoggedIn()
-    },{injector: this.injector})
+      this.userRole = this.authService.getRoleFromToken()
+    },
+    {injector: this.injector})
   }
 
   onLogout() {

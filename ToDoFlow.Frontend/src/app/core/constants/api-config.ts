@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
     GET_ALL: `${environment.apiUrl}/taskitems`,
     GET_BY_ID: `${environment.apiUrl}/taskitems`,
     GET_BY_CATEGORY_ID: `${environment.apiUrl}/taskitems/category`,
+    GET_BY_USER_ID: `${environment.apiUrl}/taskitems/user`,
     UPDATE: `${environment.apiUrl}/taskitems`,
     DELETE: `${environment.apiUrl}/taskitems`,
   },

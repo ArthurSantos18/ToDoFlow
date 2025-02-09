@@ -19,6 +19,10 @@ export class TaskItemService {
     return this.http.get<ApiResponse<TaskItemReadDto[]>>(`${API_ENDPOINTS.TASKITEM.GET_BY_CATEGORY_ID}/${categoryId}`)
   }
 
+  getTaskItemByUser(userId: number): Observable<ApiResponse<TaskItemReadDto[]>> {
+    return this.http.get<ApiResponse<TaskItemReadDto[]>>(`${API_ENDPOINTS.TASKITEM.GET_BY_USER_ID}/${userId}`)
+  }
+
   getTaskItemById(taskItemId: number): Observable<ApiResponse<TaskItemReadDto>> {
     return this.http.get<ApiResponse<TaskItemReadDto>>(`${API_ENDPOINTS.TASKITEM.GET_BY_ID}/${taskItemId}`)
   }

@@ -3,12 +3,16 @@ using ToDoFlow.Infrastructure.Repositories.Interface;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
 using ToDoFlow.Services.Services.Interface;
+using ToDoFlow.Infrastructure.Repositories;
 
 namespace ToDoFlow.Services.Services
 {
-    public class UserService(IUserRepository userRepository, IMapper mapper, IEncryptionService encryptionService) : IUserService
+    public class UserService(IUserRepository userRepository, IMapper mapper, IEncryptionService encryptionService, 
+        ICategoryRepository categoryRepository, ITaskItemRepository taskItemRepository) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository;
+        private readonly ICategoryRepository _categoryRepository = categoryRepository;
+        private readonly ITaskItemRepository _taskItemRepository = taskItemRepository;
         private readonly IMapper _mapper = mapper;
         private readonly IEncryptionService _encryptionService = encryptionService;
 
@@ -37,6 +41,15 @@ namespace ToDoFlow.Services.Services
             {
                 List<User> users = await _userRepository.ReadUserAsync();
                 List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
+                
+                foreach (UserReadDto user in userReadDtos)
+                {
+                    List<Category> categories = await _categoryRepository.ReadCategoryByUserAsync(user.Id);
+                    user.CategoryCount = categories.Count;
+
+                    List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByUserAsync(user.Id);
+                    user.TaskItemCount = taskItems.Count;
+                }
 
                 return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "Operation carried out successfully", 200);
             }

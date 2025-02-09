@@ -1,0 +1,34 @@
+<div class="modal fade" tabindex="-1" id="IUserTaskItemsModal" #IUserTaskItemsModal>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table align-middle table-bordered table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Priority</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let taskItem of taskItemsByUserId">
+              <th scope="row">{{taskItem.id}}</th>
+              <td>{{taskItem.name}}</td>
+              <td>{{taskItem.priority}}</td>
+              <td>{{taskItem.status}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

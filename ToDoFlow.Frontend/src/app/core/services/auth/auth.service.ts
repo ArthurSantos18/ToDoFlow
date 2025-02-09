@@ -10,13 +10,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthService {
-  private tokenCheckInterval = 60000;
 
   isLoggedIn = signal<boolean>(this.hasToken());
 
-  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {
-    //this.startTokenAutoCheck()
-  }
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) { }
 
   login(loginRequest: LoginRequest) {
     return this.http.post<ApiResponse<string>>(`${API_ENDPOINTS.AUTH.LOGIN}`,loginRequest)
@@ -80,10 +77,21 @@ export class AuthService {
     }
   }
 
-  /*isTokenExpired(): boolean {
-    const token = localStorage.getItem('USER_TOKEN');
-    return this.jwtHelper.isTokenExpired(token);
-  }*/
+  getRoleFromToken(): string | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const decoded = this.jwtHelper.decodeToken(token);
+      return decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || null;
+    }
+    catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  }
 
   private hasToken(): boolean {
     const token = this.getToken();
@@ -96,15 +104,4 @@ export class AuthService {
   getLoggedIn() {
     return this.isLoggedIn()
   }
-
-  /*startTokenAutoCheck() {
-    if(this.getLoggedIn()) {
-      setInterval(() => {
-        if (this.isTokenExpired()) {
-          console.log(this.isTokenExpired())
-          this.logout();
-        }
-      }, this.tokenCheckInterval);
-    }
-  }*/
 }

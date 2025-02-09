@@ -6,6 +6,7 @@ namespace ToDoFlow.Infrastructure.Repositories.Interface
     {
         public Task<List<TaskItem>> CreateTaskItemAsync(TaskItem taskItem);
         public Task<List<TaskItem>> ReadTaskItemAsync();
+        public Task<List<TaskItem>> ReadTaskItemByUserAsync(int userId);
         public Task<List<TaskItem>> ReadTaskItemByCategoryAsync(int categoryId);
         public Task<TaskItem> ReadTaskItemByIdAsync(int id);
         public Task<List<TaskItem>> UpdateTaskItemAsync(TaskItem taskItem);

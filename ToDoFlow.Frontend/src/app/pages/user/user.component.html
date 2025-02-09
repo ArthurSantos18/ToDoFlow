@@ -1,0 +1,45 @@
+<div class="d-flex justify-content-center align-items-center">
+  <section class="card mt-5 p-2" style="border: solid rgba(0, 0, 0, 0.262); width: 100%;">
+    <div class="table-responsive" id="tablecategory">
+      <table class="table align-middle table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Profile</th>
+            <th scope="col">Categories</th>
+            <th scope="col">Tasks</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr *ngFor="let user of Users">
+            <td>{{user.id}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.profile}}</td>
+            <td>
+              <div class="d-flex justify-content-center">
+                <button type="button" (click)="openUserCategoriesModal(user.id, user.name)" class="btn btn-success">{{user.categoryCount}}</button>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-center">
+                <button type="button" (click)="openTaskItemsModal(user.id, user.name)"  class="btn btn-success">{{user.taskItemCount}}</button>
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-primary me-2" >Edit</button>
+                <button type="button" class="btn btn-danger me-2" >Delete</button>
+              </div>
+            </td>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<app-user-categories-modal></app-user-categories-modal>
+<app-user-task-items-modal></app-user-task-items-modal>
