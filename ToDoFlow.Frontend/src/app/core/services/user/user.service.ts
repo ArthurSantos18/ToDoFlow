@@ -15,4 +15,12 @@ export class UserService {
   getAllUsers(): Observable<ApiResponse<UserReadDto[]>> {
     return this.http.get<ApiResponse<UserReadDto[]>>(`${API_ENDPOINTS.USER.GET}`)
   }
+
+  getUserById(userId: number): Observable<ApiResponse<UserReadDto>> {
+    return this.http.get<ApiResponse<UserReadDto>>(`${API_ENDPOINTS.USER.GET_BY_ID}/${userId}`)
+  }
+
+  deleteUser(userId: number): Observable<ApiResponse<UserReadDto[]>> {
+    return this.http.delete<ApiResponse<UserReadDto[]>>(`${API_ENDPOINTS.USER.DELETE}/${userId}`)
+  }
 }

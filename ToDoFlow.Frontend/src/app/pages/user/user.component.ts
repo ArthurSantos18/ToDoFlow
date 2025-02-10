@@ -6,17 +6,19 @@ import { UserCategoriesModalComponent } from './modals/user-categories-modal/use
 import { TaskItemService } from '../../core/services/task-item/task-item.service';
 import { CategoryService } from '../../core/services/category/category.service';
 import { UserTaskItemsModalComponent } from './modals/user-task-items-modal/user-task-items-modal.component';
+import { UserDeleteModalComponent } from "./modals/user-delete-modal/user-delete-modal.component";
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [CommonModule, UserCategoriesModalComponent, UserTaskItemsModalComponent],
+  imports: [CommonModule, UserCategoriesModalComponent, UserTaskItemsModalComponent, UserDeleteModalComponent],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
 export class UserComponent implements OnInit {
   @ViewChild(UserCategoriesModalComponent) userCategoriesModal!: UserCategoriesModalComponent;
   @ViewChild(UserTaskItemsModalComponent) userTaskItemsModal!: UserTaskItemsModalComponent;
+  @ViewChild(UserDeleteModalComponent) userDeleteModal!: UserDeleteModalComponent;
 
   Users: UserReadDto[] = []
 
@@ -28,11 +30,11 @@ export class UserComponent implements OnInit {
 
   LoadUser() {
     this.userService.getAllUsers().subscribe((response) => {
-      this.Users = response.data
+      this.Users = response.data.filter(user => user.profile === 'Default')
     })
   }
 
-  openUserCategoriesModal(userId: number, userName: string) {
+  openUserCategoriesModal(userId: number, userName: string): void {
     this.categoryService.getCategoryByUser(userId).subscribe((response) => {
       this.userCategoriesModal.categoriesByUserId = response.data;
       this.userCategoriesModal.userName = userName;
@@ -40,11 +42,17 @@ export class UserComponent implements OnInit {
     this.userCategoriesModal.openUserCategoriesModal();
   }
 
-  openTaskItemsModal(userId: number, userName: string) {
+  openUserTaskItemsModal(userId: number, userName: string): void {
     this.taskItemService.getTaskItemByUser(userId).subscribe((response) => {
       this.userTaskItemsModal.taskItemsByUserId = response.data;
       this.userTaskItemsModal.userName = userName
     })
     this.userTaskItemsModal.openUserTaskItemModal();
+  }
+
+  openUserDeleteModal(userId: number, userName: string): void {
+    this.userDeleteModal.userId = userId
+    this.userDeleteModal.userName = userName
+    this.userDeleteModal.openUserDeleteModal()
   }
 }

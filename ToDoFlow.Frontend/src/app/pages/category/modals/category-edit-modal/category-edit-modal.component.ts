@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input, input, OnInit, output, OutputEmitterRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../../core/services/auth/auth.service';
 import { CategoryService } from '../../../../core/services/category/category.service';
 
 declare const bootstrap: any;

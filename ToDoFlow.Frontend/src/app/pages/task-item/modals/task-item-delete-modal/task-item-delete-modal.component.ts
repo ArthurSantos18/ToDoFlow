@@ -40,7 +40,7 @@ export class TaskITemDeleteModalComponent {
   };
 
   deleteTaskItem(): void {
-    this.taskItemService.deleteTaskItem(Number(this.taskItemId)).subscribe({
+    this.taskItemService.deleteTaskItem(this.taskItemId!).subscribe({
       next: () => {
         location.reload()
       },

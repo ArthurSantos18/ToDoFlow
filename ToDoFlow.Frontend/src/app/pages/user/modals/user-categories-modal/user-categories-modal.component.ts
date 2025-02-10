@@ -13,13 +13,13 @@ declare const bootstrap: any
 })
 export class UserCategoriesModalComponent {
   @ViewChild("IUserCategoriesModal") modalElement!: ElementRef
-  
+
   @Input() userName: string | null = null;
   @Input() categoriesByUserId: CategoryReadDto[] = []
 
   modal: any
 
-  openUserCategoriesModal() {
+  openUserCategoriesModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
       this.modal = new bootstrap.Modal(this.modalElement.nativeElement)
       this.modal.show()
@@ -29,7 +29,7 @@ export class UserCategoriesModalComponent {
     }
   }
 
-  closeUserCategoriesModal() {
+  closeUserCategoriesModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
       this.modal.hide()
     }

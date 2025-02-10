@@ -1,6 +1,4 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { AuthService } from '../../../../core/services/auth/auth.service';
 import { CategoryService } from '../../../../core/services/category/category.service';
 
 declare var bootstrap: any;
@@ -20,7 +18,7 @@ export class CategoryDeleteModalComponent {
 
   modal: any
 
-  constructor(private categoryService: CategoryService, private fb: FormBuilder) {}
+  constructor(private categoryService: CategoryService) {}
 
   openCategoryDeleteModal(): void {
     if (this.modalElement && this.modalElement.nativeElement) {
@@ -42,7 +40,7 @@ export class CategoryDeleteModalComponent {
   }
 
   deleteCategory(): void {
-    this.categoryService.deleteCategory(Number(this.categoryId)).subscribe({
+    this.categoryService.deleteCategory(this.categoryId!).subscribe({
       next: () => {
         location.reload()
       },

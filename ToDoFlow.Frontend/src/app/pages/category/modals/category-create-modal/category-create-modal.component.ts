@@ -2,7 +2,6 @@ import { Component, ElementRef, output, Output, OutputEmitterRef, ViewChild } fr
 import { CategoryService } from '../../../../core/services/category/category.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth/auth.service';
-import { EventEmitter } from 'stream';
 
 declare var bootstrap: any;
 

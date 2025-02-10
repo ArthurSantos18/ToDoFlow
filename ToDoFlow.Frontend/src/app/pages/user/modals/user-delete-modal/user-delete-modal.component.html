@@ -1,0 +1,17 @@
+<div class="modal fade" id="IuserDeleteModal" tabindex="-1" #IuserDeleteModal>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Delete User</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="text-danger">Do you want to delete the user {{userName}}?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" (click)="deleteUser()" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

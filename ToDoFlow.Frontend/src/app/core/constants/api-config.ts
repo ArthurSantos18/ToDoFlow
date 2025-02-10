@@ -9,9 +9,9 @@ export const API_ENDPOINTS = {
   USER: {
     CREATE: `${environment.apiUrl}/users`,
     GET: `${environment.apiUrl}/users`,
-    GET_BY_ID: `${environment.apiUrl}/users/{id}`,
-    PUT: `${environment.apiUrl}/users/{id}`,
-    DELETE: `${environment.apiUrl}/users/{id}`,
+    GET_BY_ID: `${environment.apiUrl}/users`,
+    PUT: `${environment.apiUrl}/users`,
+    DELETE: `${environment.apiUrl}/users`,
   },
 
   CATEGORY: {
