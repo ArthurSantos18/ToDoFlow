@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,6 +19,8 @@ export class LoginComponent {
       password: new FormControl('', [Validators.required])
     });
   }
+
+
 
   onLogin() {
     if(this.loginForm.valid) {

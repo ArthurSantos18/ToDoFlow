@@ -27,7 +27,7 @@
           <a class="nav-link active" aria-current="page" href="#" routerLink="category">Categories</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#" routerLink="login" (click)="onLogout()">Logout</a>
+          <a class="nav-link active" aria-current="page" href="#" routerLink="login" (click)="openLayoutLogoutModal()">Logout</a>
         </li>
       }
       </ul>
@@ -37,4 +37,5 @@
 
 <main class="container">
     <router-outlet></router-outlet>
+    <app-layout-logout-modal></app-layout-logout-modal>
 </main>
