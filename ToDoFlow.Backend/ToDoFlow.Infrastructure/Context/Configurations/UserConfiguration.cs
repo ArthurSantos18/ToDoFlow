@@ -18,6 +18,8 @@ namespace ToDoFlow.Infrastructure.Context.Configurations
             builder.Property(u => u.Password).HasColumnName("password_hash").HasColumnType("varchar(60)");
             builder.Property(u => u.CreateAt).HasColumnName("create_at").HasColumnType("datetime");
             builder.Property(u => u.Profile).HasColumnName("profile").HasColumnType("tinyint");
+
+            builder.HasOne(u => u.UserRefreshToken).WithOne(u => u.User).HasForeignKey<UserRefreshToken>(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

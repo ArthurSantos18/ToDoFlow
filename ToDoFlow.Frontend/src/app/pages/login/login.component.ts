@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup
 
   constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) {
@@ -20,6 +20,8 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit(): void {
+  }
 
 
   onLogin() {

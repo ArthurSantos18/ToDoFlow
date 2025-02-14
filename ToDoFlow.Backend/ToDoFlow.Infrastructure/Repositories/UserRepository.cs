@@ -22,12 +22,12 @@ namespace ToDoFlow.Infrastructure.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User> ReadUserAsync(int id)
+        public async Task<User> ReadUserByIdAsync(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> ReadUserAsync(string email)
+        public async Task<User> ReadUserByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }

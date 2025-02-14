@@ -25,6 +25,9 @@ namespace ToDoFlow.Services.Services
 
             //AccountAuthMap
             CreateMap<RegisterRequestDto, User>().ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
+
+            //UserRefreshTokenMap
+            CreateMap<UserRefreshToken, UserRefreshTokenDto>();
         }
     }
 }

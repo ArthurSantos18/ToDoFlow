@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
+using ToDoFlow.Domain.Models;
 using ToDoFlow.Services.Services;
 using ToDoFlow.Services.Services.Interface;
 
@@ -15,27 +16,39 @@ namespace ToDoFlow.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> LoginAsync(LoginRequestDto loginRequestDto)
         {
-            ApiResponse<string> token = await _accountService.LoginAsync(loginRequestDto);
-
-            if (token == null)
+            ApiResponse<string, UserRefreshTokenDto> response = await _accountService.LoginAsync(loginRequestDto);
+            
+            if (response == null)
             {
-                return Unauthorized(token);
+                return Unauthorized(response);
             }
-
-            return Ok(token);
+            
+            return Ok(response);
         }
 
         [HttpPost("register")]
         public async Task<ActionResult> RegisterAsync(RegisterRequestDto registerRequestDto)
         {
-            ApiResponse<string> token = await _accountService.RegisterAsync(registerRequestDto);
+            ApiResponse<string, UserRefreshTokenDto> response = await _accountService.RegisterAsync(registerRequestDto);
             
-            if (token == null)
+            if (response.Data1 == null && response.Data2 == null)
             {
-                return BadRequest(token);
+                return BadRequest(response);
             }
 
-            return Ok(token);
+            return Ok(response);
+        }
+        [HttpPost("refresh")]
+        public async Task<ActionResult> RefreshTokenAsync(string refreshToken)
+        {
+            ApiResponse<string, UserRefreshTokenDto> response = await _accountService.RefreshToken(refreshToken);
+            
+            if (response.Data1 == null && response.Data2 == null)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
         }
     }
 }

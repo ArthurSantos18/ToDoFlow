@@ -58,12 +58,13 @@ namespace ToDoFlow.API
             builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
+
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
             builder.Services.AddScoped<IEnumService, EnumService>();
-
             builder.Services.AddScoped<IAccountService, AccountService>();
 
             builder.Services.AddSingleton<IEncryptionService, EncryptionService>();

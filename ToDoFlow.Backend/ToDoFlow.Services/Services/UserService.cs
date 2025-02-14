@@ -59,11 +59,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<UserReadDto>> ReadUserAsync(int id)
+        public async Task<ApiResponse<UserReadDto>> ReadUserByIdAsync(int id)
         {
             try
             {
-                User user = await _userRepository.ReadUserAsync(id);
+                User user = await _userRepository.ReadUserByIdAsync(id);
                 UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
 
                 return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
@@ -78,7 +78,7 @@ namespace ToDoFlow.Services.Services
         {
             try
             {
-                User user = await _userRepository.ReadUserAsync(id);
+                User user = await _userRepository.ReadUserByIdAsync(id);
                 _mapper.Map(userUpdateDto, user);
                 user.Password = _encryptionService.HashPassword(userUpdateDto.Password);
                 await _userRepository.UpdateUserAsync(user);

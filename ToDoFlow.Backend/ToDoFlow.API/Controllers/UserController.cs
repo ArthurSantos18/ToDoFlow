@@ -30,7 +30,7 @@ namespace ToDoFlow.API.Controllers
        //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult> ReadUserAsync(int id)
         {
-            return Ok(await _userService.ReadUserAsync(id));
+            return Ok(await _userService.ReadUserByIdAsync(id));
         }
 
         [HttpPut("{id}")]

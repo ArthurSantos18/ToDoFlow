@@ -10,6 +10,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthService {
+  private tokenExpirationTimer: any;
 
   isLoggedIn = signal<boolean>(this.hasToken());
 
@@ -24,6 +25,7 @@ export class AuthService {
       tap((response) => {
         if (response.data && response.success) {
           this.saveToken(response.data);
+          this.startTokenTimer();
           this.isLoggedIn.update(() => true);
         }
       })
@@ -39,15 +41,11 @@ export class AuthService {
       tap((response) => {
         if (response.data && response.success) {
           this.saveToken(response.data);
+          this.startTokenTimer();
           this.isLoggedIn.update(() => true);
         }
       })
     )
-  }
-
-  logout(): void {
-    localStorage.removeItem('USER_TOKEN');
-    this.isLoggedIn.update(() => false);
   }
 
   saveToken(token: string): void {
@@ -92,6 +90,44 @@ export class AuthService {
       return null;
     }
   }
+
+  getTokenExpiration(): Date | null {
+    try {
+      return this.jwtHelper.getTokenExpirationDate(this.getToken()!);
+    }
+    catch {
+      return null;
+    }
+  }
+
+  isTokenExpired(): boolean {
+    return this.jwtHelper.isTokenExpired(this.getToken());
+  }
+
+  startTokenTimer() {
+    const expirationDate = this.getTokenExpiration();
+    if (!expirationDate) {
+      return;
+    }
+
+    var expiresIn = expirationDate.getTime() - Date.now();
+    console.log(expiresIn)
+    this.tokenExpirationTimer = setTimeout(() => this.logout(), expiresIn);
+  }
+
+  stopTokenTimer() {
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = null;
+    }
+  }
+
+  logout(): void {
+    localStorage.removeItem('USER_TOKEN');
+    this.stopTokenTimer();
+    this.isLoggedIn.update(() => false);
+  }
+
 
   private hasToken(): boolean {
     const token = this.getToken();

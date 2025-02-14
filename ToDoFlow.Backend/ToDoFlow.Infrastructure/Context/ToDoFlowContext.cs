@@ -8,6 +8,7 @@ namespace ToDoFlow.Infrastructure.Context
         public DbSet<TaskItem> Tasks{ get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
