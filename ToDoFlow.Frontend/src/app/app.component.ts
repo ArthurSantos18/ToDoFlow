@@ -14,13 +14,6 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    if (this.authService.getToken()) {
-      this.authService.startTokenTimer()
-      console.log("tem token");
-    }
-    else {
-      console.log('não tem token');
-    }
   }
 
   title = 'ToDoFlow.Frontend';

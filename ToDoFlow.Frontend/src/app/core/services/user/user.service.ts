@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiResponse } from '../../../models/api-response';
+import { ApiResponseSingle } from '../../../models/api-response';
 import { UserReadDto } from '../../../models/user';
 import { API_ENDPOINTS } from '../../constants/api-config';
 
@@ -12,15 +12,15 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getAllUsers(): Observable<ApiResponse<UserReadDto[]>> {
-    return this.http.get<ApiResponse<UserReadDto[]>>(`${API_ENDPOINTS.USER.GET}`)
+  getAllUsers(): Observable<ApiResponseSingle<UserReadDto[]>> {
+    return this.http.get<ApiResponseSingle<UserReadDto[]>>(`${API_ENDPOINTS.USER.GET}`)
   }
 
-  getUserById(userId: number): Observable<ApiResponse<UserReadDto>> {
-    return this.http.get<ApiResponse<UserReadDto>>(`${API_ENDPOINTS.USER.GET_BY_ID}/${userId}`)
+  getUserById(userId: number): Observable<ApiResponseSingle<UserReadDto>> {
+    return this.http.get<ApiResponseSingle<UserReadDto>>(`${API_ENDPOINTS.USER.GET_BY_ID}/${userId}`)
   }
 
-  deleteUser(userId: number): Observable<ApiResponse<UserReadDto[]>> {
-    return this.http.delete<ApiResponse<UserReadDto[]>>(`${API_ENDPOINTS.USER.DELETE}/${userId}`)
+  deleteUser(userId: number): Observable<ApiResponseSingle<UserReadDto[]>> {
+    return this.http.delete<ApiResponseSingle<UserReadDto[]>>(`${API_ENDPOINTS.USER.DELETE}/${userId}`)
   }
 }

@@ -1,66 +1,85 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { LoginRequest, RegisterRequest } from '../../../models/auth-response';
-import { catchError, map, tap } from 'rxjs';
-import { ApiResponse } from '../../../models/api-response';
+import { LoginRequest, RefreshRequest, RegisterRequest } from '../../../models/auth-response';
+import { catchError, Observable, tap } from 'rxjs';
+import { ApiResponseDual } from '../../../models/api-response';
 import { API_ENDPOINTS } from '../../constants/api-config';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { UserRefreshToken } from '../../../models/user-refresh-token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private tokenExpirationTimer: any;
-
   isLoggedIn = signal<boolean>(this.hasToken());
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) { }
 
-  login(loginRequest: LoginRequest) {
-    return this.http.post<ApiResponse<string>>(`${API_ENDPOINTS.AUTH.LOGIN}`,loginRequest)
+  login(loginRequest: LoginRequest): Observable<ApiResponseDual<string, UserRefreshToken>> {
+    return this.http.post<ApiResponseDual<string, UserRefreshToken>>(`${API_ENDPOINTS.AUTH.LOGIN}`,loginRequest)
     .pipe(
       catchError((error) => {
         throw new Error(error.message);
       }),
       tap((response) => {
-        if (response.data && response.success) {
-          this.saveToken(response.data);
-          this.startTokenTimer();
+        if (response.data1 && response.data2 && response.success) {
+          this.saveToken(response.data1, response.data2.refreshToken);
           this.isLoggedIn.update(() => true);
+          localStorage.setItem('REFRESH_TOKEN_EXPIRATION', response.data2.expiration.toString());
         }
       })
     );
   }
 
-  register(registerRequest: RegisterRequest) {
-    return this.http.post<ApiResponse<string>>(`${API_ENDPOINTS.AUTH.REGISTER}`, registerRequest)
+  register(registerRequest: RegisterRequest): Observable<ApiResponseDual<string, UserRefreshToken>> {
+    return this.http.post<ApiResponseDual<string, UserRefreshToken>>(`${API_ENDPOINTS.AUTH.REGISTER}`, registerRequest)
     .pipe(
       catchError((error) => {
         throw new Error(error.message);
       }),
       tap((response) => {
-        if (response.data && response.success) {
-          this.saveToken(response.data);
-          this.startTokenTimer();
+        if (response.data1 && response.data2 && response.success) {
+          this.saveToken(response.data1, response.data2.refreshToken);
           this.isLoggedIn.update(() => true);
         }
       })
     )
   }
 
-  saveToken(token: string): void {
-    localStorage.setItem('USER_TOKEN', token);
+  refreshToken(): Observable<ApiResponseDual<string, UserRefreshToken>> {
+    const refreshRequest: RefreshRequest = {refreshToken: this.getRefreshToken()!};
+
+    return this.http.post<ApiResponseDual<string, UserRefreshToken>>("https://localhost:7215/api/auth/refresh", refreshRequest)
+    .pipe(
+      tap((response) => {
+        if (response.data1 && response.data2 && response.success) {
+          this.saveToken(response.data1, response.data2.refreshToken);
+        }
+      })
+    )
   }
 
-  getToken(): string | null {
+  saveToken(jwtToken: string, refreshToken: string): void {
+    localStorage.setItem('USER_TOKEN', jwtToken);
+    localStorage.setItem('REFRESH_TOKEN', refreshToken);
+  }
+
+  getJwtToken(): string | null {
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       return localStorage.getItem('USER_TOKEN');
     }
     return null;
   }
 
+  getRefreshToken(): string | null {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      return localStorage.getItem('REFRESH_TOKEN')
+    }
+    return null;
+  }
+
   getSubFromToken(): string | null {
-    const token = this.getToken();
+    const token = this.getJwtToken();
     if (!token) {
       return null;
     }
@@ -76,7 +95,7 @@ export class AuthService {
   }
 
   getRoleFromToken(): string | null {
-    const token = this.getToken();
+    const token = this.getJwtToken();
     if (!token) {
       return null;
     }
@@ -91,46 +110,33 @@ export class AuthService {
     }
   }
 
-  getTokenExpiration(): Date | null {
-    try {
-      return this.jwtHelper.getTokenExpirationDate(this.getToken()!);
-    }
-    catch {
-      return null;
-    }
-  }
-
   isTokenExpired(): boolean {
-    return this.jwtHelper.isTokenExpired(this.getToken());
+    return this.jwtHelper.isTokenExpired(this.getJwtToken());
   }
 
-  startTokenTimer() {
-    const expirationDate = this.getTokenExpiration();
+  isRefreshTokenExpired(): boolean {
+    const expirationDate = localStorage.getItem('REFRESH_TOKEN_EXPIRATION');
+
     if (!expirationDate) {
-      return;
+      return true;
     }
 
-    var expiresIn = expirationDate.getTime() - Date.now();
-    console.log(expiresIn)
-    this.tokenExpirationTimer = setTimeout(() => this.logout(), expiresIn);
+    const expirationTime = new Date(expirationDate).getTime();
+    return Date.now() >= expirationTime;
   }
 
-  stopTokenTimer() {
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
-      this.tokenExpirationTimer = null;
-    }
-  }
 
   logout(): void {
     localStorage.removeItem('USER_TOKEN');
-    this.stopTokenTimer();
+    localStorage.removeItem('REFRESH_TOKEN');
+    localStorage.removeItem('REFRESH_TOKEN_EXPIRATION');
+    location.reload();
     this.isLoggedIn.update(() => false);
   }
 
 
   private hasToken(): boolean {
-    const token = this.getToken();
+    const token = this.getJwtToken();
     if (token) {
       return true
     }

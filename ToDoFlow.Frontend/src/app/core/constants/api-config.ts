@@ -3,7 +3,8 @@ import { environment } from "../../../environments/environment.development";
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: `${environment.apiUrl}/auth/login`,
-    REGISTER: `${environment.apiUrl}/auth/register`
+    REGISTER: `${environment.apiUrl}/auth/register`,
+    REFRESH: `${environment.apiUrl}/auth/refresh`
   },
 
   USER: {

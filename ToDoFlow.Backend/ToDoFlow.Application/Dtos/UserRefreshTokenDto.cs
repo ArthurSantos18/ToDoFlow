@@ -1,10 +1,15 @@
 ﻿namespace ToDoFlow.Application.Dtos
 {
-    public class UserRefreshTokenDto
+    public class UserRefreshTokenBaseDto
     {
-        public int Id { get; set; }
-        public string RefreshToken { get; set; }
+        public required string RefreshToken { get; set; }
+    }
+
+    public class UserRefreshTokenReadDto : UserRefreshTokenBaseDto
+    {
         public DateTime Expiration { get; set; }
         public int UserId { get; set; }
     }
+
+    public class UserRefreshTokenRefreshDto : UserRefreshTokenBaseDto { }
 }

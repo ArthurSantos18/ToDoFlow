@@ -6,6 +6,7 @@ import { CategoryService } from '../../core/services/category/category.service';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { CategoryReadDto } from '../../models/category';
+import { RefreshRequest } from '../../models/auth-response';
 
 @Component({
   selector: 'app-category',
@@ -21,7 +22,7 @@ export class CategoryComponent implements OnInit {
 
   userId: number | null = null;
   categoriesByUserId: CategoryReadDto[] = []
-
+  
   constructor(private categoryService: CategoryService, private authService: AuthService) { }
 
   ngOnInit(): void {

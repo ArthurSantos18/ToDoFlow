@@ -59,7 +59,7 @@ namespace ToDoFlow.API
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
-
+            
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();

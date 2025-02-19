@@ -9,9 +9,19 @@ export const authGuard: CanActivateFn = (route, state) => {
   const role = authService.getRoleFromToken();
   const requiredRole = route.data?.['role'];
 
+  
   if (!authService.getLoggedIn()) {
     router.navigate(['login']);
     return false;
+  }
+
+  if(authService.isTokenExpired()) {
+    authService.refreshToken().subscribe();
+  }
+
+  if(authService.isRefreshTokenExpired()){
+    authService.logout();
+    router.navigate(['login'])
   }
 
   if (requiredRole && role !== requiredRole) {

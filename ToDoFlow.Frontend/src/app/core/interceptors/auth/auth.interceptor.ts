@@ -8,20 +8,24 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService)
   const router = inject(Router)
 
-
   if(authService.isLoggedIn()) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${authService.getToken()}`
-      }
-    })
+    if(authService.isRefreshTokenExpired()) {
+      authService.logout()
+      router.navigate(['login'])
+    }
+    else {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${authService.getJwtToken()}`
+        }
+      })
+    }
   }
 
   return next(req).pipe(
     retry(2),
     catchError((e: HttpErrorResponse) => {
       if(e.status === 401) {
-        localStorage.removeItem('USER_TOKEN')
         router.navigate(['home'])
       }
       const error = e.error.message || e.statusText

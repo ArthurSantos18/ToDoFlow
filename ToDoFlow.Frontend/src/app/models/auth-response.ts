@@ -9,3 +9,7 @@ export interface RegisterRequest {
   password: string
   confirmPassword: string
 }
+
+export interface RefreshRequest {
+  refreshToken: string
+}

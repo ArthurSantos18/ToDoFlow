@@ -16,7 +16,7 @@ namespace ToDoFlow.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> LoginAsync(LoginRequestDto loginRequestDto)
         {
-            ApiResponse<string, UserRefreshTokenDto> response = await _accountService.LoginAsync(loginRequestDto);
+            ApiResponse<string, UserRefreshTokenReadDto> response = await _accountService.LoginAsync(loginRequestDto);
             
             if (response == null)
             {
@@ -29,7 +29,7 @@ namespace ToDoFlow.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> RegisterAsync(RegisterRequestDto registerRequestDto)
         {
-            ApiResponse<string, UserRefreshTokenDto> response = await _accountService.RegisterAsync(registerRequestDto);
+            ApiResponse<string, UserRefreshTokenReadDto> response = await _accountService.RegisterAsync(registerRequestDto);
             
             if (response.Data1 == null && response.Data2 == null)
             {
@@ -39,10 +39,11 @@ namespace ToDoFlow.API.Controllers
             return Ok(response);
         }
         [HttpPost("refresh")]
-        public async Task<ActionResult> RefreshTokenAsync(string refreshToken)
+        public async Task<ActionResult> RefreshTokenAsync(UserRefreshTokenRefreshDto userRefreshTokenRefreshDto)
         {
-            ApiResponse<string, UserRefreshTokenDto> response = await _accountService.RefreshToken(refreshToken);
-            
+            ApiResponse<string, UserRefreshTokenReadDto> response = await _accountService.RefreshToken(userRefreshTokenRefreshDto);
+
+           
             if (response.Data1 == null && response.Data2 == null)
             {
                 return BadRequest(response);
