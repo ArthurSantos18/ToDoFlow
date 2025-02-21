@@ -15,19 +15,19 @@ namespace ToDoFlow.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserRefreshToken> ReadUserRefreshByTokenAsync(string refreshToken)
+        public async Task<UserRefreshToken?> ReadUserRefreshByTokenAsync(string refreshToken)
         {
             return await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
         }
 
-        public async Task<UserRefreshToken> ReadUserRefreshByUserIdAsync(int userId)
+        public async Task<UserRefreshToken?> ReadUserRefreshByUserIdAsync(int userId)
         {
             return await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
         public async Task DeleteUserRefreshTokenAsync(string refreshToken)
         {
-            UserRefreshToken userRefreshToken = await _context.UserRefreshToken.Where(u => u.RefreshToken == refreshToken).FirstOrDefaultAsync();
+            UserRefreshToken? userRefreshToken = await _context.UserRefreshToken.Where(u => u.RefreshToken == refreshToken).FirstOrDefaultAsync();
             
             _context.UserRefreshToken.Remove(userRefreshToken);
             await _context.SaveChangesAsync();
@@ -37,7 +37,7 @@ namespace ToDoFlow.Infrastructure.Repositories
         {
             List<UserRefreshToken> expiredTokens = await _context.UserRefreshToken.Where(t => t.Expiration < DateTime.UtcNow && t.UserId == userId).ToListAsync();
 
-            if (expiredTokens.Any())
+            if (expiredTokens.Count != 0)
             {
                 _context.UserRefreshToken.RemoveRange(expiredTokens);
                 await _context.SaveChangesAsync();

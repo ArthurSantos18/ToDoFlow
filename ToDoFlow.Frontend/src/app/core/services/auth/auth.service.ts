@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { LoginRequest, RefreshRequest, RegisterRequest } from '../../../models/auth-response';
+import { ForgotPasswordRequest, LoginRequest, RefreshRequest, RegisterRequest } from '../../../models/auth-response';
 import { catchError, Observable, tap } from 'rxjs';
-import { ApiResponseDual } from '../../../models/api-response';
+import { ApiResponse, ApiResponseDual } from '../../../models/api-response';
 import { API_ENDPOINTS } from '../../constants/api-config';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserRefreshToken } from '../../../models/user-refresh-token';
@@ -41,6 +41,7 @@ export class AuthService {
         if (response.data1 && response.data2 && response.success) {
           this.saveToken(response.data1, response.data2.refreshToken);
           this.isLoggedIn.update(() => true);
+          localStorage.setItem('REFRESH_TOKEN_EXPIRATION', response.data2.expiration.toString());
         }
       })
     )
@@ -49,7 +50,7 @@ export class AuthService {
   refreshToken(): Observable<ApiResponseDual<string, UserRefreshToken>> {
     const refreshRequest: RefreshRequest = {refreshToken: this.getRefreshToken()!};
 
-    return this.http.post<ApiResponseDual<string, UserRefreshToken>>("https://localhost:7215/api/auth/refresh", refreshRequest)
+    return this.http.post<ApiResponseDual<string, UserRefreshToken>>(API_ENDPOINTS.AUTH.REFRESH, refreshRequest)
     .pipe(
       tap((response) => {
         if (response.data1 && response.data2 && response.success) {
@@ -57,6 +58,10 @@ export class AuthService {
         }
       })
     )
+  }
+
+  forgotPassword(forgotPasswordRequest: ForgotPasswordRequest): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, forgotPasswordRequest)
   }
 
   saveToken(jwtToken: string, refreshToken: string): void {

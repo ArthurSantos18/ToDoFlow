@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
+using ToDoFlow.Infrastructure.Repositories.Interface;
 using ToDoFlow.Services.Services;
 using ToDoFlow.Services.Services.Interface;
 
@@ -50,6 +51,24 @@ namespace ToDoFlow.API.Controllers
             }
 
             return Ok(response);
+        }
+        [HttpPost("forgot-password")]
+        public async Task<ActionResult> ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto)
+        {
+            ApiResponse response = await _accountService.ForgotPasswordAsync(forgotPasswordDto);
+            
+            if (response.Success == false)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        [HttpPost("reset-password")]
+        public async Task<ActionResult> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+        {
+
+            return Ok();
         }
     }
 }

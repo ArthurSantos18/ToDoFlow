@@ -41,7 +41,7 @@ namespace ToDoFlow.API
                                     Id = "Bearer"
                                 }
                             },
-                            new string[]{}
+                            Array.Empty<string>()
                         }
                     });
                 });
@@ -60,13 +60,14 @@ namespace ToDoFlow.API
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
             
-
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
             builder.Services.AddScoped<IEnumService, EnumService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
 
+            builder.Services.AddSingleton<IEmailService, EmailService>();
+            builder.Services.AddSingleton<ITokenService, TokenService>();
             builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
 
 

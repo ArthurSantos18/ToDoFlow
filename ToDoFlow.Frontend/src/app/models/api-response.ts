@@ -1,3 +1,9 @@
+export interface ApiResponse {
+  success: boolean;
+  message: string;
+  httpStatus: number;
+}
+
 export interface ApiResponseSingle<T> {
   data: T;
   success: boolean;

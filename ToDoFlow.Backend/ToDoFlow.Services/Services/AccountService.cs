@@ -1,43 +1,26 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
-using ToDoFlow.Infrastructure.Repositories;
 using ToDoFlow.Infrastructure.Repositories.Interface;
 using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.Services.Services
 {
-    public class AccountService : IAccountService
+    public class AccountService(IConfiguration configuration, IEncryptionService encryptionService, ITokenService tokenService,
+        IEmailService emailService, IUserRepository userRepository, IMapper mapper, IUserRefreshTokenRepository userRefreshTokenRepository): IAccountService
     {
         
-        private readonly IConfiguration _configuration;
-        private readonly IConfigurationSection _jwtSettings;
+        private readonly IConfiguration _configuration = configuration;
+        private readonly IEncryptionService _encryptionService = encryptionService;
+        private readonly ITokenService _tokenService = tokenService;
+        private readonly IMapper _mapper = mapper;
+        private readonly IEmailService _emailService = emailService;
 
-        private readonly IEncryptionService _encryptionService;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserRefreshTokenRepository _userRefreshTokenRepository;
-
-        private readonly IMapper _mapper;
-
-        public AccountService(IConfiguration configuration, IEncryptionService encryptionService, IUserRepository userRepository, IMapper mapper, IUserRefreshTokenRepository userRefreshTokenRepository)
-        {
-            _configuration = configuration;
-            _jwtSettings = _configuration.GetSection("JwtSettings");
-
-            _encryptionService = encryptionService;
-            _userRepository = userRepository;
-            _userRefreshTokenRepository = userRefreshTokenRepository;
-            _mapper = mapper;
-            
-        }
-
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IUserRefreshTokenRepository _userRefreshTokenRepository = userRefreshTokenRepository;
+        
         public async Task<ApiResponse<string, UserRefreshTokenReadDto>> LoginAsync(LoginRequestDto loginRequestDto)
         {
             User user = await _userRepository.ReadUserByEmailAsync(loginRequestDto.Email);
@@ -52,7 +35,7 @@ namespace ToDoFlow.Services.Services
                 return new ApiResponse<string, UserRefreshTokenReadDto>(null, null,false, "Erro: Invalid credentials", 401);
             }
 
-            string token = GenerateToken(user, "login", int.Parse(_jwtSettings["ExpirationMinutesJwt"]));
+            string token = _tokenService.GenerateToken(user, "login", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
 
             await _userRefreshTokenRepository.DeleteExpiredTokensByUserIdAsync(user.Id);
 
@@ -60,7 +43,7 @@ namespace ToDoFlow.Services.Services
 
             if (existingRefreshToken == null)
             {
-                UserRefreshToken userRefreshToken = GenerateRefreshToken(user);
+                UserRefreshToken userRefreshToken = _tokenService.GenerateRefreshToken(user);
                 await _userRefreshTokenRepository.CreateUserRefreshTokenAsync(userRefreshToken);
                 UserRefreshTokenReadDto userRefreshTokenDto = _mapper.Map<UserRefreshTokenReadDto>(userRefreshToken);
                 
@@ -70,7 +53,7 @@ namespace ToDoFlow.Services.Services
             {
                 await _userRefreshTokenRepository.DeleteUserRefreshTokenAsync(existingRefreshToken.RefreshToken);
                 
-                UserRefreshToken userRefreshToken = GenerateRefreshToken(user);
+                UserRefreshToken userRefreshToken = _tokenService.GenerateRefreshToken(user);
                 await _userRefreshTokenRepository.CreateUserRefreshTokenAsync(userRefreshToken);
                 
                 UserRefreshTokenReadDto userRefreshTokenDto = _mapper.Map<UserRefreshTokenReadDto>(userRefreshToken);
@@ -100,8 +83,8 @@ namespace ToDoFlow.Services.Services
 
                 await _userRepository.CreateUserAsync(user);
 
-                string token = GenerateToken(user, "refresh", int.Parse(_jwtSettings["ExpirationMinutesJwt"]));
-                UserRefreshToken userRefreshToken = GenerateRefreshToken(user);
+                string token = _tokenService.GenerateToken(user, "refresh", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
+                UserRefreshToken userRefreshToken = _tokenService.GenerateRefreshToken(user);
 
                 UserRefreshTokenReadDto userRefreshTokenDto = _mapper.Map<UserRefreshTokenReadDto>(userRefreshToken);
 
@@ -120,7 +103,7 @@ namespace ToDoFlow.Services.Services
                 UserRefreshToken userRefreshToken = await _userRefreshTokenRepository.ReadUserRefreshByTokenAsync(userRefreshTokenRefreshDto.RefreshToken);
                 User user = await _userRepository.ReadUserByIdAsync(userRefreshToken.UserId);
 
-                var newToken = GenerateToken(user, "login", int.Parse(_jwtSettings["ExpirationMinutesJwt"]));
+                var newToken = _tokenService.GenerateToken(user, "login", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
 
                 UserRefreshTokenReadDto userRefreshTokenDto = _mapper.Map<UserRefreshTokenReadDto>(userRefreshToken);
 
@@ -132,56 +115,54 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public string GenerateToken(User user, string purpose, int expiryMinutes)
+        public async Task<ApiResponse> ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto)
         {
-            List<Claim> claims =
-            [
-                new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new(JwtRegisteredClaimNames.Email, user.Email),
-                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new("purpose", purpose),
-            ];
-
-            if (purpose == "login" || purpose == "refresh")
+            try
             {
-                claims.Add(new Claim(ClaimTypes.Role, user.Profile.ToString()));
-                
+                User user = await _userRepository.ReadUserByEmailAsync(forgotPasswordDto.Email);
+
+                if (user == null)
+                {
+                    return new ApiResponse(false, $"Error: user does not exist", 500);
+                }
+
+                string token = _tokenService.GenerateToken(user, "forgotPassword", int.Parse(_configuration["JwtSettings:ExpiritaionMinutesResetPassword"]));
+                string resetLink = $"{_configuration["FrontEnd:Url"]}/reset-password?token={Uri.EscapeDataString(token)}&email={user.Email}";
+
+                bool sendEmail = await _emailService.SendEmailAsync(
+                    user.Email,
+                    "Password Reset", 
+                    $"Click the link to reset your password: <a href='{resetLink}'>Reset Password</a>");
+
+                if (!sendEmail)
+                {
+                    return new ApiResponse(false, $"Error: Email not send", 500);
+                }
+
+                return new ApiResponse(sendEmail, "Email sent successfully", 200);
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse(false, $"Error: {ex.Message}", 500);
             }
 
-            foreach (var claim in claims)
-            {
-                Console.WriteLine($"Type: {claim.Type}, Value: {claim.Value}");
-            }
-
-            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_jwtSettings["SecretKey"] ?? string.Empty));
-            SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
-
-            JwtSecurityToken token = new(
-                issuer: _jwtSettings["Issuer"],
-                audience: _jwtSettings["Audience"],
-                expires: DateTime.UtcNow.AddMinutes(int.Parse(_jwtSettings["ExpirationMinutesJwt"])),
-                claims: claims,
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public UserRefreshToken GenerateRefreshToken(User user)
+        public async Task<ApiResponse> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
         {
-            byte[] randomNumber = new byte[32];
-
-            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            try
             {
-                rng.GetBytes(randomNumber);
-
-                UserRefreshToken userRefreshToken = new UserRefreshToken
+                User user = await _userRepository.ReadUserByEmailAsync(resetPasswordDto.Email);
+                if (user == null)
                 {
-                    UserId = user.Id,
-                    RefreshToken = Convert.ToBase64String(randomNumber),
-                    Expiration = DateTime.UtcNow.AddMinutes(int.Parse(_jwtSettings["ExpirationMinutesRefresh"]))
-                };
+                    return new ApiResponse(false, "User not found", 404);
+                }
 
-            return userRefreshToken; 
+                return new ApiResponse(true, "teste", 200);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse(false, $"Error: {ex.Message}", 500);
             }
         }
     }

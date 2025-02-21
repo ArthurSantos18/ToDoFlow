@@ -74,6 +74,21 @@ namespace ToDoFlow.Services.Services
             }
         }
 
+        public async Task<ApiResponse<UserReadDto>> ReadUserByEmailAsync(string email)
+        {
+            try
+            {
+                User user = await _userRepository.ReadUserByEmailAsync(email);
+                UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
+
+                return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<UserReadDto>(null!, false, $"Erro: {ex.Message}", 500);
+            }
+        }
+
         public async Task<ApiResponse<List<UserReadDto>>> UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
         {
             try

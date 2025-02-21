@@ -1,16 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm: FormGroup
 
   constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) {
@@ -19,10 +19,6 @@ export class LoginComponent implements OnInit {
       password: new FormControl('', [Validators.required])
     });
   }
-
-  ngOnInit(): void {
-  }
-
 
   onLogin() {
     if(this.loginForm.valid) {
