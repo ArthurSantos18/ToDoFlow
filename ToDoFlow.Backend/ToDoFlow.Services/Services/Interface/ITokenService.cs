@@ -6,5 +6,6 @@ namespace ToDoFlow.Services.Services.Interface
     {
         public string GenerateToken(User user, string purpose, int expiryMinutes);
         public UserRefreshToken GenerateRefreshToken(User user);
+        public bool ValidateToken(string token);
     }
 }

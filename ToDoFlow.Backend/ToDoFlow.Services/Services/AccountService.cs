@@ -126,7 +126,7 @@ namespace ToDoFlow.Services.Services
                     return new ApiResponse(false, $"Error: user does not exist", 500);
                 }
 
-                string token = _tokenService.GenerateToken(user, "forgotPassword", int.Parse(_configuration["JwtSettings:ExpiritaionMinutesResetPassword"]));
+                string token = _tokenService.GenerateToken(user, "resetPassword", int.Parse(_configuration["JwtSettings:ExpiritaionMinutesResetPassword"]));
                 string resetLink = $"{_configuration["FrontEnd:Url"]}/reset-password?token={Uri.EscapeDataString(token)}&email={user.Email}";
 
                 bool sendEmail = await _emailService.SendEmailAsync(
@@ -157,8 +157,21 @@ namespace ToDoFlow.Services.Services
                 {
                     return new ApiResponse(false, "User not found", 404);
                 }
+                
+                bool isValidate = _tokenService.ValidateToken(resetPasswordDto.Token);
+                if (!isValidate)
+                {
+                    return new ApiResponse(false, "Invalid or expired token", 400);
+                }
 
-                return new ApiResponse(true, "teste", 200);
+                resetPasswordDto.NewPassword = _encryptionService.HashPassword(resetPasswordDto.NewPassword);
+                //await _userRepository.UpdateUserAsync(user);
+
+                Console.WriteLine(resetPasswordDto.Email);
+                Console.WriteLine(resetPasswordDto.Token);
+                Console.WriteLine(resetPasswordDto.NewPassword);
+
+                return new ApiResponse(true, "Password reset successfully", 200);
             }
             catch (Exception ex)
             {

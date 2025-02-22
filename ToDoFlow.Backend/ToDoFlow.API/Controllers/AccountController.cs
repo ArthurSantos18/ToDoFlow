@@ -67,8 +67,8 @@ namespace ToDoFlow.API.Controllers
         [HttpPost("reset-password")]
         public async Task<ActionResult> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
         {
-
-            return Ok();
+            ApiResponse response = await _accountService.ResetPasswordAsync(resetPasswordDto);
+            return Ok(response);
         }
     }
 }
