@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using ToDoFlow.Services.Services.Interface;
 
-namespace ToDoFlow.Services.Services
+namespace ToDoFlow.Services.Services.Utils
 {
     public class EmailService(IConfiguration configuration) : IEmailService
     {
@@ -16,7 +16,7 @@ namespace ToDoFlow.Services.Services
                 MailMessage mailMessage = new()
                 {
                     From = new MailAddress(
-                        _configuration["EmailSettings:SmtpFrom"], 
+                        _configuration["EmailSettings:SmtpFrom"],
                         _configuration["EmailSettings:SmtpName"]),
                     Subject = subject,
                     Body = body,
@@ -37,7 +37,7 @@ namespace ToDoFlow.Services.Services
                 await smtp.SendMailAsync(mailMessage);
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }

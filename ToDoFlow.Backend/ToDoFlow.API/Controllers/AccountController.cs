@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
-using ToDoFlow.Domain.Models;
-using ToDoFlow.Infrastructure.Repositories.Interface;
-using ToDoFlow.Services.Services;
 using ToDoFlow.Services.Services.Interface;
+using ToDoFlow.Services.Services.Utils;
 
 namespace ToDoFlow.API.Controllers
 {

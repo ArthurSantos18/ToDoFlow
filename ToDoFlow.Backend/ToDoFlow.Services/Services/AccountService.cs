@@ -5,6 +5,7 @@ using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
 using ToDoFlow.Infrastructure.Repositories.Interface;
 using ToDoFlow.Services.Services.Interface;
+using ToDoFlow.Services.Services.Utils;
 
 namespace ToDoFlow.Services.Services
 {
@@ -164,12 +165,15 @@ namespace ToDoFlow.Services.Services
                     return new ApiResponse(false, "Invalid or expired token", 400);
                 }
 
-                resetPasswordDto.NewPassword = _encryptionService.HashPassword(resetPasswordDto.NewPassword);
-                //await _userRepository.UpdateUserAsync(user);
+                if (resetPasswordDto.NewPassword != resetPasswordDto.ConfirmPassword)
+                {
+                    return new ApiResponse(false, "Erro: Passwords do not match", 400);
+                }
 
-                Console.WriteLine(resetPasswordDto.Email);
-                Console.WriteLine(resetPasswordDto.Token);
-                Console.WriteLine(resetPasswordDto.NewPassword);
+                resetPasswordDto.NewPassword = _encryptionService.HashPassword(resetPasswordDto.NewPassword);
+                user.Password = resetPasswordDto.NewPassword;
+
+                await _userRepository.UpdateUserAsync(user);
 
                 return new ApiResponse(true, "Password reset successfully", 200);
             }

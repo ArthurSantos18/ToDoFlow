@@ -1,7 +1,7 @@
 ﻿using ToDoFlow.Domain.Models.Enums;
 using ToDoFlow.Services.Services.Interface;
 
-namespace ToDoFlow.Services.Services
+namespace ToDoFlow.Services.Services.Utils
 {
     public class EnumService : IEnumService
     {

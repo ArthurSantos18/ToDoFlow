@@ -1,6 +1,6 @@
 ﻿using ToDoFlow.Services.Services.Interface;
 
-namespace ToDoFlow.Services.Services
+namespace ToDoFlow.Services.Services.Utils
 {
     public class EncryptionService : IEncryptionService
     {

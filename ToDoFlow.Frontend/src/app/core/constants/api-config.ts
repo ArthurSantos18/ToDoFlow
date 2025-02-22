@@ -5,7 +5,8 @@ export const API_ENDPOINTS = {
     LOGIN: `${environment.apiUrl}/auth/login`,
     REGISTER: `${environment.apiUrl}/auth/register`,
     REFRESH: `${environment.apiUrl}/auth/refresh`,
-    FORGOT_PASSWORD: `${environment.apiUrl}/auth/forgot-password`
+    FORGOT_PASSWORD: `${environment.apiUrl}/auth/forgot-password`,
+    RESET_PASSWORD: `${environment.apiUrl}/auth/reset-password`
   },
 
   USER: {

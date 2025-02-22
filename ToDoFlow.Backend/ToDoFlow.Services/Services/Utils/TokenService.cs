@@ -1,17 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using ToDoFlow.Domain.Models;
 using ToDoFlow.Services.Services.Interface;
 
-namespace ToDoFlow.Services.Services
+namespace ToDoFlow.Services.Services.Utils
 {
     public class TokenService(IConfiguration configuration) : ITokenService
     {
@@ -84,9 +80,7 @@ namespace ToDoFlow.Services.Services
             {
                 ClaimsPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
 
-                string purposeClaim = principal.FindFirst("purpose").ToString();
-                
-                if (purposeClaim != "purpose: login")
+                if (principal.FindFirst("purpose")?.Value != "resetPassword")
                 {
                     return false;
                 }

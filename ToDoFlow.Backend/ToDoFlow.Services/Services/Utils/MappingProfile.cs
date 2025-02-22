@@ -2,7 +2,7 @@
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
 
-namespace ToDoFlow.Services.Services
+namespace ToDoFlow.Services.Services.Utils
 {
     public class MappingProfile : Profile
     {

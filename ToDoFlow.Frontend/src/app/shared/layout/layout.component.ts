@@ -19,7 +19,7 @@ export class LayoutComponent {
 
   injector = inject(Injector)
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     effect(() => {

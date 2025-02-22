@@ -7,7 +7,7 @@ namespace ToDoFlow.API.Controllers
 {
     [Route("api/taskitems")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TaskItemController(ITaskItemService taskItemService) : ControllerBase
     {
         private readonly ITaskItemService _taskItemService = taskItemService;

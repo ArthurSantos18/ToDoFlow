@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { ForgotPasswordRequest, LoginRequest, RefreshRequest, RegisterRequest } from '../../../models/auth-response';
+import { ForgotPasswordRequest, LoginRequest, RefreshRequest, RegisterRequest, ResetPasswordRequest } from '../../../models/auth-response';
 import { catchError, Observable, tap } from 'rxjs';
 import { ApiResponse, ApiResponseDual } from '../../../models/api-response';
 import { API_ENDPOINTS } from '../../constants/api-config';
@@ -64,6 +64,10 @@ export class AuthService {
     return this.http.post<ApiResponse>(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, forgotPasswordRequest)
   }
 
+  resetPassword(resetPasswordRequest: ResetPasswordRequest): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(API_ENDPOINTS.AUTH.RESET_PASSWORD, resetPasswordRequest)
+  }
+
   saveToken(jwtToken: string, refreshToken: string): void {
     localStorage.setItem('USER_TOKEN', jwtToken);
     localStorage.setItem('REFRESH_TOKEN', refreshToken);
@@ -115,8 +119,8 @@ export class AuthService {
     }
   }
 
-  isTokenExpired(): boolean {
-    return this.jwtHelper.isTokenExpired(this.getJwtToken());
+  isTokenExpired(token: string): boolean {
+    return this.jwtHelper.isTokenExpired(token);
   }
 
   isRefreshTokenExpired(): boolean {

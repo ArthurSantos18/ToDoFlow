@@ -7,7 +7,7 @@ namespace ToDoFlow.API.Controllers
 {
     [Route("api/categories")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class CategoryController(ICategoryService categoryService) : ControllerBase
     {
         private readonly ICategoryService _categoryService = categoryService;
