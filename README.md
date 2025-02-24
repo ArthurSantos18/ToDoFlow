@@ -10,8 +10,9 @@
   <li>Registrar usuários</li>
   <li>Armazenar tarefas e categorias</li>
   <li>Visualizar tarefas e categorias cadastradas</li>
-  <li>Editar as tarefas e categorias cadastradas</li
+  <li>Editar as tarefas e categorias cadastradas</li>
   <li>As senhas são criptografadas</li>
+  <li>Possibilidade de troca de senha utilizando link enviado por e-mail (SMTP)</li>
 </ul>
 
 <h2>💻 Tecnologias utilizadas</h2>
