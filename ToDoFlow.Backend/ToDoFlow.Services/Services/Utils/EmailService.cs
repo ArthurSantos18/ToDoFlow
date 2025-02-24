@@ -25,7 +25,7 @@ namespace ToDoFlow.Services.Services.Utils
                 mailMessage.To.Add(new MailAddress(email));
                 mailMessage.Priority = MailPriority.High;
 
-                using SmtpClient smtp = new SmtpClient(_configuration["EmailSettings:SmtpServer"]);
+                using SmtpClient smtp = new(_configuration["EmailSettings:SmtpServer"]);
 
                 smtp.Port = int.Parse(_configuration["EmailSettings:SmtpPort"]);
                 smtp.Credentials = new NetworkCredential(
@@ -37,7 +37,7 @@ namespace ToDoFlow.Services.Services.Utils
                 await smtp.SendMailAsync(mailMessage);
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

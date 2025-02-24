@@ -94,8 +94,19 @@ namespace ToDoFlow.Services.Services
             try
             {
                 User user = await _userRepository.ReadUserByIdAsync(id);
+
+                if (userUpdateDto.Password != null)
+                {
+                    userUpdateDto.Password = _encryptionService.HashPassword(userUpdateDto.Password);
+                }
+                else
+                {
+                    userUpdateDto.Password = user.Password;
+                    userUpdateDto.ConfirmPassword = user.Password;
+                }
+
                 _mapper.Map(userUpdateDto, user);
-                user.Password = _encryptionService.HashPassword(userUpdateDto.Password);
+
                 await _userRepository.UpdateUserAsync(user);
 
                 List<User> users = await _userRepository.ReadUserAsync();
@@ -106,7 +117,7 @@ namespace ToDoFlow.Services.Services
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: {ex.InnerException  }", 500);
             }
         }
 

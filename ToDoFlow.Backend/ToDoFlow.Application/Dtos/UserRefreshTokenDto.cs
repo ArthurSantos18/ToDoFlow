@@ -1,6 +1,6 @@
 ﻿namespace ToDoFlow.Application.Dtos
 {
-    public class UserRefreshTokenBaseDto
+    public abstract class UserRefreshTokenBaseDto
     {
         public required string RefreshToken { get; set; }
     }

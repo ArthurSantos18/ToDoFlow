@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponseSingle } from '../../../models/api-response';
-import { UserReadDto } from '../../../models/user';
+import { UserEditDto, UserReadDto } from '../../../models/user';
 import { API_ENDPOINTS } from '../../constants/api-config';
 
 @Injectable({
@@ -18,6 +18,10 @@ export class UserService {
 
   getUserById(userId: number): Observable<ApiResponseSingle<UserReadDto>> {
     return this.http.get<ApiResponseSingle<UserReadDto>>(`${API_ENDPOINTS.USER.GET_BY_ID}/${userId}`)
+  }
+
+  updateUser(UserEditDto: UserEditDto): Observable<ApiResponseSingle<UserReadDto[]>> {
+    return this.http.put<ApiResponseSingle<UserReadDto[]>>(`${API_ENDPOINTS.USER.PUT}/${UserEditDto.id}`, UserEditDto)
   }
 
   deleteUser(userId: number): Observable<ApiResponseSingle<UserReadDto[]>> {

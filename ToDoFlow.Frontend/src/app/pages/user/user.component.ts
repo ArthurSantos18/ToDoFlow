@@ -25,10 +25,10 @@ export class UserComponent implements OnInit {
   constructor(private userService: UserService, private categoryService: CategoryService, private taskItemService: TaskItemService) {}
 
   ngOnInit(): void {
-    this.LoadUser();
+    this.loadUser();
   }
 
-  LoadUser() {
+  loadUser() {
     this.userService.getAllUsers().subscribe((response) => {
       this.Users = response.data.filter(user => user.profile === 'Default')
     })
