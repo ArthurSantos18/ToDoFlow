@@ -21,6 +21,7 @@ export class UserComponent implements OnInit {
   @ViewChild(UserDeleteModalComponent) userDeleteModal!: UserDeleteModalComponent;
 
   Users: UserReadDto[] = []
+  errorMessage: string | null = null
 
   constructor(private userService: UserService, private categoryService: CategoryService, private taskItemService: TaskItemService) {}
 
@@ -29,24 +30,59 @@ export class UserComponent implements OnInit {
   }
 
   loadUser() {
-    this.userService.getAllUsers().subscribe((response) => {
-      this.Users = response.data.filter(user => user.profile === 'Default')
-    })
+    this.userService.getAllUsers().subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.Users = response.data.filter(user => user.profile === 'Default')
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
+    });
   }
 
   openUserCategoriesModal(userId: number, userName: string): void {
-    this.categoryService.getCategoryByUser(userId).subscribe((response) => {
-      this.userCategoriesModal.categoriesByUserId = response.data;
-      this.userCategoriesModal.userName = userName;
-    })
+    this.categoryService.getCategoryByUser(userId).subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.userCategoriesModal.categoriesByUserId = response.data;
+          this.userCategoriesModal.userName = userName;
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
+    });
+
     this.userCategoriesModal.openUserCategoriesModal();
   }
 
   openUserTaskItemsModal(userId: number, userName: string): void {
-    this.taskItemService.getTaskItemByUser(userId).subscribe((response) => {
-      this.userTaskItemsModal.taskItemsByUserId = response.data;
-      this.userTaskItemsModal.userName = userName
-    })
+    this.taskItemService.getTaskItemByUser(userId).subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.userTaskItemsModal.taskItemsByUserId = response.data;
+          this.userTaskItemsModal.userName = userName;
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
+    });
+    
     this.userTaskItemsModal.openUserTaskItemModal();
   }
 

@@ -16,6 +16,7 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (close)="closeCategoryEditModal()">Close</button>
           <button type="submit" (click)="updateCategory()" class="btn btn-primary">Rename Category</button>
         </div>
+        <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
       </div>
     </form>
   </div>

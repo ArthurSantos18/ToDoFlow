@@ -1,13 +1,14 @@
 import { Component, ElementRef, Input, input, OnInit, output, OutputEmitterRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../../../core/services/category/category.service';
+import { CommonModule } from '@angular/common';
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-category-edit-modal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './category-edit-modal.component.html',
   styleUrl: './category-edit-modal.component.css'
 })
@@ -18,6 +19,7 @@ export class CategoryEditModalComponent {
 
   modal: any
   categoryUpdateForm: FormGroup;
+  errorMessage: string | null = null;
 
   constructor(private categoryService: CategoryService, private fb: FormBuilder) {
 
@@ -53,11 +55,21 @@ export class CategoryEditModalComponent {
   }
 
   updateCategory(): void {
-    this.categoryService.updateCategory(this.categoryUpdateForm.value).subscribe({
-      next: () => {
-        location.reload()
-      },
-      error: (error) => console.error('')
-    })
+    if(this.categoryUpdateForm.valid) {
+      this.categoryService.updateCategory(this.categoryUpdateForm.value).subscribe({
+        next: (response) => {
+          if (response.success === false) {
+            this.errorMessage = response.message;
+          }
+          else {
+            this.errorMessage = null;
+            location.reload()
+          }
+        },
+        error: (err) => {
+          this.errorMessage = err
+        }
+      });
+    }
   }
 }

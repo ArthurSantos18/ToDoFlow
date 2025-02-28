@@ -25,6 +25,7 @@ export class TaskItemEditComponent {
   categoriesByUserId: CategoryReadDto[] = []
   taskItemUpdate!: TaskItemReadDto
   priorities!: {[key: number]: string}
+  errorMessage: string | null = null
 
   taskItemUpdateForm: FormGroup
 
@@ -47,17 +48,31 @@ export class TaskItemEditComponent {
     this.forkData(taskItemId, this.userId)
   }
 
-  forkData(taskItemId: number, userId: Number) {
+  forkData(taskItemId: number, userId: number) {
     forkJoin({
       taskItemResponse: this.taskItemService.getTaskItemById(taskItemId),
-      categoriesResponse: this.categoryService.getCategoryByUser(this.userId),
+      categoriesResponse: this.categoryService.getCategoryByUser(userId),
       prioritiesResponse: this.enumService.getPriority()
     }).subscribe({
       next: (response) => {
-        this.taskItemUpdate = response.taskItemResponse.data;
-        this.categoriesByUserId = response.categoriesResponse.data;
-        this.priorities = response.prioritiesResponse.data;
-        this.checkAndInitializeForm();
+        if (response.categoriesResponse.success === false) {
+          this.errorMessage = response.categoriesResponse.message;
+        }
+        else if (response.prioritiesResponse.success === false) {
+          this.errorMessage = response.prioritiesResponse.message;
+        }
+        else if (response.taskItemResponse.success === false) {
+          this.errorMessage = response.taskItemResponse.message;
+        }
+        else {
+          this.taskItemUpdate = response.taskItemResponse.data;
+          this.categoriesByUserId = response.categoriesResponse.data;
+          this.priorities = response.prioritiesResponse.data;
+          this.checkAndInitializeForm();
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
       }
     });
   }
@@ -75,10 +90,19 @@ export class TaskItemEditComponent {
 
   updateTaskItem(): void {
     this.taskItemService.updateTaskItem(this.taskItemUpdateForm.value).subscribe({
-      next: () => {
-        this.router.navigate(['taskitem'])
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.router.navigate(['taskitem']);
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
       }
-    })
+    });
   }
 
 }

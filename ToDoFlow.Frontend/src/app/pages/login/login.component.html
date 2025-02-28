@@ -14,6 +14,7 @@
         <button type="submit" class="btn btn-primary mt-3 w-100" [disabled]="!loginForm.valid">Sign in</button>
       </form>
       <a href="#" aria-current="page" routerLink="/forgot-password"  class="d-flex justify-content-center mt-3" style="text-decoration: none;">Forgot password?</a>
+      <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
     </div>
   </div>
 </section>

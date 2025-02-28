@@ -12,6 +12,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeCategoryDeleteModal()">Close</button>
         <button type="button" (click)="deleteCategory()" class="btn btn-danger">Delete</button>
       </div>
+      <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
     </div>
   </div>
 </div>

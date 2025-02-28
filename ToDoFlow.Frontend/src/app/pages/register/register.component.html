@@ -21,6 +21,7 @@
         </div>
         <button type="submit" class="btn btn-primary mt-3 w-100" [disabled]="!registerForm.valid">Sign up</button>
       </form>
+      <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
     </div>
   </div>
 </section>

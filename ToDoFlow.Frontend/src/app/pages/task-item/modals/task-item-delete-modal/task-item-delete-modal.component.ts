@@ -1,12 +1,13 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TaskItemService } from '../../../../core/services/task-item/task-item.service';
+import { CommonModule } from '@angular/common';
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-task-item-delete-modal',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './task-item-delete-modal.component.html',
   styleUrl: './task-item-delete-modal.component.css'
 })
@@ -16,6 +17,7 @@ export class TaskITemDeleteModalComponent {
   @Input() taskItemName: string | null = null;
   @Input() taskItemId: number | null = null;
 
+  errorMessage: string | null = null;
   modal: any
 
   constructor(private taskItemService: TaskItemService) { }
@@ -41,10 +43,18 @@ export class TaskITemDeleteModalComponent {
 
   deleteTaskItem(): void {
     this.taskItemService.deleteTaskItem(this.taskItemId!).subscribe({
-      next: () => {
-        location.reload()
+      next: (response) => {
+        if(response.success === false) {
+          this.errorMessage = response.message
+        }
+        else {
+          this.errorMessage = null
+          location.reload()
+        }
       },
-      error: (error) => console.error('')
+      error: (err) => {
+        this.errorMessage = err
+      }
     })
   }
 }

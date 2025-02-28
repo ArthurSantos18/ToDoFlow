@@ -19,6 +19,7 @@ export class TaskItemCreateComponent implements OnInit {
   userId: number | null = null;
   categoriesByUserId: CategoryReadDto[] = []
   priorities: {[key: number]: string} = {}
+  errorMessage: string | null = null;
 
   taskItemCreateForm: FormGroup
 
@@ -38,20 +39,53 @@ export class TaskItemCreateComponent implements OnInit {
   }
 
   loadCategory(userId: number): void {
-    this.categoryService.getCategoryByUser(userId).subscribe((request) => {
-      this.categoriesByUserId = request.data
+    this.categoryService.getCategoryByUser(userId).subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.categoriesByUserId = response.data
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
     })
   }
 
   loadPriorities(): void {
-    this.enumService.getPriority().subscribe((request) => {
-      this.priorities = request.data
-    })
+    this.enumService.getPriority().subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.priorities = response.data
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
+    });
   }
 
   createTaskItem(): void {
-    this.taskItemService.createTaskItem(this.taskItemCreateForm.value).subscribe(() => {
-      this.router.navigate(['/taskitem'])
-    })
+    this.taskItemService.createTaskItem(this.taskItemCreateForm.value).subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.router.navigate(['taskitem']);
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
+    });
   }
 }

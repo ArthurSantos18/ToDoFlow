@@ -1,12 +1,13 @@
 import { Component, ElementRef, Input,  ViewChild } from '@angular/core';
 import { TaskItemReadDto } from '../../../../models/task-item';
+import { CommonModule } from '@angular/common';
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-task-item-details-modal',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './task-item-details-modal.component.html',
   styleUrl: './task-item-details-modal.component.css'
 })
@@ -17,6 +18,7 @@ export class TaskItemDetailsModalComponent {
   @Input() formattedCompletedData: string | null = null;
   @Input() categoryName: string | null = null;
 
+  errorMessage: string | null = null;
   modal: any
 
   openTaskItemDetailsModal(): void {

@@ -15,5 +15,6 @@
       </form>
       <a href="#" aria-current="page" routerLink="/profile/reset-password"  class="d-flex justify-content-center mt-3" style="text-decoration: none;">Change  password?</a>
     </div>
+    <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
   </div>
 </section>

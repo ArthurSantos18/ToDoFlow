@@ -6,7 +6,6 @@ import { CategoryService } from '../../core/services/category/category.service';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { CategoryReadDto } from '../../models/category';
-import { RefreshRequest } from '../../models/auth-response';
 
 @Component({
   selector: 'app-category',
@@ -21,8 +20,9 @@ export class CategoryComponent implements OnInit {
   @ViewChild (CategoryDeleteModalComponent) categoryDeleteModal!: CategoryDeleteModalComponent
 
   userId: number | null = null;
+  errorMessage: string | null = null;
   categoriesByUserId: CategoryReadDto[] = []
-  
+
   constructor(private categoryService: CategoryService, private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -31,9 +31,20 @@ export class CategoryComponent implements OnInit {
   };
 
   loadCategory(userId: number): void {
-    this.categoryService.getCategoryByUser(userId).subscribe((request) => {
-      this.categoriesByUserId = request.data
-    })
+    this.categoryService.getCategoryByUser(userId).subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.categoriesByUserId = response.data;
+          this.errorMessage = null;
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
+    });
   }
 
   openCategoryCreateModal(): void {

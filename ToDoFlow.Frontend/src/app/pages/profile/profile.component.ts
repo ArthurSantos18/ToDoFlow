@@ -17,6 +17,7 @@ export class ProfileComponent implements OnInit {
   userId: number | null = null;
   userReadDto: UserReadDto | null = null
   userRole: string | null = null
+  errorMessage: string | null = null;
 
   userUpdateForm: FormGroup
 
@@ -42,8 +43,19 @@ export class ProfileComponent implements OnInit {
   }
 
   loadUser(): void {
-    this.userService.getUserById(this.userId!).subscribe((response) => {
-      this.userReadDto = response.data
+    this.userService.getUserById(this.userId!).subscribe({
+      next: (response) => {
+        if (response.success == false) {
+          this.errorMessage = response.message
+        }
+        else {
+          this.userReadDto = response.data
+          this.errorMessage = null
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err
+      }
     });
   }
 
@@ -63,10 +75,21 @@ export class ProfileComponent implements OnInit {
       });
     }
 
-    this.userService.updateUser(this.userUpdateForm.value).subscribe({
-      next: () => this.router.navigate(['/home']),
-      error: (err) => console.error(err)
-    });
+    if(this.userUpdateForm.valid) {
+      this.userService.updateUser(this.userUpdateForm.value).subscribe({
+        next: (response) => {
+          if (response.success === false) {
+            this.errorMessage = response.message
+          }
+          else {
+            this.errorMessage = null
+            this.router.navigate(['/home'])
+          }
+        },
+        error: (err) => {
+          this.errorMessage = err
+        }
+      });
+    }
   }
-
 }

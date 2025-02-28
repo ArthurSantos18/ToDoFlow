@@ -50,6 +50,7 @@
           <button type="submit" (click)="updateTaskItem()" [disabled]="!taskItemUpdateForm.valid" class="btn btn-success">Edit</button>
         </div>
       </form>
+      <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
     </div>
   </div>
 </section>

@@ -27,6 +27,7 @@
           <button type="submit" (click)="createTaskItem()" [disabled]="!taskItemCreateForm.valid" class="btn btn-success">Create</button>
         </div>
       </form>
+      <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
     </div>
   </div>
 </section>

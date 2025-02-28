@@ -16,6 +16,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-success"(submit)="closeCategoryCreateModal()" (click)="createCategory()" [disabled]="!categoryCreateForm.valid">Add Category</button>
           </div>
+          <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
         </div>
       </form>
     </div>

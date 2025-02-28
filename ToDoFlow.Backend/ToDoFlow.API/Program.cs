@@ -99,7 +99,7 @@ namespace ToDoFlow.API
             {
                 options.AddPolicy("AllowLocalHost", policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowCredentials().AllowAnyMethod();
+                    policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
 

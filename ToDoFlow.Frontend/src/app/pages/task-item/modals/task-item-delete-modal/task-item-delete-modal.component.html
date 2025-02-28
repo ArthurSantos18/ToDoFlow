@@ -13,5 +13,6 @@
         <button type="button" (click)="deleteTaskItem()" class="btn btn-danger">Delete</button>
       </div>
     </div>
+    <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3" role="alert">{{errorMessage}}</div>
   </div>
 </div>

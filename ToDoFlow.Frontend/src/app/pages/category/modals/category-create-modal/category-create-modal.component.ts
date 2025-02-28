@@ -2,13 +2,14 @@ import { Component, ElementRef, output, Output, OutputEmitterRef, ViewChild } fr
 import { CategoryService } from '../../../../core/services/category/category.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth/auth.service';
+import { CommonModule } from '@angular/common';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-category-create-modal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './category-create-modal.component.html',
   styleUrl: './category-create-modal.component.css'
 })
@@ -17,6 +18,7 @@ export class CategoryCreateModalComponent {
 
   modal: any
   categoryCreateForm: FormGroup
+  errorMessage: string | null = null;
 
   constructor(private categoryService: CategoryService, private authService: AuthService, private fb: FormBuilder) {
     this.categoryCreateForm = this.fb.group({
@@ -45,11 +47,21 @@ export class CategoryCreateModalComponent {
   }
 
   createCategory(): void {
-    this.categoryService.createCategory(this.categoryCreateForm.value).subscribe({
-      next: () => {
-        location.reload()
-      },
-      error: (error) => console.error('')
-    })
+    if (this.categoryCreateForm.valid) {
+      this.categoryService.createCategory(this.categoryCreateForm.value).subscribe({
+        next: (response) => {
+          if (response.success === false) {
+            this.errorMessage = response.message;
+          }
+          else {
+            this.errorMessage = null;
+          }
+        },
+        error: (err) => {
+          this.errorMessage = err
+        }
+      });
+    }
+
   }
 }

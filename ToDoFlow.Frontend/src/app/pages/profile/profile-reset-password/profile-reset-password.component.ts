@@ -4,18 +4,20 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { UserService } from '../../../core/services/user/user.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './profile-reset-password.component.html',
   styleUrl: './profile-reset-password.component.css'
 })
 export class ProfileResetPasswordComponent {
   userId: number | null = null;
-  userReadDto: UserReadDto | null = null
-  userRole: string | null = null
+  userReadDto: UserReadDto | null = null;
+  userRole: string | null = null;
+  errorMessage: string | null = null;
 
   userUpdateForm: FormGroup
 
@@ -47,8 +49,19 @@ export class ProfileResetPasswordComponent {
 
 
   loadUser(): void {
-    this.userService.getUserById(this.userId!).subscribe((response) => {
-      this.userReadDto = response.data
+    this.userService.getUserById(this.userId!).subscribe({
+      next: (response) => {
+        if (response.success == false) {
+          this.errorMessage = response.message
+        }
+        else {
+          this.userReadDto = response.data
+          this.errorMessage = null
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err
+      }
     });
   }
 
@@ -60,10 +73,21 @@ export class ProfileResetPasswordComponent {
       profile: this.authService.getRoleFromToken()
     });
 
-    this.userService.updateUser(this.userUpdateForm.value).subscribe({
-      next: () => this.router.navigate(['/home']),
-      error: (err) => console.error(err)
-    });
+    if(this.userUpdateForm.valid) {
+      this.userService.updateUser(this.userUpdateForm.value).subscribe({
+        next: (response) => {
+          if (response.success === false) {
+            this.errorMessage = response.message
+          }
+          else {
+            this.errorMessage = null
+            this.router.navigate(['/home'])
+          }
+        },
+        error: (err) => {
+          this.errorMessage = err
+        }
+      });
+    }
   }
-
 }

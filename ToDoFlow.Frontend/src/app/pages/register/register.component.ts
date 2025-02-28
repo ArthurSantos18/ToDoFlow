@@ -2,16 +2,19 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   registerForm: FormGroup
+  errorMessage: string | null = null
 
   constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) {
     this.registerForm = this.fb.group({
@@ -32,10 +35,19 @@ export class RegisterComponent {
   }
 
   onSignUp() {
-    if(this.registerForm.valid) {
+    if (this.registerForm.valid) {
       this.authService.register(this.registerForm.value).subscribe({
-        next: () => this.router.navigate(['/home']),
-        error: (err) => console.error(err)
+        next: (response) => {
+          if (response.success === false) {
+            this.errorMessage = response.message; // Erro "lógico" (ex: validação)
+          }
+          else {
+            this.router.navigate(['home']);
+          }
+        },
+        error: (err) => {
+          this.errorMessage = err
+        }
       });
     }
   }

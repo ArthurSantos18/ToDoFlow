@@ -24,10 +24,11 @@ export class TaskItemComponent implements OnInit {
   @ViewChild(TaskItemEditComponent) taskItemEdit!: TaskItemEditComponent;
 
   userId: number | null = null;
+  errorMessage: string | null = null;
   categoriesByUserId: CategoryReadDto[] = []
   taskItemByCategory:  {[categoryId: number]: TaskItemReadDto[] } = {}
 
-  constructor(private categoryService: CategoryService, private taskItemService: TaskItemService, private authService: AuthService, private datePipe: DatePipe, private router: Router) { }
+  constructor(private categoryService: CategoryService, private taskItemService: TaskItemService, private authService: AuthService, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.userId = Number(this.authService.getSubFromToken());
@@ -35,35 +36,70 @@ export class TaskItemComponent implements OnInit {
   }
 
   loadCategories(userId: number): void {
-    this.categoryService.getCategoryByUser(userId).subscribe((response) => {
-      this.categoriesByUserId = response.data
+    this.categoryService.getCategoryByUser(userId).subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.categoriesByUserId = response.data;
 
-      this.categoriesByUserId.forEach(category => {
-        this.loadTaskItemsByCategory(category.id);
-      });
-    })
+          this.categoriesByUserId.forEach(category => {
+            this.loadTaskItemsByCategory(category.id);
+          });
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
+    });
   }
 
   loadTaskItemsByCategory(categoryId: number): void {
-    this.taskItemService.getTaskItemByCategory(categoryId).subscribe((response) => {
-      this.taskItemByCategory[categoryId] = response.data
-    })
+    this.taskItemService.getTaskItemByCategory(categoryId).subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
+          this.taskItemByCategory[categoryId] = response.data
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
+      }
+    });
   }
 
   openTaskItemDetailsModal(taskItemId: number): void {
-    this.taskItemService.getTaskItemById(taskItemId).subscribe((response) => {
-      this.taskItemDetailsModal.taskItemDetails = response.data
+    this.taskItemService.getTaskItemById(taskItemId).subscribe({
+      next: (response) => {
+        if (response.success === false) {
+          this.errorMessage = response.message;
+        }
+        else {
+          this.errorMessage = null;
 
-      const formattedCreatedData = this.datePipe.transform(this.taskItemDetailsModal.taskItemDetails.createdAt, 'MM-dd-yyyy');
-      const formattedCompletedData = this.datePipe.transform(this.taskItemDetailsModal.taskItemDetails.completeAt, 'MM-dd-yyyy');
-      this.taskItemDetailsModal.formattedCreatedData = formattedCreatedData
-      this.taskItemDetailsModal.formattedCompletedData = formattedCompletedData
+          this.taskItemDetailsModal.taskItemDetails = response.data
 
-      const category = this.categoriesByUserId.find(cat => cat.id === response.data.categoryId)
-      if (category) {
-        this.taskItemDetailsModal.categoryName = category?.name
+          const formattedCreatedData = this.datePipe.transform(this.taskItemDetailsModal.taskItemDetails.createdAt, 'MM-dd-yyyy');
+          const formattedCompletedData = this.datePipe.transform(this.taskItemDetailsModal.taskItemDetails.completeAt, 'MM-dd-yyyy');
+          this.taskItemDetailsModal.formattedCreatedData = formattedCreatedData
+          this.taskItemDetailsModal.formattedCompletedData = formattedCompletedData
+
+          const category = this.categoriesByUserId.find(cat => cat.id === response.data.categoryId)
+          if (category) {
+            this.taskItemDetailsModal.categoryName = category?.name
+          }
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err;
       }
-    })
+    });
+
     this.taskItemDetailsModal.openTaskItemDetailsModal();
   }
 
