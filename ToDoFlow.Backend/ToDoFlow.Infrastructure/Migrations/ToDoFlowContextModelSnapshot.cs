@@ -45,6 +45,26 @@ namespace ToDoFlow.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("categories", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Home",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Shopping",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Work",
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("ToDoFlow.Domain.Models.TaskItem", b =>
@@ -91,6 +111,78 @@ namespace ToDoFlow.Infrastructure.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("task_items", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Clean all the dirty dishes, including plates, glasses, and utensils.",
+                            Name = "Wash the dishes",
+                            Priority = (byte)1,
+                            Status = (byte)1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Vacuum the floors, mop the surfaces, and tidy up the rooms.",
+                            Name = "Clean the house",
+                            Priority = (byte)2,
+                            Status = (byte)1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 2,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Buy groceries including vegetables, fruits, bread, and milk.",
+                            Name = "Grocery shopping",
+                            Priority = (byte)3,
+                            Status = (byte)1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 2,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Buy new headphones and a phone charger.",
+                            Name = "Electronics shopping",
+                            Priority = (byte)0,
+                            Status = (byte)1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 3,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Finalize the report for the current project, including graphs and conclusions.",
+                            Name = "Complete project report",
+                            Priority = (byte)2,
+                            Status = (byte)1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 3,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Join the weekly team meeting to discuss project progress and goals.",
+                            Name = "Attend team meeting",
+                            Priority = (byte)1,
+                            Status = (byte)1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 3,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Go through and reply to important work-related emails.",
+                            Name = "Check emails",
+                            Priority = (byte)0,
+                            Status = (byte)1
+                        });
                 });
 
             modelBuilder.Entity("ToDoFlow.Domain.Models.User", b =>
@@ -102,9 +194,9 @@ namespace ToDoFlow.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime")
-                        .HasColumnName("create_at");
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -128,32 +220,72 @@ namespace ToDoFlow.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@gmail.com",
+                            Name = "Admin",
+                            Password = "$2a$11$ZVHygbDAmzxjzbIEOLPBluUfUToFaqskwUO4r7YzWQSlJJ9DWwKhq",
+                            Profile = (byte)0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "doloris@gmail.com",
+                            Name = "Misumi Uika",
+                            Password = "$2a$11$nmsDFSlnFp4QFOZ76qfBOeF4H7AxA2Tc6zASVRw/2..MqPELfZT6C",
+                            Profile = (byte)1
+                        });
                 });
 
             modelBuilder.Entity("ToDoFlow.Domain.Models.UserRefreshToken", b =>
                 {
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("refresh_token");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime")
                         .HasColumnName("expiration");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("refresh_token");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("user_id");
 
-                    b.HasKey("RefreshToken");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("user_refresh_token", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Expiration = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RefreshToken = "",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Expiration = new DateTime(1986, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RefreshToken = "",
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("ToDoFlow.Domain.Models.Category", b =>

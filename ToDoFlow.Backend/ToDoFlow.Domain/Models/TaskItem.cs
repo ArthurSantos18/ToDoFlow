@@ -12,6 +12,6 @@ namespace ToDoFlow.Domain.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now.ToLocalTime();
         public DateTime? CompleteAt { get; set; }
         public int CategoryId { get; set; }
-        public required Category Category { get; set; }
+        public Category Category { get; set; }
     }
 }

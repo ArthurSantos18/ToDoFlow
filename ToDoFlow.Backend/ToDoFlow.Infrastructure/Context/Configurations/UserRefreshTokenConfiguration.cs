@@ -15,7 +15,7 @@ namespace ToDoFlow.Infrastructure.Context.Configurations
         {
             builder.ToTable("user_refresh_token");
 
-            builder.HasKey(x => x.RefreshToken);
+            builder.HasKey(x => x.Id);
 
             builder.Property(t => t.Id).HasColumnName("id").HasColumnType("int");
             builder.Property(t => t.RefreshToken).HasColumnName("refresh_token").HasColumnType("varchar(100)");

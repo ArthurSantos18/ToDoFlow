@@ -93,6 +93,7 @@ namespace ToDoFlow.API
                 };
             });
 
+
             builder.Services.AddAuthorization();
 
             builder.Services.AddCors(options =>
