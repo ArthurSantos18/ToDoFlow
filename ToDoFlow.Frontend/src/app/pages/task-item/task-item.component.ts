@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { TaskItemDetailsModalComponent } from './modals/task-item-details-modal/task-item-details-modal.component';
 import { TaskITemDeleteModalComponent } from './modals/task-item-delete-modal/task-item-delete-modal.component';
 import { CategoryService } from '../../core/services/category/category.service';

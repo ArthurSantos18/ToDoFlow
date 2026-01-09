@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input,  ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TaskItemReadDto } from '../../../../models/task-item';
 import { CommonModule } from '@angular/common';
 

@@ -1,5 +1,5 @@
 import { Component, effect, inject, Injector, OnInit, ViewChild } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { LayoutLogoutModalComponent } from './layout-logout-modal/layout-logout-modal.component';
