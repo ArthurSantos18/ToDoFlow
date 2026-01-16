@@ -69,7 +69,7 @@ namespace ToDoFlow.API
 
             builder.Services.AddSingleton<IEmailService, EmailService>();
             builder.Services.AddSingleton<ITokenService, TokenService>();
-            builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+            builder.Services.AddSingleton<IPasswordService, PasswordService>();
 
 
             builder.Services.AddAuthentication(options =>

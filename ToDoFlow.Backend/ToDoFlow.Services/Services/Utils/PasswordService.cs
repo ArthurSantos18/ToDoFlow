@@ -2,7 +2,7 @@
 
 namespace ToDoFlow.Services.Services.Utils
 {
-    public class EncryptionService : IEncryptionService
+    public class PasswordService : IPasswordService
     {
         public string HashPassword(string password)
         {

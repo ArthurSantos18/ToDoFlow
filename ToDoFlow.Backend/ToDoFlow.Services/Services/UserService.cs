@@ -7,21 +7,21 @@ using ToDoFlow.Services.Services.Utils;
 
 namespace ToDoFlow.Services.Services
 {
-    public class UserService(IUserRepository userRepository, IMapper mapper, IEncryptionService encryptionService, 
+    public class UserService(IUserRepository userRepository, IMapper mapper, IPasswordService passwordService, 
         ICategoryRepository categoryRepository, ITaskItemRepository taskItemRepository) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly ICategoryRepository _categoryRepository = categoryRepository;
         private readonly ITaskItemRepository _taskItemRepository = taskItemRepository;
         private readonly IMapper _mapper = mapper;
-        private readonly IEncryptionService _encryptionService = encryptionService;
+        private readonly IPasswordService _passwordService = passwordService;
 
         public async Task<ApiResponse<List<UserReadDto>>> CreateUserAsync(UserCreateDto userCreateDto)
         {
             try
             {
                 User user = _mapper.Map<User>(userCreateDto);
-                user.Password = _encryptionService.HashPassword(user.Password);
+                user.Password = _passwordService.HashPassword(user.Password);
                 await _userRepository.CreateUserAsync(user);
 
                 List<User> users = await _userRepository.ReadUserAsync();
@@ -97,7 +97,7 @@ namespace ToDoFlow.Services.Services
 
                 if (userUpdateDto.Password != null)
                 {
-                    userUpdateDto.Password = _encryptionService.HashPassword(userUpdateDto.Password);
+                    userUpdateDto.Password = _passwordService.HashPassword(userUpdateDto.Password);
                 }
                 else
                 {

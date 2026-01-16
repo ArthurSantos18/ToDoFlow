@@ -9,12 +9,12 @@ using ToDoFlow.Services.Services.Utils;
 
 namespace ToDoFlow.Services.Services
 {
-    public class AccountService(IConfiguration configuration, IEncryptionService encryptionService, ITokenService tokenService,
+    public class AccountService(IConfiguration configuration, IPasswordService passwordService, ITokenService tokenService,
         IEmailService emailService, IUserRepository userRepository, IMapper mapper, IUserRefreshTokenRepository userRefreshTokenRepository): IAccountService
     {
         
         private readonly IConfiguration _configuration = configuration;
-        private readonly IEncryptionService _encryptionService = encryptionService;
+        private readonly IPasswordService _passwordService = passwordService;
         private readonly ITokenService _tokenService = tokenService;
         private readonly IMapper _mapper = mapper;
         private readonly IEmailService _emailService = emailService;
@@ -31,7 +31,7 @@ namespace ToDoFlow.Services.Services
                 return new ApiResponse<string, UserRefreshTokenReadDto>(null, null, false, "Erro: User not found", 404);
             }
 
-            if (!_encryptionService.VerifyPassword(loginRequestDto.Password, user.Password))
+            if (!_passwordService.VerifyPassword(loginRequestDto.Password, user.Password))
             {
                 return new ApiResponse<string, UserRefreshTokenReadDto>(null, null,false, "Erro: Invalid credentials", 401);
             }
@@ -80,7 +80,7 @@ namespace ToDoFlow.Services.Services
             try
             {
                 User user = _mapper.Map<User>(registerRequestDto);
-                user.Password = _encryptionService.HashPassword(user.Password);
+                user.Password = _passwordService.HashPassword(user.Password);
 
                 await _userRepository.CreateUserAsync(user);
 
@@ -170,7 +170,7 @@ namespace ToDoFlow.Services.Services
                     return new ApiResponse(false, "Erro: Passwords do not match", 400);
                 }
 
-                resetPasswordDto.NewPassword = _encryptionService.HashPassword(resetPasswordDto.NewPassword);
+                resetPasswordDto.NewPassword = _passwordService.HashPassword(resetPasswordDto.NewPassword);
                 user.Password = resetPasswordDto.NewPassword;
 
                 await _userRepository.UpdateUserAsync(user);
