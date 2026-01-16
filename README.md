@@ -8,7 +8,7 @@
 <ul>
   <li>Autenticação com JWT (Access Token + Refresh Token)</li>
   <li>Registro de usuários</li>
-  <li>Criptografia de senhas</li>
+  <li>Hash de senhas</li>
   <li>CRUD de tarefas e categorias</li>
   <li>Relacionamento entre tarefas e categorias</li>
   <li>Acesso protegido por autenticação</li>
