@@ -21,9 +21,10 @@ export const API_ENDPOINTS = {
     CREATE: `${environment.apiUrl}/categories`,
     GET_ALL: `${environment.apiUrl}/categories`,
     GET_BY_ID: `${environment.apiUrl}/categories`,
-    GET_BY_USER_ID: `${environment.apiUrl}/categories/user`,
+    GET_BY_USER_ID: `${environment.apiUrl}/categories/me`,
+    GET_ADMIN_BY_USER_ID: `${environment.apiUrl}/categories/user`,
     UPDATE: `${environment.apiUrl}/categories`,
-    DELETE: `${environment.apiUrl}/categories`,
+    DELETE: `${environment.apiUrl}/categories`
   },
 
   TASKITEM: {
@@ -31,7 +32,7 @@ export const API_ENDPOINTS = {
     GET_ALL: `${environment.apiUrl}/taskitems`,
     GET_BY_ID: `${environment.apiUrl}/taskitems`,
     GET_BY_CATEGORY_ID: `${environment.apiUrl}/taskitems/category`,
-    GET_BY_USER_ID: `${environment.apiUrl}/taskitems/user`,
+    GET_BY_USER_ID: `${environment.apiUrl}/taskitems/me`,
     UPDATE: `${environment.apiUrl}/taskitems`,
     DELETE: `${environment.apiUrl}/taskitems`,
   },

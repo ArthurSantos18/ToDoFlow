@@ -20,9 +20,8 @@ export class CategoryCreateModalComponent {
   categoryCreateForm: FormGroup
   errorMessage: string | null = null;
 
-  constructor(private categoryService: CategoryService, private authService: AuthService, private fb: FormBuilder) {
+  constructor(private categoryService: CategoryService, private fb: FormBuilder) {
     this.categoryCreateForm = this.fb.group({
-      userId: new FormControl(Number(authService.getSubFromToken())),
       name: new FormControl('', [Validators.required])
     })
   }
@@ -55,6 +54,7 @@ export class CategoryCreateModalComponent {
           }
           else {
             this.errorMessage = null;
+            location.reload()
           }
         },
         error: (err) => {

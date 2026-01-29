@@ -29,8 +29,7 @@ namespace ToDoFlow.Infrastructure.Repositories
 
         public async Task<List<TaskItem>> ReadTaskItemByUserAsync(int userId)
         {
-            return await _context.Tasks.Where(t => 
-            _context.Categories.Where(c => c.UserId == userId).Select(c => c.Id).Contains(t.CategoryId)).ToListAsync();
+            return await _context.Tasks.Where(t => t.Category.UserId == userId).ToListAsync();
         }
 
         public async Task<TaskItem> ReadTaskItemByIdAsync(int id)
@@ -46,12 +45,17 @@ namespace ToDoFlow.Infrastructure.Repositories
             return await _context.Tasks.Where(t => t.CategoryId == taskItem.CategoryId).ToListAsync();
         }
 
-        public async Task<List<TaskItem>> DeleteTaskItemAsync(int id, int categoryId)
+        public async Task<List<TaskItem>> DeleteTaskItemAsync(int id)
         {
-            _context.Tasks.Remove(await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id));
+            TaskItem task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (task == null)
+                return new List<TaskItem>();
+
+            _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
 
-            return await _context.Tasks.Where(t => t.CategoryId == categoryId).ToListAsync();
+            return await _context.Tasks.Where(t => t.CategoryId == task.CategoryId).ToListAsync();
         }
     }
 }

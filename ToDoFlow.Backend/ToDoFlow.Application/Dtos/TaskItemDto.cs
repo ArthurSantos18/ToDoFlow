@@ -22,7 +22,6 @@ namespace ToDoFlow.Application.Dtos
 
     public class TaskItemUpdateDto : TaskItemBaseDto    
     {
-        public int Id { get; set; }
         public Status? Status { get; set; }
     }
 }

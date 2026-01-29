@@ -3,7 +3,6 @@ export interface CategoryBaseDto {
 }
 
 export interface CategoryCreateDto extends CategoryBaseDto {
-  userId: number;
 }
 
 export interface CategoryReadDto extends CategoryBaseDto {

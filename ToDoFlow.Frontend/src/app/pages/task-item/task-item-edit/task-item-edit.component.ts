@@ -45,13 +45,13 @@ export class TaskItemEditComponent {
     this.userId = Number(this.authService.getSubFromToken());
     const taskItemId = Number(this.route.snapshot.paramMap.get('id'))
 
-    this.forkData(taskItemId, this.userId)
+    this.forkData(taskItemId)
   }
 
-  forkData(taskItemId: number, userId: number) {
+  forkData(taskItemId: number) {
     forkJoin({
       taskItemResponse: this.taskItemService.getTaskItemById(taskItemId),
-      categoriesResponse: this.categoryService.getCategoryByUser(userId),
+      categoriesResponse: this.categoryService.getCategoryByUser(),
       prioritiesResponse: this.enumService.getPriority()
     }).subscribe({
       next: (response) => {

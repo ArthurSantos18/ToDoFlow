@@ -34,12 +34,12 @@ export class TaskItemCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.userId = Number(this.authService.getSubFromToken());
-    this.loadCategory(this.userId)
+    this.loadCategory()
     this.loadPriorities()
   }
 
-  loadCategory(userId: number): void {
-    this.categoryService.getCategoryByUser(userId).subscribe({
+  loadCategory(): void {
+    this.categoryService.getCategoryByUser().subscribe({
       next: (response) => {
         if (response.success === false) {
           this.errorMessage = response.message;

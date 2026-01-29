@@ -34,7 +34,6 @@ namespace ToDoFlow.Infrastructure.Repositories
 
         public async Task<List<Category>> UpdateCategoryAsync(Category category)
         {
-
             _context.Categories.Update(category);
             await _context.SaveChangesAsync();
 
@@ -45,10 +44,10 @@ namespace ToDoFlow.Infrastructure.Repositories
         {
             Category category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
 
-            _context.Categories.Remove(await _context.Categories.FirstOrDefaultAsync(c => c.Id == id));
+            _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
 
-            return await _context.Categories.Where(u => u.UserId == category.Id).ToListAsync();
+            return await _context.Categories.Where(u => u.UserId == category.UserId).ToListAsync();
         }
 
     }

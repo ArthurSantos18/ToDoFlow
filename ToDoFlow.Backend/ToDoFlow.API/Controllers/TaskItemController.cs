@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using ToDoFlow.Application.Dtos;
+using ToDoFlow.Domain.Models;
 using ToDoFlow.Services.Services.Interface;
 
 namespace ToDoFlow.API.Controllers
@@ -12,46 +14,71 @@ namespace ToDoFlow.API.Controllers
     {
         private readonly ITaskItemService _taskItemService = taskItemService;
 
+        private int GetCurrentUserId()
+        {
+            return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        } 
+
         [HttpPost]
         public async Task<ActionResult> CreateTaskItemAsync(TaskItemCreateDto taskItemCreateDto)
         {
-            return Ok(await _taskItemService.CreateTaskItemAsync(taskItemCreateDto));
+            int userId = GetCurrentUserId();
+
+            return Ok(await _taskItemService.CreateTaskItemAsync(userId, taskItemCreateDto));
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> ReadTaskItemAsync()
         {
             return Ok(await _taskItemService.ReadTaskItemAsync());
         }
 
-        [HttpGet("category/{categoryId}")]
-        public async Task<ActionResult> ReadTaskItemByCategoryAsync(int categoryId)
-        {
-            return Ok(await _taskItemService.ReadTaskItemByCategoryAsync(categoryId));
-        }
-
-        [HttpGet("user/{userId}")]
-        public async Task<ActionResult> ReadTaskItemByUserAsync(int userId)
+        [HttpGet("user/{userId:int}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> ReadTaskItemForUserByAdminAsync(int userId)
         {
             return Ok(await _taskItemService.ReadTaskItemByUserAsync(userId));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("me")]
+        public async Task<ActionResult> ReadTaskItemByUserAsync()
+        {
+            int userId = GetCurrentUserId();
+
+            return Ok(await _taskItemService.ReadTaskItemByUserAsync(userId));
+        }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<ActionResult> ReadTaskItemByCategoryAsync(int categoryId)
+        {
+            int userId = GetCurrentUserId();
+            
+            return Ok(await _taskItemService.ReadTaskItemByCategoryAsync(categoryId, userId));
+        }
+
+        [HttpGet("{id:int}")]
         public async Task<ActionResult> ReadTaskItemByIdAsync(int id)
         {
-            return Ok(await _taskItemService.ReadTaskItemByIdAsync(id));
+            int userId = GetCurrentUserId();
+
+            return Ok(await _taskItemService.ReadTaskItemByIdAsync(id, userId));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateTaskItemAsync(int id, TaskItemUpdateDto taskItemUpdateDto)
         {
-            return Ok(await _taskItemService.UpdateTaskItemAsync(id, taskItemUpdateDto));
+            int userId = GetCurrentUserId();
+
+            return Ok(await _taskItemService.UpdateTaskItemAsync(id, userId, taskItemUpdateDto));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTaskItemAsync(int id, int categoryId)
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> DeleteTaskItemAsync(int id)
         {
-            return Ok(await _taskItemService.DeleteTaskItemAsync(id, categoryId));
+            int userId = GetCurrentUserId();
+
+            return Ok(await _taskItemService.DeleteTaskItemAsync(id, userId));
         }
     }
 }

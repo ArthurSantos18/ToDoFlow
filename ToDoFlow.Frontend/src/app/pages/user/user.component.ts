@@ -47,14 +47,14 @@ export class UserComponent implements OnInit {
   }
 
   openUserCategoriesModal(userId: number, userName: string): void {
-    this.categoryService.getCategoryByUser(userId).subscribe({
+    this.categoryService.getAdminCategoryById(userId).subscribe({
       next: (response) => {
         if (response.success === false) {
           this.errorMessage = response.message;
         }
         else {
           this.errorMessage = null;
-          this.userCategoriesModal.categoriesByUserId = response.data;
+          this.userCategoriesModal.categoriesAdminByUserId = response.data;
           this.userCategoriesModal.userName = userName;
         }
       },
@@ -82,7 +82,7 @@ export class UserComponent implements OnInit {
         this.errorMessage = err;
       }
     });
-    
+
     this.userTaskItemsModal.openUserTaskItemModal();
   }
 

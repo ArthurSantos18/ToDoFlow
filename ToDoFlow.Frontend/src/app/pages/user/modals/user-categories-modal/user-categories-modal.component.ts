@@ -15,7 +15,7 @@ export class UserCategoriesModalComponent {
   @ViewChild("IUserCategoriesModal") modalElement!: ElementRef
 
   @Input() userName: string | null = null;
-  @Input() categoriesByUserId: CategoryReadDto[] = []
+  @Input() categoriesAdminByUserId: CategoryReadDto[] = []
 
   modal: any
 

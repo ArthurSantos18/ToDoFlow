@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Services.Services.Interface;
 
@@ -42,6 +43,8 @@ namespace ToDoFlow.API.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> DeleteUserAsync(int id)
         {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
             return Ok(await _userService.DeleteUserAsync(id));
         }
     }

@@ -4,10 +4,7 @@
     {
         public required string Name { get; set; }
     }
-    public class CategoryCreateDto : CategoryBaseDto
-    {
-        public int UserId { get; set; }
-    }
+    public class CategoryCreateDto : CategoryBaseDto { }
     public class CategoryReadDto : CategoryBaseDto
     {
         public int Id { get; set; }
