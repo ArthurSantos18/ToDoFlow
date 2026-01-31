@@ -34,8 +34,8 @@ export class CategoryService {
     );
   }
 
-  getAdminCategoryById(categoryId: number): Observable<ApiResponseSingle<CategoryReadDto[]>> {
-    return this.http.get<ApiResponseSingle<CategoryReadDto[]>>(`${API_ENDPOINTS.CATEGORY.GET_ADMIN_BY_USER_ID}/${categoryId}`).
+  getAdminCategoryById(userId: number): Observable<ApiResponseSingle<CategoryReadDto[]>> {
+    return this.http.get<ApiResponseSingle<CategoryReadDto[]>>(`${API_ENDPOINTS.CATEGORY.GET_ADMIN_BY_USER_ID}/${userId}`).
     pipe(
       catchError(this.errorService.handleError)
     );

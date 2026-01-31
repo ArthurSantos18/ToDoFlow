@@ -21,7 +21,7 @@ namespace ToDoFlow.API.Controllers
                 return Unauthorized(response);
             }
             
-            return Ok(response);
+            return StatusCode(response.HttpStatus, response);
         }
 
         [HttpPost("register")]
@@ -34,7 +34,7 @@ namespace ToDoFlow.API.Controllers
                 return BadRequest(response);
             }
 
-            return Ok(response);
+            return StatusCode(response.HttpStatus, response);
         }
         [HttpPost("refresh")]
         public async Task<ActionResult> RefreshTokenAsync(UserRefreshTokenRefreshDto userRefreshTokenRefreshDto)
@@ -47,7 +47,7 @@ namespace ToDoFlow.API.Controllers
                 return BadRequest(response);
             }
 
-            return Ok(response);
+            return StatusCode(response.HttpStatus, response);
         }
         [HttpPost("forgot-password")]
         public async Task<ActionResult> ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto)
@@ -59,13 +59,14 @@ namespace ToDoFlow.API.Controllers
                 return BadRequest(response);
             }
 
-            return Ok(response);
+            return StatusCode(response.HttpStatus, response);
         }
         [HttpPost("reset-password")]
         public async Task<ActionResult> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
         {
             ApiResponse response = await _accountService.ResetPasswordAsync(resetPasswordDto);
-            return Ok(response);
+            
+            return StatusCode(response.HttpStatus, response);
         }
     }
 }

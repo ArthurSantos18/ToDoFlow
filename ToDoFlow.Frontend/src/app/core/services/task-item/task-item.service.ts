@@ -26,8 +26,8 @@ export class TaskItemService {
     )
   }
 
-  getTaskItemByUser(userId: number): Observable<ApiResponseSingle<TaskItemReadDto[]>> {
-    return this.http.get<ApiResponseSingle<TaskItemReadDto[]>>(`${API_ENDPOINTS.TASKITEM.GET_BY_USER_ID}/${userId}`).
+  getTaskItemByUser(): Observable<ApiResponseSingle<TaskItemReadDto[]>> {
+    return this.http.get<ApiResponseSingle<TaskItemReadDto[]>>(`${API_ENDPOINTS.TASKITEM.GET_BY_USER_ID}`).
     pipe(
       catchError(this.errorService.handleError)
     )
@@ -35,6 +35,13 @@ export class TaskItemService {
 
   getTaskItemById(taskItemId: number): Observable<ApiResponseSingle<TaskItemReadDto>> {
     return this.http.get<ApiResponseSingle<TaskItemReadDto>>(`${API_ENDPOINTS.TASKITEM.GET_BY_ID}/${taskItemId}`).
+    pipe(
+      catchError(this.errorService.handleError)
+    )
+  }
+
+  getAdminTaskItemById(userId: number): Observable<ApiResponseSingle<TaskItemReadDto[]>> {
+    return this.http.get<ApiResponseSingle<TaskItemReadDto[]>>(`${API_ENDPOINTS.TASKITEM.GET_ADMIN_BY_USER_ID}/${userId}`).
     pipe(
       catchError(this.errorService.handleError)
     )

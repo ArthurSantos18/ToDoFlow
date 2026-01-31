@@ -13,7 +13,9 @@ namespace ToDoFlow.API.Controllers
         [HttpGet("priorities")]
         public IActionResult GetPriorities()
         {
-            return Ok(enumService.ReadPriorities());
+            var response = enumService.ReadPriorities();
+            
+            return StatusCode(response.HttpStatus, response);
         }
     }
 }

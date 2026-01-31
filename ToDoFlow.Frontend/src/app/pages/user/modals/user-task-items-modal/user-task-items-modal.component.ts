@@ -15,7 +15,7 @@ export class UserTaskItemsModalComponent {
   @ViewChild("IUserTaskItemsModal") modalElement!: ElementRef
 
   @Input() userName: string | null = null;
-  @Input() taskItemsByUserId: TaskItemReadDto[] = []
+  @Input() taskItemsAdminByUserId: TaskItemReadDto[] = []
 
   modal: any
 

@@ -67,14 +67,14 @@ export class UserComponent implements OnInit {
   }
 
   openUserTaskItemsModal(userId: number, userName: string): void {
-    this.taskItemService.getTaskItemByUser(userId).subscribe({
+    this.taskItemService.getAdminTaskItemById(userId).subscribe({
       next: (response) => {
         if (response.success === false) {
           this.errorMessage = response.message;
         }
         else {
           this.errorMessage = null;
-          this.userTaskItemsModal.taskItemsByUserId = response.data;
+          this.userTaskItemsModal.taskItemsAdminByUserId = response.data;
           this.userTaskItemsModal.userName = userName;
         }
       },

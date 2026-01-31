@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Services.Services.Interface;
+using ToDoFlow.Services.Services.Utils;
 
 namespace ToDoFlow.API.Controllers
 {
@@ -15,61 +16,82 @@ namespace ToDoFlow.API.Controllers
 
         private int GetCurrentUserId()
         {
-            return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim is null)
+            {
+                throw new UnauthorizedAccessException("Id not found");
+            }
+
+            return int.Parse(userIdClaim.Value);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateCategoryAsync(CategoryCreateDto categoryCreateDto)
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> CreateCategoryAsync(CategoryCreateDto categoryCreateDto)
         {
             int userId = GetCurrentUserId();
 
-            return Ok(await _categoryService.CreateCategoryAsync(userId, categoryCreateDto));
+            var response = await _categoryService.CreateCategoryAsync(userId, categoryCreateDto);
+
+            return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> ReadCategoryAsync()
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> ReadCategoryAsync()
         {
-            return Ok(await _categoryService.ReadCategoryAsync());
+            var response = await _categoryService.ReadCategoryAsync();
+
+            return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("user/{userId:int}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> ReadCategoryForUserByAdminAsync(int userId)
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> ReadCategoryForUserByAdminAsync(int userId)
         {
-            return Ok(await _categoryService.ReadCategoryByUserAsync(userId));
+            var response = await _categoryService.ReadCategoryByUserAsync(userId);
+
+            return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("me")]
-        public async Task<ActionResult> ReadCategoryByUserAsync()
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> ReadCategoryByUserAsync()
         {
             int userId = GetCurrentUserId();
 
-            return Ok(await _categoryService.ReadCategoryByUserAsync(userId));
+            var response = await _categoryService.ReadCategoryByUserAsync(userId);
+
+            return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult> ReadCategoryByIdAsync(int id)
+        public async Task<ActionResult<ApiResponse<CategoryReadDto>>> ReadCategoryByIdAsync(int id)
         {
             int userId = GetCurrentUserId();
 
-            return Ok(await _categoryService.ReadCategoryByIdAsync(id, userId));
+            var response = await _categoryService.ReadCategoryByIdAsync(id, userId);
+
+            return StatusCode(response.HttpStatus, response);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> UpdateCategoryAsync(int id, CategoryUpdateDto categoryUpdateDto)
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> UpdateCategoryAsync(int id, CategoryUpdateDto categoryUpdateDto)
         {
             int userId = GetCurrentUserId();
 
-            return Ok(await _categoryService.UpdateCategoryAsync(id, userId, categoryUpdateDto));
+            var response = await _categoryService.UpdateCategoryAsync(id, userId, categoryUpdateDto);
+
+            return StatusCode(response.HttpStatus, response);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeleteCategoryAsync(int id)
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> DeleteCategoryAsync(int id)
         {
             int userId = GetCurrentUserId();
 
-            return Ok(await _categoryService.DeleteCategoryAsync(id, userId));
+            var response = await _categoryService.DeleteCategoryAsync(id, userId);
+
+            return StatusCode(response.HttpStatus, response);
         }
     }
 }
