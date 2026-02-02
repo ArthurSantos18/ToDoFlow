@@ -38,7 +38,6 @@ namespace ToDoFlow.Services.Services
                 List<Category> categories = await _categoryRepository.ReadCategoryAsync();
                 List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
 
-
                 return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)

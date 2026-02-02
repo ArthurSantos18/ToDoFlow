@@ -44,22 +44,22 @@ namespace ToDoFlow.API.Controllers
             return StatusCode(response.HttpStatus, response);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<UserReadDto>>> ReadUserByIdAsync(int id)
+        [HttpGet("me")]
+        public async Task<ActionResult<ApiResponse<UserReadDto>>> ReadUserByIdAsync()
         {
             int userId = GetCurrentUserId();
 
-            var response = await _userService.ReadUserByIdAsync(id);
+            var response = await _userService.ReadUserByIdAsync(userId);
 
             return StatusCode(response.HttpStatus, response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
+        [HttpPut]
+        public async Task<ActionResult<ApiResponse<UserReadDto>>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             int userId = GetCurrentUserId();
 
-            var response = await _userService.UpdateUserAsync(id, userUpdateDto);
+            var response = await _userService.UpdateUserAsync(userId, userUpdateDto);
 
             return StatusCode(response.HttpStatus, response);
 
@@ -67,7 +67,7 @@ namespace ToDoFlow.API.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> DeleteUserAsync(int id)
+        public async Task<ActionResult<ApiResponse<List<UserReadDto>>>> DeleteUserAsync(int id)
         {
             int userId = GetCurrentUserId();
 

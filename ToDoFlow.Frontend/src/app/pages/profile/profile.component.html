@@ -5,11 +5,11 @@
       <form [formGroup]="userUpdateForm" (submit)="updateUser()">
         <div class="form mb-3">
           <label for="Iname" class="form-label">User Name</label>
-          <input type="text" class="form-control" placeholder="Usuário" formControlName="name" value="{{userReadDto?.name}}">
+          <input type="text" class="form-control" placeholder="Usuário" formControlName="name">
         </div>
         <div class="form mb-3">
           <label for="iemail" class="form-label">Email</label>
-          <input type="email" class="form-control" placeholder="Seu email" formControlName="email" value="{{userReadDto?.email}}">
+          <input type="email" class="form-control" placeholder="Seu email" formControlName="email">
         </div>
         <button type="submit" class="btn btn-primary mt-3 w-100" [disabled]="!userUpdateForm.valid">Edit</button>
       </form>

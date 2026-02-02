@@ -12,59 +12,38 @@ namespace ToDoFlow.API.Controllers
         private readonly IAccountService _accountService = accountService;
 
         [HttpPost("login")]
-        public async Task<ActionResult> LoginAsync(LoginRequestDto loginRequestDto)
+        public async Task<ActionResult<ApiResponse<string, UserRefreshTokenReadDto>>> LoginAsync(LoginRequestDto loginRequestDto)
         {
-            ApiResponse<string, UserRefreshTokenReadDto> response = await _accountService.LoginAsync(loginRequestDto);
-            
-            if (response == null)
-            {
-                return Unauthorized(response);
-            }
+            var response = await _accountService.LoginAsync(loginRequestDto);
             
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> RegisterAsync(RegisterRequestDto registerRequestDto)
+        public async Task<ActionResult<ApiResponse<string, UserRefreshTokenReadDto>>> RegisterAsync(RegisterRequestDto registerRequestDto)
         {
-            ApiResponse<string, UserRefreshTokenReadDto> response = await _accountService.RegisterAsync(registerRequestDto);
-            
-            if (response.Data1 == null && response.Data2 == null)
-            {
-                return BadRequest(response);
-            }
+            var response = await _accountService.RegisterAsync(registerRequestDto);
 
             return StatusCode(response.HttpStatus, response);
         }
         [HttpPost("refresh")]
-        public async Task<ActionResult> RefreshTokenAsync(UserRefreshTokenRefreshDto userRefreshTokenRefreshDto)
+        public async Task<ActionResult<ApiResponse<string, UserRefreshTokenReadDto>>> RefreshTokenAsync(UserRefreshTokenRefreshDto userRefreshTokenRefreshDto)
         {
-            ApiResponse<string, UserRefreshTokenReadDto> response = await _accountService.RefreshToken(userRefreshTokenRefreshDto);
-
-           
-            if (response.Data1 == null && response.Data2 == null)
-            {
-                return BadRequest(response);
-            }
+            var response = await _accountService.RefreshToken(userRefreshTokenRefreshDto);
 
             return StatusCode(response.HttpStatus, response);
         }
         [HttpPost("forgot-password")]
-        public async Task<ActionResult> ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto)
+        public async Task<ActionResult<ApiResponse>> ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto)
         {
-            ApiResponse response = await _accountService.ForgotPasswordAsync(forgotPasswordDto);
-            
-            if (response.Success == false)
-            {
-                return BadRequest(response);
-            }
+            var response = await _accountService.ForgotPasswordAsync(forgotPasswordDto);
 
             return StatusCode(response.HttpStatus, response);
         }
         [HttpPost("reset-password")]
-        public async Task<ActionResult> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+        public async Task<ActionResult<ApiResponse>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
         {
-            ApiResponse response = await _accountService.ResetPasswordAsync(resetPasswordDto);
+            var response = await _accountService.ResetPasswordAsync(resetPasswordDto);
             
             return StatusCode(response.HttpStatus, response);
         }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
@@ -91,9 +90,9 @@ namespace ToDoFlow.Services.Services
 
                 return new ApiResponse<string, UserRefreshTokenReadDto>(token, userRefreshTokenDto, true, "Registration completed successfully", 200);
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                return new ApiResponse<string, UserRefreshTokenReadDto>(null, null,false, $"Erro: {ex.InnerException?.Message}", 500);
+                return new ApiResponse<string, UserRefreshTokenReadDto>(null, null,false, $"Erro: {ex.Message}", 500);
             }
         }
 
@@ -102,6 +101,12 @@ namespace ToDoFlow.Services.Services
             try
             {
                 UserRefreshToken userRefreshToken = await _userRefreshTokenRepository.ReadUserRefreshByTokenAsync(userRefreshTokenRefreshDto.RefreshToken);
+                
+                if (userRefreshToken == null)
+                {
+                    return new ApiResponse<string, UserRefreshTokenReadDto>(null, null, false, "Invalid refresh token", 401);
+                }
+
                 User user = await _userRepository.ReadUserByIdAsync(userRefreshToken.UserId);
 
                 var newToken = _tokenService.GenerateToken(user, "login", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
@@ -124,7 +129,7 @@ namespace ToDoFlow.Services.Services
 
                 if (user == null)
                 {
-                    return new ApiResponse(false, $"Error: user does not exist", 500);
+                    return new ApiResponse(false, $"If the email exists, a reset link was sent", 200);
                 }
 
                 string token = _tokenService.GenerateToken(user, "resetPassword", int.Parse(_configuration["JwtSettings:ExpiritaionMinutesResetPassword"]));
@@ -142,7 +147,7 @@ namespace ToDoFlow.Services.Services
 
                 return new ApiResponse(sendEmail, "Email sent successfully", 200);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new ApiResponse(false, $"Error: {ex.Message}", 500);
             }

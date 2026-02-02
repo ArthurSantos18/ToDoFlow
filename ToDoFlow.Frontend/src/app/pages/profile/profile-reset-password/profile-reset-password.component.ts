@@ -49,7 +49,7 @@ export class ProfileResetPasswordComponent {
 
 
   loadUser(): void {
-    this.userService.getUserById(this.userId!).subscribe({
+    this.userService.getUserById().subscribe({
       next: (response) => {
         if (response.success == false) {
           this.errorMessage = response.message

@@ -12,7 +12,7 @@ export const API_ENDPOINTS = {
   USER: {
     CREATE: `${environment.apiUrl}/users`,
     GET: `${environment.apiUrl}/users`,
-    GET_BY_ID: `${environment.apiUrl}/users`,
+    GET_BY_ID: `${environment.apiUrl}/users/me`,
     PUT: `${environment.apiUrl}/users`,
     DELETE: `${environment.apiUrl}/users`,
   },

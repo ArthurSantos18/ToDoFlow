@@ -16,12 +16,12 @@ export class UserService {
     return this.http.get<ApiResponseSingle<UserReadDto[]>>(`${API_ENDPOINTS.USER.GET}`)
   }
 
-  getUserById(userId: number): Observable<ApiResponseSingle<UserReadDto>> {
-    return this.http.get<ApiResponseSingle<UserReadDto>>(`${API_ENDPOINTS.USER.GET_BY_ID}/${userId}`)
+  getUserById(): Observable<ApiResponseSingle<UserReadDto>> {
+    return this.http.get<ApiResponseSingle<UserReadDto>>(`${API_ENDPOINTS.USER.GET_BY_ID}`)
   }
 
   updateUser(UserEditDto: UserEditDto): Observable<ApiResponseSingle<UserReadDto[]>> {
-    return this.http.put<ApiResponseSingle<UserReadDto[]>>(`${API_ENDPOINTS.USER.PUT}/${UserEditDto.id}`, UserEditDto)
+    return this.http.put<ApiResponseSingle<UserReadDto[]>>(`${API_ENDPOINTS.USER.PUT}`, UserEditDto)
   }
 
   deleteUser(userId: number): Observable<ApiResponseSingle<UserReadDto[]>> {

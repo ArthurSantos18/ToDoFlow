@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Services.Services.Interface;
+using ToDoFlow.Services.Services.Utils;
 
 namespace ToDoFlow.API.Controllers
 {
@@ -8,12 +8,12 @@ namespace ToDoFlow.API.Controllers
     [ApiController]
     public class EnumController(IEnumService enumService) : ControllerBase
     {
-        private readonly IEnumService enumService = enumService;
+        private readonly IEnumService _enumService = enumService;
 
         [HttpGet("priorities")]
-        public IActionResult GetPriorities()
+        public async Task<ActionResult<ApiResponse<Dictionary<int, string>>>> GetPriorities()
         {
-            var response = enumService.ReadPriorities();
+            var response = _enumService.ReadPriorities();
             
             return StatusCode(response.HttpStatus, response);
         }

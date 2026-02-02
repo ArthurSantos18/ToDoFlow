@@ -64,6 +64,12 @@ namespace ToDoFlow.Services.Services
             try
             {
                 User user = await _userRepository.ReadUserByIdAsync(id);
+
+                if (user == null)
+                {
+                    return new ApiResponse<UserReadDto>(null, false, "User not found", 404);
+                }
+
                 UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
 
                 return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
@@ -79,6 +85,12 @@ namespace ToDoFlow.Services.Services
             try
             {
                 User user = await _userRepository.ReadUserByEmailAsync(email);
+
+                if (user == null)
+                {
+                    return new ApiResponse<UserReadDto>(null, false, "User not found", 404);
+                }
+
                 UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
 
                 return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
@@ -89,7 +101,7 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<UserReadDto>>> UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
+        public async Task<ApiResponse<UserReadDto>> UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
         {
             try
             {
@@ -109,15 +121,15 @@ namespace ToDoFlow.Services.Services
 
                 await _userRepository.UpdateUserAsync(user);
 
-                List<User> users = await _userRepository.ReadUserAsync();
-                List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
+                
+                UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
 
-                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "User edited successfully", 200);
+                return new ApiResponse<UserReadDto>(userReadDto, true, "User edited successfully", 200);
 
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: {ex.InnerException  }", 500);
+                return new ApiResponse<UserReadDto>(null!, false, $"Erro: {ex.Message}", 500);
             }
         }
 
