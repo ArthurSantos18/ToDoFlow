@@ -9,12 +9,12 @@ namespace ToDoFlow.Infrastructure.Repositories
     {
         private readonly ToDoFlowContext _context = context;
 
-        public async Task<List<User>> CreateUserAsync(User user)
+        public async Task<User> CreateUserAsync(User user)
         {
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            return await _context.Users.ToListAsync();
+            return user;
         }
 
         public async Task<List<User>> ReadUserAsync()
@@ -32,19 +32,26 @@ namespace ToDoFlow.Infrastructure.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<List<User>> UpdateUserAsync(User user)
+        public async Task<User> UpdateUserAsync(User user)
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return await _context.Users.ToListAsync();
+            return user;
         }
-        public async Task<List<User>> DeleteUserAsync(int id)
+        public async Task<bool> DeleteUserAsync(int id)
         {
-            _context.Users.Remove(await _context.Users.FirstOrDefaultAsync(u => u.Id == id));
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return await _context.Users.ToListAsync();
+            return true;
         }
     }
 }

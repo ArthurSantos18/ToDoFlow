@@ -9,12 +9,12 @@ namespace ToDoFlow.Infrastructure.Repositories
     {
         private readonly ToDoFlowContext _context = context;
 
-        public async Task<List<Category>> CreateCategoryAsync(Category category)
+        public async Task<Category> CreateCategoryAsync(Category category)
         {
             await _context.AddAsync(category);
             await _context.SaveChangesAsync();
 
-            return await _context.Categories.Where(u => u.UserId == category.UserId).ToListAsync();
+            return category;
         }
 
         public async Task<List<Category>> ReadCategoryAsync()
@@ -32,23 +32,26 @@ namespace ToDoFlow.Infrastructure.Repositories
             return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<List<Category>> UpdateCategoryAsync(Category category)
+        public async Task<Category> UpdateCategoryAsync(Category category)
         {
             _context.Categories.Update(category);
             await _context.SaveChangesAsync();
 
-            return await _context.Categories.Where(u => u.UserId == category.UserId).Include(t => t.Tasks).ToListAsync();
+            return category;
         }
 
-        public async Task<List<Category>> DeleteCategoryAsync(int id)
+        public async Task<bool> DeleteCategoryAsync(int id)
         {
             Category category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (category == null) {
+                return false;
+            }
 
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
 
-            return await _context.Categories.Where(u => u.UserId == category.UserId).ToListAsync();
+            return true;
         }
-
     }
 }

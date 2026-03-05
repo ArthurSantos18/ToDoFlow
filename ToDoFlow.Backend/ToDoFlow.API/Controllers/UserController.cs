@@ -28,7 +28,7 @@ namespace ToDoFlow.API.Controllers
 
         [HttpPost]
         [Authorize (Roles = "Administrator")]
-        public async Task<ActionResult<ApiResponse<List<UserReadDto>>>> CreateUserAsync(UserCreateDto userCreateDto)
+        public async Task<ActionResult<ApiResponse<List<UserReadDto>>>> CreateUserAdminAsync(UserCreateDto userCreateDto)
         {
             var response = await _userService.CreateUserAsync(userCreateDto);
 

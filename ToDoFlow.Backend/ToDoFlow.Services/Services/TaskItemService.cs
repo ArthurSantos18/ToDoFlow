@@ -15,7 +15,7 @@ namespace ToDoFlow.Services.Services
         private readonly ICategoryRepository _categoryRepository = CategoryRepository;
         private readonly IMapper _mapper = mapper;
         
-        public async Task<ApiResponse<List<TaskItemReadDto>>> CreateTaskItemAsync(int userId, TaskItemCreateDto taskItemCreateDto)
+        public async Task<ApiResponse<TaskItemReadDto>> CreateTaskItemAsync(int userId, TaskItemCreateDto taskItemCreateDto)
         {
             try
             {
@@ -25,24 +25,24 @@ namespace ToDoFlow.Services.Services
 
                 if (category == null)
                 {
-                    return new ApiResponse<List<TaskItemReadDto>>(null, false, "Category not found", 404);
+                    return new ApiResponse<TaskItemReadDto>(null, false, "Category not found", 404);
                 }
 
                 if (category.UserId != userId)
                 {
-                    return new ApiResponse<List<TaskItemReadDto>>(null, false, "Unauthorized", 403);
+                    return new ApiResponse<TaskItemReadDto>(null, false, "Unauthorized", 403);
                 }
 
                 await _taskItemRepository.CreateTaskItemAsync(taskItem);
 
-                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(taskItem.CategoryId);
-                List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
+                
+                TaskItemReadDto taskItemReadDto = _mapper.Map<TaskItemReadDto>(taskItem);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Task created successfully", 200);
+                return new ApiResponse<TaskItemReadDto>(taskItemReadDto, true, "Task created successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<TaskItemReadDto>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
 
@@ -131,7 +131,7 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<TaskItemReadDto>>> UpdateTaskItemAsync(int id, int userId, TaskItemUpdateDto taskItemUpdateDto)
+        public async Task<ApiResponse<TaskItemReadDto>> UpdateTaskItemAsync(int id, int userId, TaskItemUpdateDto taskItemUpdateDto)
         {
             try
             {
@@ -139,14 +139,14 @@ namespace ToDoFlow.Services.Services
 
                 if (taskItem == null)
                 {
-                    return new ApiResponse<List<TaskItemReadDto>>(null, false, "Task not found", 404);
+                    return new ApiResponse<TaskItemReadDto>(null, false, "Task not found", 404);
                 }
 
                 Category category = await _categoryRepository.ReadCategoryByIdAsync(taskItem.CategoryId);
 
                 if (category.UserId != userId)
                 {
-                    return new ApiResponse<List<TaskItemReadDto>>(null, false, "Unauthorized", 403);
+                    return new ApiResponse<TaskItemReadDto>(null, false, "Unauthorized", 403);
                 }
 
                 _mapper.Map(taskItemUpdateDto, taskItem);
@@ -162,17 +162,17 @@ namespace ToDoFlow.Services.Services
 
                 await _taskItemRepository.UpdateTaskItemAsync(taskItem);
 
-                List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByCategoryAsync(taskItem.CategoryId);
-                List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
+                
+                TaskItemReadDto taskItemReadDto = _mapper.Map<TaskItemReadDto>(taskItem);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Task edited successfully", 200);
+                return new ApiResponse<TaskItemReadDto>(taskItemReadDto, true, "Task edited successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<TaskItemReadDto>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
-        public async Task<ApiResponse<List<TaskItemReadDto>>> DeleteTaskItemAsync(int id, int userId)
+        public async Task<ApiResponse> DeleteTaskItemAsync(int id, int userId)
         {
             try
             {
@@ -180,24 +180,24 @@ namespace ToDoFlow.Services.Services
 
                 if (taskItem == null)
                 {
-                    return new ApiResponse<List<TaskItemReadDto>>(null, false, "Task not found", 404);
+                    return new ApiResponse(false, "Task not found", 404);
                 }
 
                 Category category = await _categoryRepository.ReadCategoryByIdAsync(taskItem.CategoryId);
 
                 if (category.UserId != userId)
                 {
-                    return new ApiResponse<List<TaskItemReadDto>>(null, false, "Unauthorized", 403);
+                    return new ApiResponse(false, "Unauthorized", 403);
                 }
 
-                List<TaskItem> taskItems = await _taskItemRepository.DeleteTaskItemAsync(id);
-                List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
+                await _taskItemRepository.DeleteTaskItemAsync(id);
+                
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Task deleted successfully", 200);
+                return new ApiResponse(true, "Task deleted successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.InnerException}", 500);
+                return new ApiResponse(false, $"Erro: {ex.InnerException}", 500);
             }
         }
     }

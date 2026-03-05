@@ -12,22 +12,22 @@ namespace ToDoFlow.Services.Services
         private readonly ICategoryRepository _categoryRepository = categoryRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<ApiResponse<List<CategoryReadDto>>> CreateCategoryAsync(int userId, CategoryCreateDto categoryCreateDto)
+        public async Task<ApiResponse<CategoryReadDto>> CreateCategoryAsync(int userId, CategoryCreateDto categoryCreateDto)
         {
             try
             {
                 Category category = _mapper.Map<Category>(categoryCreateDto);
                 category.UserId = userId;
 
-                List<Category> categories = await _categoryRepository.CreateCategoryAsync(category);
+                await _categoryRepository.CreateCategoryAsync(category);
 
-                List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
+                CategoryReadDto categoryReadDto = _mapper.Map<CategoryReadDto>(category);
 
-                return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Category created successfully", 201);
+                return new ApiResponse<CategoryReadDto>(categoryReadDto, true, "Category created successfully", 201);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<CategoryReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<CategoryReadDto>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
 
@@ -87,7 +87,7 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<CategoryReadDto>>> UpdateCategoryAsync(int id, int userId, CategoryUpdateDto categoryUpdateDto)
+        public async Task<ApiResponse<CategoryReadDto>> UpdateCategoryAsync(int id, int userId, CategoryUpdateDto categoryUpdateDto)
         {
             try
             {
@@ -95,29 +95,29 @@ namespace ToDoFlow.Services.Services
 
                 if (category == null)
                 {
-                    return new ApiResponse<List<CategoryReadDto>>(null, false, "Category not found", 404);
+                    return new ApiResponse<CategoryReadDto>(null, false, "Category not found", 404);
                 }
 
                 if (category.UserId != userId)
                 {
-                    return new ApiResponse<List<CategoryReadDto>>(null, false, "Unauthorized", 403);
+                    return new ApiResponse<CategoryReadDto>(null, false, "Unauthorized", 403);
                 }
                 
                 _mapper.Map(categoryUpdateDto, category);
                 await _categoryRepository.UpdateCategoryAsync(category);
 
-                List<Category> categories = await _categoryRepository.ReadCategoryByUserAsync(category.UserId);
-                List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
+                
+                CategoryReadDto categoryReadDto = _mapper.Map<CategoryReadDto>(category);
 
-                return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Category updated successfully", 200);
+                return new ApiResponse<CategoryReadDto>(categoryReadDto, true, "Category updated successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<CategoryReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<CategoryReadDto>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
 
-        public async Task<ApiResponse<List<CategoryReadDto>>> DeleteCategoryAsync(int id, int userId)
+        public async Task<ApiResponse> DeleteCategoryAsync(int id, int userId)
         {
             try
             {
@@ -125,22 +125,22 @@ namespace ToDoFlow.Services.Services
 
                 if (category == null)
                 {
-                    return new ApiResponse<List<CategoryReadDto>>(null, false, "Category not found", 404);
+                    return new ApiResponse(false, "Category not found", 404);
                 }
 
                 if (category.UserId != userId)
                 {
-                    return new ApiResponse<List<CategoryReadDto>>(null, false, "Unauthorized", 403);
+                    return new ApiResponse(false, "Unauthorized", 403);
                 }
 
-                List<Category> categories = await _categoryRepository.DeleteCategoryAsync(id);
-                List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
+                await _categoryRepository.DeleteCategoryAsync(id);
+                
 
-                return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Category deleted successfully", 200);
+                return new ApiResponse(true, "Category deleted successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<CategoryReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse(false, $"Erro: {ex.Message}", 500);
             }
         }
     }

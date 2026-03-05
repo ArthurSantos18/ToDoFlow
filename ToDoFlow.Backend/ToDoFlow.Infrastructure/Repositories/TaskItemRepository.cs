@@ -9,12 +9,12 @@ namespace ToDoFlow.Infrastructure.Repositories
     {
         private readonly ToDoFlowContext _context = context;
 
-        public async Task<List<TaskItem>> CreateTaskItemAsync(TaskItem taskItem)
+        public async Task<TaskItem> CreateTaskItemAsync(TaskItem taskItem)
         {
             await _context.AddAsync(taskItem);
             await _context.SaveChangesAsync();
 
-            return await _context.Tasks.Where(t => t.CategoryId == taskItem.CategoryId).ToListAsync();
+            return taskItem;
         }
 
         public async Task<List<TaskItem>> ReadTaskItemAsync()
@@ -37,25 +37,25 @@ namespace ToDoFlow.Infrastructure.Repositories
             return await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<List<TaskItem>> UpdateTaskItemAsync(TaskItem taskItem)
+        public async Task<TaskItem> UpdateTaskItemAsync(TaskItem taskItem)
         {
             _context.Tasks.Update(taskItem);
             await _context.SaveChangesAsync();
 
-            return await _context.Tasks.Where(t => t.CategoryId == taskItem.CategoryId).ToListAsync();
+            return taskItem;
         }
 
-        public async Task<List<TaskItem>> DeleteTaskItemAsync(int id)
+        public async Task<bool> DeleteTaskItemAsync(int id)
         {
             TaskItem task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
 
             if (task == null)
-                return new List<TaskItem>();
+                return false;
 
             _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
 
-            return await _context.Tasks.Where(t => t.CategoryId == task.CategoryId).ToListAsync();
+            return true;
         }
     }
 }

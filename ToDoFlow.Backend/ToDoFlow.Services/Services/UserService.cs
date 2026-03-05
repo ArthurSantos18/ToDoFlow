@@ -16,7 +16,7 @@ namespace ToDoFlow.Services.Services
         private readonly IMapper _mapper = mapper;
         private readonly IPasswordService _passwordService = passwordService;
 
-        public async Task<ApiResponse<List<UserReadDto>>> CreateUserAsync(UserCreateDto userCreateDto)
+        public async Task<ApiResponse<UserReadDto>> CreateUserAsync(UserCreateDto userCreateDto)
         {
             try
             {
@@ -24,14 +24,13 @@ namespace ToDoFlow.Services.Services
                 user.Password = _passwordService.HashPassword(user.Password);
                 await _userRepository.CreateUserAsync(user);
 
-                List<User> users = await _userRepository.ReadUserAsync();
-                List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
+                UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
 
-                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "User created successfully", 201);
+                return new ApiResponse<UserReadDto>(userReadDto, true, "User created successfully", 201);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: ${ex.Message}", 500);
+                return new ApiResponse<UserReadDto>(null!, false, $"Erro: ${ex.Message}", 500);
             }
         }
 
@@ -133,20 +132,17 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<UserReadDto>>> DeleteUserAsync(int id)
+        public async Task<ApiResponse> DeleteUserAsync(int id)
         {
             try
             {
                 await _userRepository.DeleteUserAsync(id);
 
-                List<User> users = await _userRepository.ReadUserAsync();
-                List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
-
-                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "User deleted successfully", 200);
+                return new ApiResponse(true, "User deleted successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse(false, $"Erro: {ex.Message}", 500);
             }
         }
     }
