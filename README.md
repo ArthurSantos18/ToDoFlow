@@ -115,7 +115,9 @@ dotnet ef database update --startup-project ../ToDoFlow.API</code></pre>
 <p>Após seguir os passos, você poderá acessar a aplicação, criar um novo usuário e começar a gerenciar suas tarefas e categorias.</p>
 
 <h2>📎 Links</h2>
-<p>Linkedin: "www.linkedin.com/in/arthurazevedo18"</p>
+ <p>
+  <a href="https://www.linkedin.com/in/arthurazevedo18">🔗 LinkedIn: Arthur Azevedo</a>
+</p>
 
 <h2>📄 Licença</h2>
 <p>Este projeto foi desenvolvido para fins de estudo e portfólio profissional.</p>
