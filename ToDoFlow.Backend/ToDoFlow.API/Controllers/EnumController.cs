@@ -13,7 +13,7 @@ namespace ToDoFlow.API.Controllers
         [HttpGet("priorities")]
         public async Task<ActionResult<ApiResponse<Dictionary<int, string>>>> GetPriorities()
         {
-            var response = _enumService.ReadPriorities();
+            var response = _enumService.GetPriorities();
             
             return StatusCode(response.HttpStatus, response);
         }

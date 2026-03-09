@@ -31,11 +31,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<CategoryReadDto>>> ReadCategoryAsync()
+        public async Task<ApiResponse<List<CategoryReadDto>>> GetCategoryAsync()
         {
             try
             {
-                List<Category> categories = await _categoryRepository.ReadCategoryAsync();
+                List<Category> categories = await _categoryRepository.GetCategoryAsync();
                 List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
 
                 return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Operation carried out successfully", 200);
@@ -46,11 +46,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<CategoryReadDto>>> ReadCategoryByUserAsync(int userId)
+        public async Task<ApiResponse<List<CategoryReadDto>>> GetCategoryByUserAsync(int userId)
         {
             try
             {
-                List<Category> categories = await _categoryRepository.ReadCategoryByUserAsync(userId);
+                List<Category> categories = await _categoryRepository.GetCategoryByUserAsync(userId);
                 List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
 
                 return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Operation carried out successfully", 200);
@@ -61,11 +61,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<CategoryReadDto>> ReadCategoryByIdAsync(int id, int userId)
+        public async Task<ApiResponse<CategoryReadDto>> GetCategoryByIdAsync(int id, int userId)
         {
             try
             {
-                Category category = await _categoryRepository.ReadCategoryByIdAsync(id);
+                Category category = await _categoryRepository.GetCategoryByIdAsync(id);
                 
                 if (category == null)
                 {
@@ -91,7 +91,7 @@ namespace ToDoFlow.Services.Services
         {
             try
             {
-                Category category = await _categoryRepository.ReadCategoryByIdAsync(id);
+                Category category = await _categoryRepository.GetCategoryByIdAsync(id);
 
                 if (category == null)
                 {
@@ -121,7 +121,7 @@ namespace ToDoFlow.Services.Services
         {
             try
             {
-                Category category = await _categoryRepository.ReadCategoryByIdAsync(id);
+                Category category = await _categoryRepository.GetCategoryByIdAsync(id);
 
                 if (category == null)
                 {

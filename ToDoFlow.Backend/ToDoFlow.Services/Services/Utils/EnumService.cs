@@ -5,7 +5,7 @@ namespace ToDoFlow.Services.Services.Utils
 {
     public class EnumService : IEnumService
     {
-        public ApiResponse<Dictionary<int, string>> ReadPriorities()
+        public ApiResponse<Dictionary<int, string>> GetPriorities()
         {
             try
             {

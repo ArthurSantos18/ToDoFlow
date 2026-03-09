@@ -6,9 +6,9 @@ namespace ToDoFlow.Infrastructure.Repositories.Interface
     public interface ICategoryRepository
     {
         public Task<Category> CreateCategoryAsync(Category category);
-        public Task<List<Category>> ReadCategoryAsync();
-        public Task<List<Category>> ReadCategoryByUserAsync(int userId);
-        public Task<Category> ReadCategoryByIdAsync(int id);
+        public Task<List<Category>> GetCategoryAsync();
+        public Task<List<Category>> GetCategoryByUserAsync(int userId);
+        public Task<Category> GetCategoryByIdAsync(int id);
         public Task<Category> UpdateCategoryAsync(Category category);
         public Task<bool> DeleteCategoryAsync(int userId);
     }

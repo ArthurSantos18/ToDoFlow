@@ -15,12 +15,12 @@ namespace ToDoFlow.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserRefreshToken?> ReadUserRefreshByTokenAsync(string refreshToken)
+        public async Task<UserRefreshToken?> GetUserRefreshByTokenAsync(string refreshToken)
         {
             return await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
         }
 
-        public async Task<UserRefreshToken?> ReadUserRefreshByUserIdAsync(int userId)
+        public async Task<UserRefreshToken?> GetUserRefreshByUserIdAsync(int userId)
         {
             return await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.UserId == userId);
         }

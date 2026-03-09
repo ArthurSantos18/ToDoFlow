@@ -29,7 +29,7 @@ namespace ToDoFlow.API.Controllers
         [HttpPost("refresh")]
         public async Task<ActionResult<ApiResponse<string, UserRefreshTokenReadDto>>> RefreshTokenAsync(UserRefreshTokenRefreshDto userRefreshTokenRefreshDto)
         {
-            var response = await _accountService.RefreshToken(userRefreshTokenRefreshDto);
+            var response = await _accountService.RefreshTokenAsync(userRefreshTokenRefreshDto);
 
             return StatusCode(response.HttpStatus, response);
         }

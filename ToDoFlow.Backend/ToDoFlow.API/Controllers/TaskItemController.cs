@@ -39,48 +39,48 @@ namespace ToDoFlow.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<ApiResponse<List<TaskItemReadDto>>>> ReadTaskItemAsync()
+        public async Task<ActionResult<ApiResponse<List<TaskItemReadDto>>>> GetTaskItemAsync()
         {
-            var response = await _taskItemService.ReadTaskItemAsync();
+            var response = await _taskItemService.GetTaskItemAsync();
 
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("user/{userId:int}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<ApiResponse<List<TaskItemReadDto>>>> ReadTaskItemForUserByAdminAsync(int userId)
+        public async Task<ActionResult<ApiResponse<List<TaskItemReadDto>>>> GetTaskItemForUserByAdminAsync(int userId)
         {
-            var response = await _taskItemService.ReadTaskItemByUserAsync(userId);
+            var response = await _taskItemService.GetTaskItemByUserAsync(userId);
             
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("me")]
-        public async Task<ActionResult<ApiResponse<List<TaskItemReadDto>>>> ReadTaskItemByUserAsync()
+        public async Task<ActionResult<ApiResponse<List<TaskItemReadDto>>>> GetTaskItemByUserAsync()
         {
             int userId = GetCurrentUserId();
 
-            var response = await _taskItemService.ReadTaskItemByUserAsync(userId);
+            var response = await _taskItemService.GetTaskItemByUserAsync(userId);
 
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("category/{categoryId}")]
-        public async Task<ActionResult<ApiResponse<List<TaskItemReadDto>>>> ReadTaskItemByCategoryAsync(int categoryId)
+        public async Task<ActionResult<ApiResponse<List<TaskItemReadDto>>>> GetTaskItemByCategoryAsync(int categoryId)
         {
             int userId = GetCurrentUserId();
             
-            var response = await _taskItemService.ReadTaskItemByCategoryAsync(categoryId, userId);
+            var response = await _taskItemService.GetTaskItemByCategoryAsync(categoryId, userId);
 
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ApiResponse<TaskItemReadDto>>> ReadTaskItemByIdAsync(int id)
+        public async Task<ActionResult<ApiResponse<TaskItemReadDto>>> GetTaskItemByIdAsync(int id)
         {
             int userId = GetCurrentUserId();
 
-            var response = await _taskItemService.ReadTaskItemByIdAsync(id, userId);
+            var response = await _taskItemService.GetTaskItemByIdAsync(id, userId);
 
             return StatusCode(response.HttpStatus, response);
         }

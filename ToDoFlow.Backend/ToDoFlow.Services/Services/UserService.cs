@@ -34,19 +34,19 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<UserReadDto>>> ReadUserAsync()
+        public async Task<ApiResponse<List<UserReadDto>>> GetUserAsync()
         {
             try
             {
-                List<User> users = await _userRepository.ReadUserAsync();
+                List<User> users = await _userRepository.GetUserAsync();
                 List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
                 
                 foreach (UserReadDto user in userReadDtos)
                 {
-                    List<Category> categories = await _categoryRepository.ReadCategoryByUserAsync(user.Id);
+                    List<Category> categories = await _categoryRepository.GetCategoryByUserAsync(user.Id);
                     user.CategoryCount = categories.Count;
 
-                    List<TaskItem> taskItems = await _taskItemRepository.ReadTaskItemByUserAsync(user.Id);
+                    List<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByUserAsync(user.Id);
                     user.TaskItemCount = taskItems.Count;
                 }
 
@@ -58,11 +58,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<UserReadDto>> ReadUserByIdAsync(int id)
+        public async Task<ApiResponse<UserReadDto>> GetUserByIdAsync(int id)
         {
             try
             {
-                User user = await _userRepository.ReadUserByIdAsync(id);
+                User user = await _userRepository.GetUserByIdAsync(id);
 
                 if (user == null)
                 {
@@ -79,11 +79,11 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<UserReadDto>> ReadUserByEmailAsync(string email)
+        public async Task<ApiResponse<UserReadDto>> GetUserByEmailAsync(string email)
         {
             try
             {
-                User user = await _userRepository.ReadUserByEmailAsync(email);
+                User user = await _userRepository.GetUserByEmailAsync(email);
 
                 if (user == null)
                 {
@@ -104,7 +104,7 @@ namespace ToDoFlow.Services.Services
         {
             try
             {
-                User user = await _userRepository.ReadUserByIdAsync(id);
+                User user = await _userRepository.GetUserByIdAsync(id);
 
                 if (userUpdateDto.Password != null)
                 {

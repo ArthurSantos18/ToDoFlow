@@ -38,38 +38,38 @@ namespace ToDoFlow.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> ReadCategoryAsync()
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> GetCategoryAsync()
         {
-            var response = await _categoryService.ReadCategoryAsync();
+            var response = await _categoryService.GetCategoryAsync();
 
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("user/{userId:int}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> ReadCategoryForUserByAdminAsync(int userId)
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> GetCategoryForUserByAdminAsync(int userId)
         {
-            var response = await _categoryService.ReadCategoryByUserAsync(userId);
+            var response = await _categoryService.GetCategoryByUserAsync(userId);
 
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("me")]
-        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> ReadCategoryByUserAsync()
+        public async Task<ActionResult<ApiResponse<List<CategoryReadDto>>>> GetCategoryByUserAsync()
         {
             int userId = GetCurrentUserId();
 
-            var response = await _categoryService.ReadCategoryByUserAsync(userId);
+            var response = await _categoryService.GetCategoryByUserAsync(userId);
 
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ApiResponse<CategoryReadDto>>> ReadCategoryByIdAsync(int id)
+        public async Task<ActionResult<ApiResponse<CategoryReadDto>>> GetCategoryByIdAsync(int id)
         {
             int userId = GetCurrentUserId();
 
-            var response = await _categoryService.ReadCategoryByIdAsync(id, userId);
+            var response = await _categoryService.GetCategoryByIdAsync(id, userId);
 
             return StatusCode(response.HttpStatus, response);
         }

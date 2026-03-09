@@ -17,17 +17,17 @@ namespace ToDoFlow.Infrastructure.Repositories
             return category;
         }
 
-        public async Task<List<Category>> ReadCategoryAsync()
+        public async Task<List<Category>> GetCategoryAsync()
         {
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<List<Category>> ReadCategoryByUserAsync(int userId)
+        public async Task<List<Category>> GetCategoryByUserAsync(int userId)
         {
             return await _context.Categories.Where(u => u.UserId == userId).ToListAsync();
         }
 
-        public async Task<Category> ReadCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id)
         {
             return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
         }

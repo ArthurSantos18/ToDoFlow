@@ -17,17 +17,17 @@ namespace ToDoFlow.Infrastructure.Repositories
             return user;
         }
 
-        public async Task<List<User>> ReadUserAsync()
+        public async Task<List<User>> GetUserAsync()
         {
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User> ReadUserByIdAsync(int id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> ReadUserByEmailAsync(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }

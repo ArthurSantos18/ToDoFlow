@@ -37,19 +37,19 @@ namespace ToDoFlow.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<ApiResponse<List<UserReadDto>>>> ReadUserAsync()
+        public async Task<ActionResult<ApiResponse<List<UserReadDto>>>> GetUserAsync()
         {
-            var response = await _userService.ReadUserAsync();
+            var response = await _userService.GetUserAsync();
 
             return StatusCode(response.HttpStatus, response);
         }
 
         [HttpGet("me")]
-        public async Task<ActionResult<ApiResponse<UserReadDto>>> ReadUserByIdAsync()
+        public async Task<ActionResult<ApiResponse<UserReadDto>>> GetUserByIdAsync()
         {
             int userId = GetCurrentUserId();
 
-            var response = await _userService.ReadUserByIdAsync(userId);
+            var response = await _userService.GetUserByIdAsync(userId);
 
             return StatusCode(response.HttpStatus, response);
         }

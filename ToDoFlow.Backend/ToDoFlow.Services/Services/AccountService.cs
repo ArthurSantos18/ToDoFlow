@@ -23,7 +23,7 @@ namespace ToDoFlow.Services.Services
         
         public async Task<ApiResponse<string, UserRefreshTokenReadDto>> LoginAsync(LoginRequestDto loginRequestDto)
         {
-            User user = await _userRepository.ReadUserByEmailAsync(loginRequestDto.Email);
+            User user = await _userRepository.GetUserByEmailAsync(loginRequestDto.Email);
 
             if (user == null)
             {
@@ -39,7 +39,7 @@ namespace ToDoFlow.Services.Services
 
             await _userRefreshTokenRepository.DeleteExpiredTokensByUserIdAsync(user.Id);
 
-            UserRefreshToken existingRefreshToken = await _userRefreshTokenRepository.ReadUserRefreshByUserIdAsync(user.Id);
+            UserRefreshToken existingRefreshToken = await _userRefreshTokenRepository.GetUserRefreshByUserIdAsync(user.Id);
 
             if (existingRefreshToken == null)
             {
@@ -64,7 +64,7 @@ namespace ToDoFlow.Services.Services
 
         public async Task<ApiResponse<string, UserRefreshTokenReadDto>> RegisterAsync(RegisterRequestDto registerRequestDto)
         {
-            User existingUser = await _userRepository.ReadUserByEmailAsync(registerRequestDto.Email);
+            User existingUser = await _userRepository.GetUserByEmailAsync(registerRequestDto.Email);
 
             if (existingUser != null)
             {
@@ -96,18 +96,18 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<string, UserRefreshTokenReadDto>> RefreshToken(UserRefreshTokenRefreshDto userRefreshTokenRefreshDto)
+        public async Task<ApiResponse<string, UserRefreshTokenReadDto>> RefreshTokenAsync(UserRefreshTokenRefreshDto userRefreshTokenRefreshDto)
         {
             try
             {
-                UserRefreshToken userRefreshToken = await _userRefreshTokenRepository.ReadUserRefreshByTokenAsync(userRefreshTokenRefreshDto.RefreshToken);
+                UserRefreshToken userRefreshToken = await _userRefreshTokenRepository.GetUserRefreshByTokenAsync(userRefreshTokenRefreshDto.RefreshToken);
                 
                 if (userRefreshToken == null)
                 {
                     return new ApiResponse<string, UserRefreshTokenReadDto>(null, null, false, "Invalid refresh token", 401);
                 }
 
-                User user = await _userRepository.ReadUserByIdAsync(userRefreshToken.UserId);
+                User user = await _userRepository.GetUserByIdAsync(userRefreshToken.UserId);
 
                 var newToken = _tokenService.GenerateToken(user, "login", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
 
@@ -125,7 +125,7 @@ namespace ToDoFlow.Services.Services
         {
             try
             {
-                User user = await _userRepository.ReadUserByEmailAsync(forgotPasswordDto.Email);
+                User user = await _userRepository.GetUserByEmailAsync(forgotPasswordDto.Email);
 
                 if (user == null)
                 {
@@ -158,7 +158,7 @@ namespace ToDoFlow.Services.Services
         {
             try
             {
-                User user = await _userRepository.ReadUserByEmailAsync(resetPasswordDto.Email);
+                User user = await _userRepository.GetUserByEmailAsync(resetPasswordDto.Email);
                 if (user == null)
                 {
                     return new ApiResponse(false, "User not found", 404);
