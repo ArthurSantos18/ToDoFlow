@@ -35,9 +35,9 @@ namespace ToDoFlow.Infrastructure.Repositories
 
         public async Task DeleteExpiredTokensByUserIdAsync(int userId)
         {
-            List<UserRefreshToken> expiredTokens = await _context.UserRefreshToken.Where(t => t.Expiration < DateTime.UtcNow && t.UserId == userId).ToListAsync();
+            IEnumerable<UserRefreshToken> expiredTokens = await _context.UserRefreshToken.Where(t => t.Expiration < DateTime.UtcNow && t.UserId == userId).ToListAsync();
 
-            if (expiredTokens.Count != 0)
+            if (expiredTokens.Count() != 0)
             {
                 _context.UserRefreshToken.RemoveRange(expiredTokens);
                 await _context.SaveChangesAsync();

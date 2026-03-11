@@ -46,22 +46,22 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<TaskItemReadDto>>> GetTaskItemAsync()
+        public async Task<ApiResponse<IEnumerable<TaskItemReadDto>>> GetTaskItemAsync()
         {
             try
             {
-                List<TaskItem> taskItems = await _taskItemRepository.GetTaskItemAsync();
-                List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
+                IEnumerable<TaskItem> taskItems = await _taskItemRepository.GetTaskItemAsync();
+                IEnumerable<TaskItemReadDto> taskItemReadDtos = _mapper.Map<IEnumerable<TaskItemReadDto>>(taskItems);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
+                return new ApiResponse<IEnumerable<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<IEnumerable<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
 
-        public async Task<ApiResponse<List<TaskItemReadDto>>> GetTaskItemByCategoryAsync(int categoryId, int userId)
+        public async Task<ApiResponse<IEnumerable<TaskItemReadDto>>> GetTaskItemByCategoryAsync(int categoryId, int userId)
         {
             try
             {
@@ -69,37 +69,37 @@ namespace ToDoFlow.Services.Services
 
                 if (category == null)
                 {
-                    return new ApiResponse<List<TaskItemReadDto>>(null, false, "Category not found", 404);
+                    return new ApiResponse<IEnumerable<TaskItemReadDto>>(null, false, "Category not found", 404);
                 }
 
                 if (category.UserId != userId)
                 {
-                    return new ApiResponse<List<TaskItemReadDto>>(null, false, "Unauthorized", 403);
+                    return new ApiResponse<IEnumerable<TaskItemReadDto>>(null, false, "Unauthorized", 403);
                 }
 
-                List<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByCategoryAsync(categoryId); 
-                List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
+                IEnumerable<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByCategoryAsync(categoryId); 
+                IEnumerable<TaskItemReadDto> taskItemReadDtos = _mapper.Map<IEnumerable<TaskItemReadDto>>(taskItems);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
+                return new ApiResponse<IEnumerable<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<IEnumerable<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
 
-        public async Task<ApiResponse<List<TaskItemReadDto>>> GetTaskItemByUserAsync(int userId)
+        public async Task<ApiResponse<IEnumerable<TaskItemReadDto>>> GetTaskItemByUserAsync(int userId)
         {
             try
             {
-                List<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByUserAsync(userId);
-                List<TaskItemReadDto> taskItemReadDtos = _mapper.Map<List<TaskItemReadDto>>(taskItems);
+                IEnumerable<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByUserAsync(userId);
+                IEnumerable<TaskItemReadDto> taskItemReadDtos = _mapper.Map<IEnumerable<TaskItemReadDto>>(taskItems);
 
-                return new ApiResponse<List<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
+                return new ApiResponse<IEnumerable<TaskItemReadDto>>(taskItemReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<IEnumerable<TaskItemReadDto>>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
             

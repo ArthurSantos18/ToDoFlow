@@ -10,7 +10,7 @@ namespace ToDoFlow.Domain.Models
         public required string Password { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public Profile Profile { get; set; } = Profile.Default;
-        public UserRefreshToken UserRefreshToken { get; set; }
+        public UserRefreshToken? UserRefreshToken { get; set; }
         public List<Category>? Categories { get; set; }
     }
 }

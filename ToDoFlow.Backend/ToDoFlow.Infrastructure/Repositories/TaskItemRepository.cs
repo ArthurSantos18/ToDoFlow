@@ -17,24 +17,24 @@ namespace ToDoFlow.Infrastructure.Repositories
             return taskItem;
         }
 
-        public async Task<List<TaskItem>> GetTaskItemAsync()
+        public async Task<IEnumerable<TaskItem>> GetTaskItemAsync()
         {
             return await _context.Tasks.ToListAsync();
         }
 
-        public async Task<List<TaskItem>> GetTaskItemByCategoryAsync(int categoryId)
+        public async Task<IEnumerable<TaskItem>> GetTaskItemByCategoryAsync(int categoryId)
         {
             return await _context.Tasks.Where(t => t.CategoryId == categoryId).ToListAsync();
         }
 
-        public async Task<List<TaskItem>> GetTaskItemByUserAsync(int userId)
+        public async Task<IEnumerable<TaskItem>> GetTaskItemByUserAsync(int userId)
         {
             return await _context.Tasks.Where(t => t.Category.UserId == userId).ToListAsync();
         }
 
         public async Task<TaskItem> GetTaskItemByIdAsync(int id)
         {
-            return await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+            return await _context.Tasks.FindAsync(id);
         }
 
         public async Task<TaskItem> UpdateTaskItemAsync(TaskItem taskItem)
@@ -47,7 +47,7 @@ namespace ToDoFlow.Infrastructure.Repositories
 
         public async Task<bool> DeleteTaskItemAsync(int id)
         {
-            TaskItem task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+            TaskItem task = await _context.Tasks.FindAsync(id);
 
             if (task == null)
                 return false;

@@ -34,27 +34,27 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<UserReadDto>>> GetUserAsync()
+        public async Task<ApiResponse<IEnumerable<UserReadDto>>> GetUserAsync()
         {
             try
             {
-                List<User> users = await _userRepository.GetUserAsync();
-                List<UserReadDto> userReadDtos = _mapper.Map<List<UserReadDto>>(users);
+                IEnumerable<User> users = await _userRepository.GetUserAsync();
+                IEnumerable<UserReadDto> userReadDtos = _mapper.Map<IEnumerable<UserReadDto>>(users);
                 
                 foreach (UserReadDto user in userReadDtos)
                 {
-                    List<Category> categories = await _categoryRepository.GetCategoryByUserAsync(user.Id);
-                    user.CategoryCount = categories.Count;
+                    IEnumerable<Category> categories = await _categoryRepository.GetCategoryByUserAsync(user.Id);
+                    user.CategoryCount = categories.Count();
 
-                    List<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByUserAsync(user.Id);
-                    user.TaskItemCount = taskItems.Count;
+                    IEnumerable<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByUserAsync(user.Id);
+                    user.TaskItemCount = taskItems.Count();
                 }
 
-                return new ApiResponse<List<UserReadDto>>(userReadDtos, true, "Operation carried out successfully", 200);
+                return new ApiResponse<IEnumerable<UserReadDto>>(userReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<UserReadDto>>(null!, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<IEnumerable<UserReadDto>>(null!, false, $"Erro: {ex.Message}", 500);
             }
         }
 

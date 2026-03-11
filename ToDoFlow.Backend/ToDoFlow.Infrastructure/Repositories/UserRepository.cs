@@ -17,14 +17,14 @@ namespace ToDoFlow.Infrastructure.Repositories
             return user;
         }
 
-        public async Task<List<User>> GetUserAsync()
+        public async Task<IEnumerable<User>> GetUserAsync()
         {
             return await _context.Users.ToListAsync();
         }
 
         public async Task<User> GetUserByIdAsync(int id)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Users.FindAsync(id);
         }
 
         public async Task<User> GetUserByEmailAsync(string email)

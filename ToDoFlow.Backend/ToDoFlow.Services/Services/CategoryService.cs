@@ -31,33 +31,33 @@ namespace ToDoFlow.Services.Services
             }
         }
 
-        public async Task<ApiResponse<List<CategoryReadDto>>> GetCategoryAsync()
+        public async Task<ApiResponse<IEnumerable<CategoryReadDto>>> GetCategoryAsync()
         {
             try
             {
-                List<Category> categories = await _categoryRepository.GetCategoryAsync();
-                List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
+                IEnumerable<Category> categories = await _categoryRepository.GetCategoryAsync();
+                IEnumerable<CategoryReadDto> categoryReadDtos = _mapper.Map<IEnumerable<CategoryReadDto>>(categories);
 
-                return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Operation carried out successfully", 200);
+                return new ApiResponse<IEnumerable<CategoryReadDto>>(categoryReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<CategoryReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<IEnumerable<CategoryReadDto>>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
 
-        public async Task<ApiResponse<List<CategoryReadDto>>> GetCategoryByUserAsync(int userId)
+        public async Task<ApiResponse<IEnumerable<CategoryReadDto>>> GetCategoryByUserAsync(int userId)
         {
             try
             {
-                List<Category> categories = await _categoryRepository.GetCategoryByUserAsync(userId);
-                List<CategoryReadDto> categoryReadDtos = _mapper.Map<List<CategoryReadDto>>(categories);
+                IEnumerable<Category> categories = await _categoryRepository.GetCategoryByUserAsync(userId);
+                IEnumerable<CategoryReadDto> categoryReadDtos = _mapper.Map<IEnumerable<CategoryReadDto>>(categories);
 
-                return new ApiResponse<List<CategoryReadDto>>(categoryReadDtos, true, "Operation carried out successfully", 200);
+                return new ApiResponse<IEnumerable<CategoryReadDto>>(categoryReadDtos, true, "Operation carried out successfully", 200);
             }
             catch (Exception ex)
             {
-                return new ApiResponse<List<CategoryReadDto>>(null, false, $"Erro: {ex.Message}", 500);
+                return new ApiResponse<IEnumerable<CategoryReadDto>>(null, false, $"Erro: {ex.Message}", 500);
             }
         }
 

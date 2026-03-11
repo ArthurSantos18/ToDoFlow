@@ -17,19 +17,19 @@ namespace ToDoFlow.Infrastructure.Repositories
             return category;
         }
 
-        public async Task<List<Category>> GetCategoryAsync()
+        public async Task<IEnumerable<Category>> GetCategoryAsync()
         {
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<List<Category>> GetCategoryByUserAsync(int userId)
+        public async Task<IEnumerable<Category>> GetCategoryByUserAsync(int userId)
         {
             return await _context.Categories.Where(u => u.UserId == userId).ToListAsync();
         }
 
         public async Task<Category> GetCategoryByIdAsync(int id)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Categories.FindAsync(id);
         }
 
         public async Task<Category> UpdateCategoryAsync(Category category)
@@ -42,7 +42,7 @@ namespace ToDoFlow.Infrastructure.Repositories
 
         public async Task<bool> DeleteCategoryAsync(int id)
         {
-            Category category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            Category category = await _context.Categories.FindAsync(id);
 
             if (category == null) {
                 return false;
