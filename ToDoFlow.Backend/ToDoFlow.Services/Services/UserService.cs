@@ -18,132 +18,90 @@ namespace ToDoFlow.Services.Services
 
         public async Task<ApiResponse<UserReadDto>> CreateUserAsync(UserCreateDto userCreateDto)
         {
-            try
-            {
-                User user = _mapper.Map<User>(userCreateDto);
-                user.Password = _passwordService.HashPassword(user.Password);
-                await _userRepository.CreateUserAsync(user);
+            User user = _mapper.Map<User>(userCreateDto);
+            user.Password = _passwordService.HashPassword(user.Password);
+            await _userRepository.CreateUserAsync(user);
 
-                UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
+            UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
 
-                return new ApiResponse<UserReadDto>(userReadDto, true, "User created successfully", 201);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<UserReadDto>(null!, false, $"Erro: ${ex.Message}", 500);
-            }
+            return new ApiResponse<UserReadDto>(userReadDto, true, "User created successfully", 201);
         }
 
         public async Task<ApiResponse<IEnumerable<UserReadDto>>> GetUserAsync()
         {
-            try
-            {
-                IEnumerable<User> users = await _userRepository.GetUserAsync();
-                IEnumerable<UserReadDto> userReadDtos = _mapper.Map<IEnumerable<UserReadDto>>(users);
+ 
+            IEnumerable<User> users = await _userRepository.GetUserAsync();
+            IEnumerable<UserReadDto> userReadDtos = _mapper.Map<IEnumerable<UserReadDto>>(users);
                 
-                foreach (UserReadDto user in userReadDtos)
-                {
-                    IEnumerable<Category> categories = await _categoryRepository.GetCategoryByUserAsync(user.Id);
-                    user.CategoryCount = categories.Count();
-
-                    IEnumerable<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByUserAsync(user.Id);
-                    user.TaskItemCount = taskItems.Count();
-                }
-
-                return new ApiResponse<IEnumerable<UserReadDto>>(userReadDtos, true, "Operation carried out successfully", 200);
-            }
-            catch (Exception ex)
+            foreach (UserReadDto user in userReadDtos)
             {
-                return new ApiResponse<IEnumerable<UserReadDto>>(null!, false, $"Erro: {ex.Message}", 500);
+                IEnumerable<Category> categories = await _categoryRepository.GetCategoryByUserAsync(user.Id);
+                user.CategoryCount = categories.Count();
+
+                IEnumerable<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByUserAsync(user.Id);
+                user.TaskItemCount = taskItems.Count();
             }
+
+            return new ApiResponse<IEnumerable<UserReadDto>>(userReadDtos, true, "Operation carried out successfully", 200);
         }
 
         public async Task<ApiResponse<UserReadDto>> GetUserByIdAsync(int id)
         {
-            try
-            {
-                User user = await _userRepository.GetUserByIdAsync(id);
+            ValidationHelper.ValidateId(id, "User Id");
 
-                if (user == null)
-                {
-                    return new ApiResponse<UserReadDto>(null, false, "User not found", 404);
-                }
+            User user = await _userRepository.GetUserByIdAsync(id);
 
-                UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
+            ValidationHelper.ValidateObject(user, "User");
 
-                return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<UserReadDto>(null!, false, $"Erro: {ex.Message}", 500);
-            }
+            UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
+
+            return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
         }
 
         public async Task<ApiResponse<UserReadDto>> GetUserByEmailAsync(string email)
         {
-            try
-            {
-                User user = await _userRepository.GetUserByEmailAsync(email);
+            User user = await _userRepository.GetUserByEmailAsync(email);
 
-                if (user == null)
-                {
-                    return new ApiResponse<UserReadDto>(null, false, "User not found", 404);
-                }
+            ValidationHelper.ValidateObject(user, "User");
 
-                UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
+            UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
 
-                return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<UserReadDto>(null!, false, $"Erro: {ex.Message}", 500);
-            }
+            return new ApiResponse<UserReadDto>(userReadDto, true, "Operation carried out successfully", 200);
         }
 
         public async Task<ApiResponse<UserReadDto>> UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
         {
-            try
+            ValidationHelper.ValidateId(id, "User Id");
+
+            User user = await _userRepository.GetUserByIdAsync(id);
+
+            ValidationHelper.ValidateObject(user, "User");
+
+            if (userUpdateDto.Password != null)
             {
-                User user = await _userRepository.GetUserByIdAsync(id);
-
-                if (userUpdateDto.Password != null)
-                {
-                    userUpdateDto.Password = _passwordService.HashPassword(userUpdateDto.Password);
-                }
-                else
-                {
-                    userUpdateDto.Password = user.Password;
-                    userUpdateDto.ConfirmPassword = user.Password;
-                }
-
-                _mapper.Map(userUpdateDto, user);
-
-                await _userRepository.UpdateUserAsync(user);
-
-                
-                UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
-
-                return new ApiResponse<UserReadDto>(userReadDto, true, "User edited successfully", 200);
-
+                userUpdateDto.Password = _passwordService.HashPassword(userUpdateDto.Password);
             }
-            catch (Exception ex)
+            else
             {
-                return new ApiResponse<UserReadDto>(null!, false, $"Erro: {ex.Message}", 500);
+                userUpdateDto.Password = user.Password;
+                userUpdateDto.ConfirmPassword = user.Password;
             }
+
+            _mapper.Map(userUpdateDto, user);
+
+            await _userRepository.UpdateUserAsync(user);
+
+            UserReadDto userReadDto = _mapper.Map<UserReadDto>(user);
+
+            return new ApiResponse<UserReadDto>(userReadDto, true, "User edited successfully", 200);
         }
 
         public async Task<ApiResponse> DeleteUserAsync(int id)
         {
-            try
-            {
-                await _userRepository.DeleteUserAsync(id);
+            ValidationHelper.ValidateId(id, "User Id");
+            await _userRepository.DeleteUserAsync(id);
 
-                return new ApiResponse(true, "User deleted successfully", 200);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse(false, $"Erro: {ex.Message}", 500);
-            }
+            return new ApiResponse(true, "User deleted successfully", 200);
         }
     }
 }

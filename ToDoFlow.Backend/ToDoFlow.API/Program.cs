@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using ToDoFlow.API.Middlewares;
 using ToDoFlow.Infrastructure.Context;
 using ToDoFlow.Infrastructure.Repositories;
 using ToDoFlow.Infrastructure.Repositories.Interface;
@@ -115,6 +116,8 @@ namespace ToDoFlow.API
             app.UseHttpsRedirection();
 
             app.UseCors("AllowLocalHost");
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();

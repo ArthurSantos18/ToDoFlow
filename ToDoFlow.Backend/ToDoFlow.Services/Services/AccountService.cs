@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using System.ComponentModel.DataAnnotations;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
 using ToDoFlow.Infrastructure.Repositories.Interface;
@@ -25,14 +26,11 @@ namespace ToDoFlow.Services.Services
         {
             User user = await _userRepository.GetUserByEmailAsync(loginRequestDto.Email);
 
-            if (user == null)
-            {
-                return new ApiResponse<string, UserRefreshTokenReadDto>(null, null, false, "Erro: User not found", 404);
-            }
+            ValidationHelper.ValidateObject(user, "User");
 
             if (!_passwordService.VerifyPassword(loginRequestDto.Password, user.Password))
             {
-                return new ApiResponse<string, UserRefreshTokenReadDto>(null, null,false, "Erro: Invalid credentials", 401);
+                throw new UnauthorizedAccessException("Invalid credentials");
             }
 
             string token = _tokenService.GenerateToken(user, "login", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
@@ -68,124 +66,92 @@ namespace ToDoFlow.Services.Services
 
             if (existingUser != null)
             {
-                return new ApiResponse<string, UserRefreshTokenReadDto>(null, null, false, "Erro: User already exists", 400);
+                throw new ValidationException("User already exists");
             }
 
             if (registerRequestDto.Password != registerRequestDto.ConfirmPassword)
             {
-                return new ApiResponse<string, UserRefreshTokenReadDto>(null, null, false, "Erro: Passwords do not match", 400);
+                throw new ValidationException("Passwords do not match");
             }
 
-            try
-            {
-                User user = _mapper.Map<User>(registerRequestDto);
-                user.Password = _passwordService.HashPassword(user.Password);
 
-                await _userRepository.CreateUserAsync(user);
+            User user = _mapper.Map<User>(registerRequestDto);
+            user.Password = _passwordService.HashPassword(user.Password);
 
-                string token = _tokenService.GenerateToken(user, "refresh", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
-                UserRefreshToken userRefreshToken = _tokenService.GenerateRefreshToken(user);
+            await _userRepository.CreateUserAsync(user);
 
-                UserRefreshTokenReadDto userRefreshTokenDto = _mapper.Map<UserRefreshTokenReadDto>(userRefreshToken);
+            string token = _tokenService.GenerateToken(user, "refresh", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
+            UserRefreshToken userRefreshToken = _tokenService.GenerateRefreshToken(user);
 
-                return new ApiResponse<string, UserRefreshTokenReadDto>(token, userRefreshTokenDto, true, "Registration completed successfully", 200);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<string, UserRefreshTokenReadDto>(null, null,false, $"Erro: {ex.Message}", 500);
-            }
+            UserRefreshTokenReadDto userRefreshTokenDto = _mapper.Map<UserRefreshTokenReadDto>(userRefreshToken);
+
+            return new ApiResponse<string, UserRefreshTokenReadDto>(token, userRefreshTokenDto, true, "Registration completed successfully", 200);
         }
 
         public async Task<ApiResponse<string, UserRefreshTokenReadDto>> RefreshTokenAsync(UserRefreshTokenRefreshDto userRefreshTokenRefreshDto)
         {
-            try
-            {
-                UserRefreshToken userRefreshToken = await _userRefreshTokenRepository.GetUserRefreshByTokenAsync(userRefreshTokenRefreshDto.RefreshToken);
-                
-                if (userRefreshToken == null)
-                {
-                    return new ApiResponse<string, UserRefreshTokenReadDto>(null, null, false, "Invalid refresh token", 401);
-                }
+            UserRefreshToken userRefreshToken = await _userRefreshTokenRepository.GetUserRefreshByTokenAsync(userRefreshTokenRefreshDto.RefreshToken);
 
-                User user = await _userRepository.GetUserByIdAsync(userRefreshToken.UserId);
+            ValidationHelper.ValidateObject(userRefreshToken, "Refresh Token");
 
-                var newToken = _tokenService.GenerateToken(user, "login", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
+            User user = await _userRepository.GetUserByIdAsync(userRefreshToken.UserId);
 
-                UserRefreshTokenReadDto userRefreshTokenDto = _mapper.Map<UserRefreshTokenReadDto>(userRefreshToken);
+            var newToken = _tokenService.GenerateToken(user, "login", int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]));
 
-                return new ApiResponse<string, UserRefreshTokenReadDto>(newToken, userRefreshTokenDto, true, "Operation carried out successfully", 200);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<string, UserRefreshTokenReadDto>(null, null, false, $"{ex.Message}", 500);
-            }
+            UserRefreshTokenReadDto userRefreshTokenDto = _mapper.Map<UserRefreshTokenReadDto>(userRefreshToken);
+
+            return new ApiResponse<string, UserRefreshTokenReadDto>(newToken, userRefreshTokenDto, true, "Operation carried out successfully", 200);
         }
 
         public async Task<ApiResponse> ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto)
         {
-            try
+            User user = await _userRepository.GetUserByEmailAsync(forgotPasswordDto.Email);
+
+            if (user == null)
             {
-                User user = await _userRepository.GetUserByEmailAsync(forgotPasswordDto.Email);
-
-                if (user == null)
-                {
-                    return new ApiResponse(false, $"If the email exists, a reset link was sent", 200);
-                }
-
-                string token = _tokenService.GenerateToken(user, "resetPassword", int.Parse(_configuration["JwtSettings:ExpiritaionMinutesResetPassword"]));
-                string resetLink = $"{_configuration["FrontEnd:Url"]}/reset-password?token={Uri.EscapeDataString(token)}&email={user.Email}";
-
-                bool sendEmail = await _emailService.SendEmailAsync(
-                    user.Email,
-                    "Password Reset", 
-                    $"Click the link to reset your password: <a href='{resetLink}'>Reset Password</a>");
-
-                if (!sendEmail)
-                {
-                    return new ApiResponse(false, $"Error: Email not send", 500);
-                }
-
-                return new ApiResponse(sendEmail, "Email sent successfully", 200);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse(false, $"Error: {ex.Message}", 500);
+                return new ApiResponse(true, $"If the email exists, a reset link was sent", 200);
             }
 
+            string token = _tokenService.GenerateToken(user, "resetPassword", int.Parse(_configuration["JwtSettings:ExpiritaionMinutesResetPassword"]));
+            string resetLink = $"{_configuration["FrontEnd:Url"]}/reset-password?token={Uri.EscapeDataString(token)}&email={user.Email}";
+
+            bool sendEmail = await _emailService.SendEmailAsync(
+                user.Email,
+                "Password Reset", 
+                $"Click the link to reset your password: <a href='{resetLink}'>Reset Password</a>");
+
+            if (!sendEmail)
+            {
+                throw new Exception($"Error: Email not send");
+            }
+
+            return new ApiResponse(sendEmail, "Email sent successfully", 200);
         }
 
         public async Task<ApiResponse> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
         {
-            try
-            {
-                User user = await _userRepository.GetUserByEmailAsync(resetPasswordDto.Email);
-                if (user == null)
-                {
-                    return new ApiResponse(false, "User not found", 404);
-                }
+            User user = await _userRepository.GetUserByEmailAsync(resetPasswordDto.Email);
+
+            ValidationHelper.ValidateObject(user, "User");
                 
-                bool isValidate = _tokenService.ValidateToken(resetPasswordDto.Token);
-                if (!isValidate)
-                {
-                    return new ApiResponse(false, "Invalid or expired token", 400);
-                }
-
-                if (resetPasswordDto.NewPassword != resetPasswordDto.ConfirmPassword)
-                {
-                    return new ApiResponse(false, "Erro: Passwords do not match", 400);
-                }
-
-                resetPasswordDto.NewPassword = _passwordService.HashPassword(resetPasswordDto.NewPassword);
-                user.Password = resetPasswordDto.NewPassword;
-
-                await _userRepository.UpdateUserAsync(user);
-
-                return new ApiResponse(true, "Password reset successfully", 200);
-            }
-            catch (Exception ex)
+            bool isValidate = _tokenService.ValidateToken(resetPasswordDto.Token);
+            
+            if (!isValidate)
             {
-                return new ApiResponse(false, $"Error: {ex.Message}", 500);
+                throw new ValidationException("Invalid or expired token");
             }
+
+            if (resetPasswordDto.NewPassword != resetPasswordDto.ConfirmPassword)
+            {
+                throw new ValidationException("Invalid or expired token");
+            }
+
+            user.Password = _passwordService.HashPassword(resetPasswordDto.NewPassword);
+
+            await _userRepository.UpdateUserAsync(user);
+
+            return new ApiResponse(true, "Password reset successfully", 200);
         }
     }
 }
+
