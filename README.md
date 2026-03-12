@@ -18,9 +18,8 @@
 <h2>🏗️ Arquitetura</h2>
 <ul>
   <li>API: Controllers, autenticação e endpoints</li>
-  <li>Application: Dtos de cada caso</li>
+  <li>Application: Dtos, Serviços de domínio, integrações, SMTP, JWT</li>
   <li>Domain: Entidades e regras de negócio puras</li>
-  <li>Services: Serviços de domínio, integrações, SMTP, JWT</li>
   <li>Infrastructure: Acesso a dados, EF Core e repositórios</li>
 </ul>
 

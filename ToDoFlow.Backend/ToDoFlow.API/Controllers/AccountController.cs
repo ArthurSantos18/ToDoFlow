@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
-using ToDoFlow.Services.Services.Interface;
-using ToDoFlow.Services.Services.Utils;
+using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Utils;
 
 namespace ToDoFlow.API.Controllers
 {

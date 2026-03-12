@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ToDoFlow.Services.Services.Utils
+namespace ToDoFlow.Application.Services.Utils
 {
     public static class ValidationHelper
     {

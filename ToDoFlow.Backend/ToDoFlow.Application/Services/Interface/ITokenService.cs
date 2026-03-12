@@ -1,6 +1,6 @@
 ﻿using ToDoFlow.Domain.Models;
 
-namespace ToDoFlow.Services.Services.Interface
+namespace ToDoFlow.Application.Services.Interface
 {
     public interface ITokenService
     {

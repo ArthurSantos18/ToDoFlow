@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using System.ComponentModel.DataAnnotations;
 using ToDoFlow.Application.Dtos;
+using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Utils;
 using ToDoFlow.Domain.Models;
 using ToDoFlow.Domain.Models.Enums;
 using ToDoFlow.Infrastructure.Repositories;
 using ToDoFlow.Infrastructure.Repositories.Interface;
-using ToDoFlow.Services.Services.Interface;
-using ToDoFlow.Services.Services.Utils;
 
-namespace ToDoFlow.Services.Services
+namespace ToDoFlow.Application.Services
 {
     public class TaskItemService(ITaskItemRepository taskItemRepository, ICategoryRepository CategoryRepository, IMapper mapper) : ITaskItemService
     {

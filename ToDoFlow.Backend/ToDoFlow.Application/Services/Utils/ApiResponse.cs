@@ -1,4 +1,4 @@
-﻿namespace ToDoFlow.Services.Services.Utils
+﻿namespace ToDoFlow.Application.Services.Utils
 {
     public class ApiResponse(bool success, string message, int httpStatus)
     {

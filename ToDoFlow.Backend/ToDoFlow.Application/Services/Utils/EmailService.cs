@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
-using ToDoFlow.Services.Services.Interface;
+using ToDoFlow.Application.Services.Interface;
 
-namespace ToDoFlow.Services.Services.Utils
+namespace ToDoFlow.Application.Services.Utils
 {
     public class EmailService(IConfiguration configuration) : IEmailService
     {

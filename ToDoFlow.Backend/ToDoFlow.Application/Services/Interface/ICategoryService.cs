@@ -1,7 +1,7 @@
 ﻿using ToDoFlow.Application.Dtos;
-using ToDoFlow.Services.Services.Utils;
+using ToDoFlow.Application.Services.Utils;
 
-namespace ToDoFlow.Services.Services.Interface
+namespace ToDoFlow.Application.Services.Interface
 {
     public interface ICategoryService
     {

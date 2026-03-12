@@ -4,10 +4,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using ToDoFlow.Application.Services.Interface;
 using ToDoFlow.Domain.Models;
-using ToDoFlow.Services.Services.Interface;
 
-namespace ToDoFlow.Services.Services.Utils
+namespace ToDoFlow.Application.Services.Utils
 {
     public class TokenService(IConfiguration configuration) : ITokenService
     {

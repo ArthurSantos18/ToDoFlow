@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoFlow.Domain", "ToDoFlow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoFlow.Infrastructure", "ToDoFlow.Infrastructure\ToDoFlow.Infrastructure.csproj", "{8012D323-A17F-42EB-B261-ACF15B5EE53A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoFlow.Services", "ToDoFlow.Services\ToDoFlow.Services.csproj", "{60F5E6F3-54FC-4461-81B1-72B0A114AA69}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoFlow.Application", "ToDoFlow.Application\ToDoFlow.Application.csproj", "{AB9D2595-3EF6-4449-BB16-3F28A1882910}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoFlow.API", "ToDoFlow.API\ToDoFlow.API.csproj", "{7580BBAC-AED3-42DE-82B1-8718AE15BFBF}"
@@ -27,10 +25,6 @@ Global
 		{8012D323-A17F-42EB-B261-ACF15B5EE53A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8012D323-A17F-42EB-B261-ACF15B5EE53A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8012D323-A17F-42EB-B261-ACF15B5EE53A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60F5E6F3-54FC-4461-81B1-72B0A114AA69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60F5E6F3-54FC-4461-81B1-72B0A114AA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60F5E6F3-54FC-4461-81B1-72B0A114AA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60F5E6F3-54FC-4461-81B1-72B0A114AA69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AB9D2595-3EF6-4449-BB16-3F28A1882910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AB9D2595-3EF6-4449-BB16-3F28A1882910}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB9D2595-3EF6-4449-BB16-3F28A1882910}.Release|Any CPU.ActiveCfg = Release|Any CPU

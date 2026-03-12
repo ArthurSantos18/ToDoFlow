@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ToDoFlow.Application\ToDoFlow.Application.csproj" />
     <ProjectReference Include="..\ToDoFlow.Infrastructure\ToDoFlow.Infrastructure.csproj" />
-    <ProjectReference Include="..\ToDoFlow.Services\ToDoFlow.Services.csproj" />
   </ItemGroup>
 
 </Project>

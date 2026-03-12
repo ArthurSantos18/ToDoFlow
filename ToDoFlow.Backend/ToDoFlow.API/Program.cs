@@ -4,12 +4,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using ToDoFlow.API.Middlewares;
+using ToDoFlow.Application.Services;
+using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Utils;
 using ToDoFlow.Infrastructure.Context;
 using ToDoFlow.Infrastructure.Repositories;
 using ToDoFlow.Infrastructure.Repositories.Interface;
-using ToDoFlow.Services.Services;
-using ToDoFlow.Services.Services.Interface;
-using ToDoFlow.Services.Services.Utils;
 
 namespace ToDoFlow.API
 {

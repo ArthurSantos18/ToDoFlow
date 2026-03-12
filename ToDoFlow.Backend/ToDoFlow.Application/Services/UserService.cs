@@ -2,10 +2,10 @@
 using ToDoFlow.Infrastructure.Repositories.Interface;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
-using ToDoFlow.Services.Services.Interface;
-using ToDoFlow.Services.Services.Utils;
+using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Utils;
 
-namespace ToDoFlow.Services.Services
+namespace ToDoFlow.Application.Services
 {
     public class UserService(IUserRepository userRepository, IMapper mapper, IPasswordService passwordService, 
         ICategoryRepository categoryRepository, ITaskItemRepository taskItemRepository) : IUserService

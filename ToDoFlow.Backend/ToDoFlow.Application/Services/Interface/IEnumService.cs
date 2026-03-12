@@ -1,6 +1,6 @@
-﻿using ToDoFlow.Services.Services.Utils;
+﻿using ToDoFlow.Application.Services.Utils;
 
-namespace ToDoFlow.Services.Services.Interface
+namespace ToDoFlow.Application.Services.Interface
 {
     public interface IEnumService
     {
