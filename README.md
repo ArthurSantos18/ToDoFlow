@@ -13,6 +13,7 @@
   <li>Relacionamento entre tarefas e categorias</li>
   <li>Acesso protegido por autenticação</li>
   <li>Recuperação de senha via e-mail (SMTP)</li>
+  <li>Realização de testes unitários</li>
 </ul>
 
 <h2>🏗️ Arquitetura</h2>
@@ -21,6 +22,7 @@
   <li>Application: Dtos, Serviços de domínio, integrações, SMTP, JWT</li>
   <li>Domain: Entidades e regras de negócio puras</li>
   <li>Infrastructure: Acesso a dados, EF Core e repositórios</li>
+  <li>Tests: Testes unitários</li>
 </ul>
 
 <h2>🔐 Segurança</h2>
