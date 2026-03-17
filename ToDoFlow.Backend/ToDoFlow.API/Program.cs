@@ -5,11 +5,11 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using ToDoFlow.API.Middlewares;
 using ToDoFlow.Application.Services;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Application.Services.Utils;
 using ToDoFlow.Infrastructure.Context;
 using ToDoFlow.Infrastructure.Repositories;
-using ToDoFlow.Infrastructure.Repositories.Interface;
+using ToDoFlow.Infrastructure.Repositories.Interfaces;
 
 namespace ToDoFlow.API
 {

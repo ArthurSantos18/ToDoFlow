@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ToDoFlow.Application.Dtos;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Application.Services.Utils;
 
 namespace ToDoFlow.API.Controllers
@@ -44,7 +44,7 @@ namespace ToDoFlow.API.Controllers
         public async Task<ActionResult<ApiResponse>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
         {
             var response = await _accountService.ResetPasswordAsync(resetPasswordDto);
-            
+
             return StatusCode(response.HttpStatus, response);
         }
     }

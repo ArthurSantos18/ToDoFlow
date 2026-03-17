@@ -1,4 +1,4 @@
-﻿using ToDoFlow.Application.Services.Interface;
+﻿using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Domain.Models.Enums;
 
 namespace ToDoFlow.Application.Services.Utils

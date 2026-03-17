@@ -1,7 +1,7 @@
 ﻿using ToDoFlow.Application.Dtos;
 using ToDoFlow.Application.Services.Utils;
 
-namespace ToDoFlow.Application.Services.Interface
+namespace ToDoFlow.Application.Services.Interfaces
 {
     public interface IUserService
     {

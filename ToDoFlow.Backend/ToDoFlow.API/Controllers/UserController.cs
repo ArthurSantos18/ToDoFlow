@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ToDoFlow.Application.Dtos;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Application.Services.Utils;
 
 namespace ToDoFlow.API.Controllers

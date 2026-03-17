@@ -1,4 +1,4 @@
-﻿using ToDoFlow.Application.Services.Interface;
+﻿using ToDoFlow.Application.Services.Interfaces;
 
 namespace ToDoFlow.Application.Services.Utils
 {

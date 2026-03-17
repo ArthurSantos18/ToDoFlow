@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using ToDoFlow.Infrastructure.Repositories.Interface;
+using ToDoFlow.Infrastructure.Repositories.Interfaces;
 using ToDoFlow.Application.Dtos;
 using ToDoFlow.Domain.Models;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Application.Services.Utils;
 
 namespace ToDoFlow.Application.Services

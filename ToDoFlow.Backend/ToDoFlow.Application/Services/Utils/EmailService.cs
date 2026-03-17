@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 
 namespace ToDoFlow.Application.Services.Utils
 {

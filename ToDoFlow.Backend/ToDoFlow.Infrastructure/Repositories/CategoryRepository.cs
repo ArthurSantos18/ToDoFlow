@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ToDoFlow.Domain.Models;
 using ToDoFlow.Infrastructure.Context;
-using ToDoFlow.Infrastructure.Repositories.Interface;
+using ToDoFlow.Infrastructure.Repositories.Interfaces;
 
 namespace ToDoFlow.Infrastructure.Repositories
 {

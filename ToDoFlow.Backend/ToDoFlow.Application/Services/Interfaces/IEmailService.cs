@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace ToDoFlow.Application.Services.Interface
+﻿namespace ToDoFlow.Application.Services.Interfaces
 {
     public interface IEmailService
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Application.Services.Utils;
 
 namespace ToDoFlow.API.Controllers

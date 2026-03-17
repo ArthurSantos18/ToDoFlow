@@ -10,7 +10,13 @@ namespace ToDoFlow.Application.Services.Utils
         {
             // TaskItem Map
             CreateMap<TaskItemCreateDto, TaskItem>();
-            CreateMap<TaskItem, TaskItemReadDto>();
+            CreateMap<TaskItem, TaskItemReadDto>()
+                .ForMember(
+                dest => dest.CreatedAt, 
+                opt => opt.MapFrom(
+                    src => src.CreatedAt.ToLocalTime()
+                    )
+                );
             CreateMap<TaskItemUpdateDto, TaskItem>();
 
             // CategoryMap

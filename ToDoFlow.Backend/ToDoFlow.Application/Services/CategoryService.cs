@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using System.ComponentModel.DataAnnotations;
 using ToDoFlow.Application.Dtos;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Application.Services.Utils;
 using ToDoFlow.Domain.Models;
-using ToDoFlow.Infrastructure.Repositories.Interface;
+using ToDoFlow.Infrastructure.Repositories.Interfaces;
 
 namespace ToDoFlow.Application.Services
 {
@@ -15,7 +14,6 @@ namespace ToDoFlow.Application.Services
 
         public async Task<ApiResponse<CategoryReadDto>> CreateCategoryAsync(int userId, CategoryCreateDto categoryCreateDto)
         {
-            
             Category category = _mapper.Map<Category>(categoryCreateDto);
             category.UserId = userId;
 
@@ -37,10 +35,7 @@ namespace ToDoFlow.Application.Services
 
         public async Task<ApiResponse<IEnumerable<CategoryReadDto>>> GetCategoryByUserAsync(int userId)
         {
-            if (userId < 0)
-            {
-                throw new ArgumentException($"Invalid user ID: {userId}");
-            }
+            ValidationHelper.ValidateId(userId, "User Id");
                 
             IEnumerable<Category> categories = await _categoryRepository.GetCategoryByUserAsync(userId);
             IEnumerable<CategoryReadDto> categoryReadDtos = _mapper.Map<IEnumerable<CategoryReadDto>>(categories);
@@ -50,22 +45,12 @@ namespace ToDoFlow.Application.Services
 
         public async Task<ApiResponse<CategoryReadDto>> GetCategoryByIdAsync(int id, int userId)
         {
-            if (id < 0)
-            {
-                throw new ArgumentException($"Invalid category ID: {id}");
-            }
-                
-            if (userId < 0)
-            {
-                throw new ArgumentException($"Invalid user ID: {userId}");
-            }
-                
+            ValidationHelper.ValidateId(id, "Category Id");
+            ValidationHelper.ValidateId(userId, "User Id");
+
             Category category = await _categoryRepository.GetCategoryByIdAsync(id);
-                
-            if (category == null)
-            {
-                throw new KeyNotFoundException($"Category with ID {id} not found");
-            }
+
+            ValidationHelper.ValidateObject(category, "Category");
 
             if (category.UserId != userId)
             {
@@ -80,22 +65,12 @@ namespace ToDoFlow.Application.Services
 
         public async Task<ApiResponse<CategoryReadDto>> UpdateCategoryAsync(int id, int userId, CategoryUpdateDto categoryUpdateDto)
         {
-            if (id < 0)
-            {
-                throw new ArgumentException($"Invalid category ID: {id}");
-            }
-                
-            if (userId < 0)
-            {
-                throw new ArgumentException($"Invalid user ID: {id}");
-            }
-                
+            ValidationHelper.ValidateId(id, "Category Id");
+            ValidationHelper.ValidateId(userId, "User Id");
+
             Category category = await _categoryRepository.GetCategoryByIdAsync(id);
 
-            if (category == null)
-            {
-                throw new KeyNotFoundException($"Category with ID {id} not found");
-            }
+            ValidationHelper.ValidateObject(category, "Category");
 
             if (category.UserId != userId)
             {
@@ -104,7 +79,6 @@ namespace ToDoFlow.Application.Services
                 
             _mapper.Map(categoryUpdateDto, category);
             await _categoryRepository.UpdateCategoryAsync(category);
-
                 
             CategoryReadDto categoryReadDto = _mapper.Map<CategoryReadDto>(category);
 
@@ -115,10 +89,7 @@ namespace ToDoFlow.Application.Services
         {
             Category category = await _categoryRepository.GetCategoryByIdAsync(id);
 
-            if (category == null)
-            {
-                throw new KeyNotFoundException($"Category with ID {id} not found");
-            }
+            ValidationHelper.ValidateObject(category, "Category");
 
             if (category.UserId != userId)
             {

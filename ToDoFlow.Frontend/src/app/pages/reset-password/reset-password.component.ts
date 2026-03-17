@@ -13,13 +13,11 @@ import { CommonModule } from '@angular/common';
 })
 export class ResetPasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
-  email: string | null = null;
   token: string | null = null;
   errorMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.resetPasswordForm = this.fb.group({
-      email: new FormControl('', [Validators.required, Validators.email]),
       token: new FormControl('', [Validators.required]),
       newPassword: new FormControl('', [Validators.required]),
       confirmPassword: new FormControl('', [Validators.required]),
@@ -30,27 +28,26 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.email = this.route.snapshot.queryParamMap.get('email') || '';
     this.token = this.route.snapshot.queryParamMap.get('token') || '';
 
-    if (this.email == '' || this.token == '' || this.authService.isTokenExpired(this.token)) {
+    if (this.token == '' || this.authService.isTokenExpired(this.token)) {
       this.router.navigate(['login']);
     }
 
     this.resetPasswordForm.patchValue({
-      email: this.email,
       token: this.token
     });
   }
 
   passwordsMatch(group: FormGroup) {
-    const password = group.get('password')?.value;
+    const password = group.get('newPassword')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { notMatching: true };
   }
 
   resetPassword() {
     if (this.resetPasswordForm.valid) {
+      console.log(this.resetPasswordForm.value);
       this.authService.resetPassword(this.resetPasswordForm.value).subscribe({
         next: (response) => {
           if (response.success === false) {

@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Domain.Models;
+using ToDoFlow.Domain.Models.Enums;
 
 namespace ToDoFlow.Application.Services.Utils
 {
@@ -13,8 +15,10 @@ namespace ToDoFlow.Application.Services.Utils
     {
         private readonly IConfiguration _configuration = configuration;
 
-        public string GenerateToken(User user, string purpose, int expiryMinutes)
+        public string GenerateToken(User user, string purpose)
         {
+            int expire_time;
+
             List<Claim> claims =
             [
                 new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
@@ -23,19 +27,23 @@ namespace ToDoFlow.Application.Services.Utils
                 new("purpose", purpose),
             ];
 
-            if (purpose == "login" || purpose == "refresh")
+            if (purpose == TokenPurpose.Login.ToString())
             {
+                expire_time = int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"]);
                 claims.Add(new Claim(ClaimTypes.Role, user.Profile.ToString()));
-
+            }
+            else
+            {
+                expire_time = int.Parse(_configuration["JwtSettings:ExpirationMinutesResetPassword"]);
             }
 
-            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"] ?? string.Empty));
+                SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"] ?? string.Empty));
             SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken token = new(
                 issuer: _configuration["JwtSettings:Issuer"],
                 audience: _configuration["JwtSettings:Audience"],
-                expires: DateTime.UtcNow.AddMinutes(int.Parse(_configuration["JwtSettings:ExpirationMinutesJwt"])),
+                expires: DateTime.UtcNow.AddMinutes(expire_time),
                 claims: claims,
                 signingCredentials: creds);
 
@@ -59,7 +67,7 @@ namespace ToDoFlow.Application.Services.Utils
             return userRefreshToken;
         }
 
-        public bool ValidateToken(string token)
+        public ClaimsPrincipal ValidateToken(string token)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"] ?? string.Empty));
@@ -76,21 +84,18 @@ namespace ToDoFlow.Application.Services.Utils
                 ClockSkew = TimeSpan.Zero
             };
 
-            try
-            {
-                ClaimsPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+            ClaimsPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
 
-                if (principal.FindFirst("purpose")?.Value != "resetPassword")
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            catch
+            if (principal.FindFirst("purpose")?.Value != TokenPurpose.ResetPassword.ToString())
             {
-                return false;
+                throw new ValidationException("Invalid token purpose");
             }
+
+            return principal;    
         }
+        
     }
+    
 }
+
+

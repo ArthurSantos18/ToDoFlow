@@ -1,4 +1,4 @@
-﻿namespace ToDoFlow.Application.Services.Interface
+﻿namespace ToDoFlow.Application.Services.Interfaces
 {
     public interface IPasswordService
     {

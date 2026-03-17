@@ -1,6 +1,6 @@
 ﻿using ToDoFlow.Domain.Models;
 
-namespace ToDoFlow.Infrastructure.Repositories.Interface
+namespace ToDoFlow.Infrastructure.Repositories.Interfaces
 {
     public interface ITaskItemRepository
     {

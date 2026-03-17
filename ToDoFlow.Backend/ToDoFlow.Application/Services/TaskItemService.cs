@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using System.ComponentModel.DataAnnotations;
 using ToDoFlow.Application.Dtos;
-using ToDoFlow.Application.Services.Interface;
+using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Application.Services.Utils;
 using ToDoFlow.Domain.Models;
 using ToDoFlow.Domain.Models.Enums;
 using ToDoFlow.Infrastructure.Repositories;
-using ToDoFlow.Infrastructure.Repositories.Interface;
+using ToDoFlow.Infrastructure.Repositories.Interfaces;
 
 namespace ToDoFlow.Application.Services
 {
@@ -16,37 +16,24 @@ namespace ToDoFlow.Application.Services
         private readonly ICategoryRepository _categoryRepository = CategoryRepository;
         private readonly IMapper _mapper = mapper;
 
-        private static void ValidateId(int id, string entityName)
-        {
-            if (id < 0)
-            {
-                throw new ArgumentException($"Invalid {entityName} ID: {id}");
-            }
-        }
-
         public async Task<ApiResponse<TaskItemReadDto>> CreateTaskItemAsync(int userId, TaskItemCreateDto taskItemCreateDto)
         {
-            ValidateId(taskItemCreateDto.CategoryId, "Category");
+            ValidationHelper.ValidateId(userId, "User");
+            ValidationHelper.ValidateId(taskItemCreateDto.CategoryId, "Category");
                     
             TaskItem taskItem = _mapper.Map<TaskItem>(taskItemCreateDto);
 
             Category category = await _categoryRepository.GetCategoryByIdAsync(taskItem.CategoryId);
 
-            if (category == null)
-            {
-                throw new KeyNotFoundException($"Category with ID {taskItemCreateDto.CategoryId} not found");
-            }
+            ValidationHelper.ValidateObject(category, "Category");
 
-            if (category.UserId != userId)
-            {
-                throw new UnauthorizedAccessException("You do not have permission to create tasks in this category");
-            }
+            ValidationHelper.ValidateId(category.UserId, "User");
 
             await _taskItemRepository.CreateTaskItemAsync(taskItem);
 
             TaskItemReadDto taskItemReadDto = _mapper.Map<TaskItemReadDto>(taskItem);
 
-            return new ApiResponse<TaskItemReadDto>(taskItemReadDto, true, "Task created successfully", 200);
+            return new ApiResponse<TaskItemReadDto>(taskItemReadDto, true, "Task created successfully", 201);
 
         }
 
@@ -60,22 +47,13 @@ namespace ToDoFlow.Application.Services
 
         public async Task<ApiResponse<IEnumerable<TaskItemReadDto>>> GetTaskItemByCategoryAsync(int categoryId, int userId)
         {
-            if (categoryId <= 0)
-            {
-                throw new ArgumentException($"Invalid category ID: {categoryId}");
-            }
 
-            if (userId <= 0)
-            {
-                throw new ArgumentException($"Invalid user ID: {userId}");
-            }
-
+            ValidationHelper.ValidateId(categoryId, "Category");
+            ValidationHelper.ValidateId(userId, "User");
+            
             Category category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
 
-            if (category == null)
-            {
-                throw new KeyNotFoundException($"Category with ID {categoryId} not found");
-            }
+            ValidationHelper.ValidateObject(category, "Category");
 
             if (category.UserId != userId)
             {
@@ -90,11 +68,8 @@ namespace ToDoFlow.Application.Services
 
         public async Task<ApiResponse<IEnumerable<TaskItemReadDto>>> GetTaskItemByUserAsync(int userId)
         {
-            if (userId <= 0)
-            {
-                throw new ArgumentException($"Invalid user ID: {userId}");
-            }
-                
+            ValidationHelper.ValidateId(userId, "User");
+
             IEnumerable<TaskItem> taskItems = await _taskItemRepository.GetTaskItemByUserAsync(userId);
             IEnumerable<TaskItemReadDto> taskItemReadDtos = _mapper.Map<IEnumerable<TaskItemReadDto>>(taskItems);
 
@@ -104,22 +79,12 @@ namespace ToDoFlow.Application.Services
             
         public async Task<ApiResponse<TaskItemReadDto>> GetTaskItemByIdAsync(int id, int userId)
         {
-            if (id <= 0)
-            {
-                throw new ArgumentException($"Invalid task ID: {id}");
-            }
-            
-            if (userId <= 0)
-            {
-                throw new ArgumentException($"Invalid user ID: {userId}");
-            }
+            ValidationHelper.ValidateId(id, "Task");
+            ValidationHelper.ValidateId(userId, "User");
 
             TaskItem taskItem = await _taskItemRepository.GetTaskItemByIdAsync(id);
 
-            if (taskItem == null)
-            {
-                throw new KeyNotFoundException($"Task with ID {id} not found");
-            }
+            ValidationHelper.ValidateObject(taskItem, "Task");
 
             Category category = await _categoryRepository.GetCategoryByIdAsync(taskItem.CategoryId);
                 
@@ -135,22 +100,12 @@ namespace ToDoFlow.Application.Services
 
         public async Task<ApiResponse<TaskItemReadDto>> UpdateTaskItemAsync(int id, int userId, TaskItemUpdateDto taskItemUpdateDto)
         {
-            if (id <= 0)
-            {
-                throw new ArgumentException($"Invalid task ID: {id}");
-            }
-
-            if (userId <= 0)
-            {
-                throw new ArgumentException($"Invalid user ID: {userId}");
-            }
+            ValidationHelper.ValidateId(id, "Task");
+            ValidationHelper.ValidateId(userId, "User");
 
             TaskItem taskItem = await _taskItemRepository.GetTaskItemByIdAsync(id);
 
-            if (taskItem == null)
-            {
-                throw new KeyNotFoundException($"Task with ID {id} not found");
-            }
+            ValidationHelper.ValidateObject(taskItem, "Task");
 
             Category category = await _categoryRepository.GetCategoryByIdAsync(taskItem.CategoryId);
 
@@ -179,22 +134,12 @@ namespace ToDoFlow.Application.Services
 
         public async Task<ApiResponse> DeleteTaskItemAsync(int id, int userId)
         {
-            if (id <= 0)
-            {
-                throw new ArgumentException($"Invalid task ID: {id}");
-            }
-
-            if (userId <= 0)
-            {
-                throw new ArgumentException($"Invalid user ID: {userId}");
-            }
+            ValidationHelper.ValidateId(id, "Task");
+            ValidationHelper.ValidateId(userId, "User");
 
             TaskItem taskItem = await _taskItemRepository.GetTaskItemByIdAsync(id);
 
-            if (taskItem == null)
-            {
-                throw new KeyNotFoundException($"Task with ID {id} not found");
-            }
+            ValidationHelper.ValidateObject(taskItem, "Task");
 
             Category category = await _categoryRepository.GetCategoryByIdAsync(taskItem.CategoryId);
 

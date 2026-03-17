@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ToDoFlow.Application.Services.Utils
+﻿namespace ToDoFlow.Application.Services.Utils
 {
     public static class ValidationHelper
     {
@@ -16,7 +10,7 @@ namespace ToDoFlow.Application.Services.Utils
             }
         }
 
-        public static void ValidateObject(object obj, string entityName)
+        public static void ValidateObject(object? obj, string entityName)
         {
             if (obj == null)
             {
