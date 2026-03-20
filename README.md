@@ -78,8 +78,16 @@ cd ToDoFlow</code></pre>
   }
     </code></pre>
   </li>
+    <li>
+      <p><strong>Frontend Url</strong>: No mesmo arquivo preencha a seção <code>FrontEnd</code> para a Url do Frontend</p>
+    </li>
   <li>
-    <p><strong>Configurar JWT, Email e Frontend Url</strong>: No mesmo arquivo, preencha as seções <code>JwtSettings</code> (SecretKey, Issuer, Audience), <code>SmtpSettings</code> para habilitar a recuperação de senha e <code>FrontEnd</code> para a Url do Frontend</p>
+    <p><em>⚠️ Este projeto utiliza User Secrets do .NET para armazenar dados sensíveis (como chave JWT e senha de e-mail). O arquivo `appsettings.json` contém apenas valores de exemplo.
+</em></p>
+    <p>Execute os comandos abaixo na pasta do projeto da API:</p>
+    <pre><code>dotnet user-secrets init</code>
+dotnet user-secrets set "JwtSettings:SecretKey" "sua-chave-aqui"</code>
+dotnet user-secrets set "EmailSettings:SmtpPassword" "sua-senha-aqui"</code></pre>  
   </li>
   <li>
     <p><strong>Aplicar as migrações do banco de dados</strong>:</p>
