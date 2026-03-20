@@ -72,21 +72,29 @@ cd ToDoFlow</code></pre>
   </li>
   <li>
     <p><strong>Configurar a string de conexão</strong>: Edite o arquivo <code>appsettings.json</code>) e atualize a propriedade <code>DefaultConnection</code> com os dados do seu SQL Server.</p>
-    <pre><code>{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=SEU_SERVIDOR;Database=ToDoFlowDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
-  }
-    </code></pre>
+    <pre><code>"ConnectionStrings": {
+    "DefaultConnection": "Data source=SEU_SERVIDOR;Database=ToDoFlowDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+  }</code></pre>
   </li>
-    <li>
-      <p><strong>Frontend Url</strong>: No mesmo arquivo preencha a seção <code>FrontEnd</code> para a Url do Frontend</p>
-    </li>
   <li>
-    <p><em>⚠️ Este projeto utiliza User Secrets do .NET para armazenar dados sensíveis (como chave JWT e senha de e-mail). O arquivo `appsettings.json` contém apenas valores de exemplo.
-</em></p>
+    <p><strong>Configurar URL do Frontend e CORS</strong>:</p>
+    <p>No arquivo <code>appsettings.json</code>, configure a URL do frontend e as origens permitidas:</
+    <p><em>⚠️ Certifique-se de que a URL do frontend está incluída nas origens permitidas pelo CORS.</em></p>
+    <pre><code>"FrontEnd": {
+    "Url": "http://localhost:4200"
+  },
+"CorsSettings": {
+   "AllowedOrigins": [
+     "http://localhost:4200"
+    ]
+  }</code></pre>
+  </li>
+  <li>
+    <p>Este projeto utiliza User Secrets do .NET para armazenar dados sensíveis (como chave JWT e senha de e-mail). O arquivo `appsettings.json` contém apenas valores de exemplo.</p>
     <p>Execute os comandos abaixo na pasta do projeto da API:</p>
     <pre><code>dotnet user-secrets init</code>
 dotnet user-secrets set "JwtSettings:SecretKey" "sua-chave-aqui"</code>
+dotnet user-secrets set "EmailSettings:SmtpFrom" "seu-email-aqui"</code>
 dotnet user-secrets set "EmailSettings:SmtpPassword" "sua-senha-aqui"</code></pre>  
   </li>
   <li>
