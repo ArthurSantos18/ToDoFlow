@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class ForgotPasswordComponent {
   forgotPasswordForm: FormGroup
   errorMessage: string | null = null;
+  isLoading: boolean = false;
 
   constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) {
     this.forgotPasswordForm = this.fb.group({
@@ -22,9 +23,14 @@ export class ForgotPasswordComponent {
   }
 
   sendEmail() {
-    if (this.forgotPasswordForm.valid) {
+    if (this.forgotPasswordForm.valid && !this.isLoading) {
+
+      this.isLoading = true;
+
       this.authService.forgotPassword(this.forgotPasswordForm.value).subscribe({
         next: (response) => {
+          this.isLoading = false;
+
           if (response.success === false) {
             this.errorMessage = response.message
           }
@@ -34,6 +40,7 @@ export class ForgotPasswordComponent {
           }
         },
         error: (err) => {
+          this.isLoading = false
           this.errorMessage = err
         }
       });

@@ -1,15 +1,6 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
+using ToDoFlow.API.Extensions;
 using ToDoFlow.API.Middlewares;
-using ToDoFlow.Application.Services;
-using ToDoFlow.Application.Services.Interfaces;
 using ToDoFlow.Application.Services.Utils;
-using ToDoFlow.Infrastructure.Context;
-using ToDoFlow.Infrastructure.Repositories;
-using ToDoFlow.Infrastructure.Repositories.Interfaces;
 
 namespace ToDoFlow.API
 {
@@ -21,89 +12,22 @@ namespace ToDoFlow.API
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(
-                c =>
-                {
-                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                    {
-                        Description = "Exemplo: 'bearer {token}'",
-                        Type = SecuritySchemeType.ApiKey,
-                        Name = "Authorization",
-                        In = ParameterLocation.Header
-                    });
 
-                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            Array.Empty<string>()
-                        }
-                    });
-                });
+            builder.Services.AddSwaggerWithJwt();
 
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
-            builder.Services.AddDbContext<ToDoFlowContext>(options =>
-            {
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("ToDoFlow.Infrastructure"));
-            });
+            builder.Services.AddDatabase(builder.Configuration);
 
-            builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
-            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
-            
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<ITaskItemService, TaskItemService>();
-            builder.Services.AddScoped<IEnumService, EnumService>();
-            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddRepositories();
 
-            builder.Services.AddSingleton<IEmailService, EmailService>();
-            builder.Services.AddSingleton<ITokenService, TokenService>();
-            builder.Services.AddSingleton<IPasswordService, PasswordService>();
+            builder.Services.AddServices();
 
-
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            }).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-                    ValidAudience = builder.Configuration["JwtSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"])),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
-
+            builder.Services.AddJwtAuthentication(builder.Configuration);
 
             builder.Services.AddAuthorization();
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowLocalHost", policy =>
-                {
-                    policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-                });
-            });
+            builder.Services.AddCustomCors(builder.Configuration);
 
             var app = builder.Build();
 
