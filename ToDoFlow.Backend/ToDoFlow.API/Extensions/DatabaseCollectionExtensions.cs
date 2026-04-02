@@ -3,7 +3,7 @@ using ToDoFlow.Infrastructure.Context;
 
 namespace ToDoFlow.API.Extensions
 {
-    public static class DatabaseExtensions
+    public static class DatabaseCollectionExtensions
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {

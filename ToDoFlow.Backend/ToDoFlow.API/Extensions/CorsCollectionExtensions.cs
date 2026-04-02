@@ -2,7 +2,7 @@
 
 namespace ToDoFlow.API.Extensions
 {
-    public static class CorsExtensions
+    public static class CorsCollectionExtensions
     {
         public static IServiceCollection AddCustomCors(this IServiceCollection services, IConfiguration configuration)
         {

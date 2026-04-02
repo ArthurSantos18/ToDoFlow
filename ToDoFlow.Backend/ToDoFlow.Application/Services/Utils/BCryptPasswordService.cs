@@ -2,7 +2,7 @@
 
 namespace ToDoFlow.Application.Services.Utils
 {
-    public class PasswordService : IPasswordService
+    public class BCryptPasswordService : IBCryptPasswordService
     {
         public string HashPassword(string password)
         {

@@ -4,7 +4,7 @@ using ToDoFlow.Application.Services;
 
 namespace ToDoFlow.API.Extensions
 {
-    public static class ServiceExtensions
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
@@ -16,7 +16,7 @@ namespace ToDoFlow.API.Extensions
             services.AddScoped<IEmailService, EmailService>();
 
             services.AddSingleton<ITokenService, TokenService>();
-            services.AddSingleton<IPasswordService, PasswordService>();
+            services.AddSingleton<IBCryptPasswordService, BCryptPasswordService>();
 
             return services;
         }

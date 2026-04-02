@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ToDoFlow.API.Extensions
 {
-    public static class AuthenticationExtensions
+    public static class AuthenticationCollectionExtensions
     {
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {

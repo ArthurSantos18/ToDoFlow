@@ -3,7 +3,7 @@ using ToDoFlow.Infrastructure.Repositories;
 
 namespace ToDoFlow.API.Extensions
 {
-    public static class RepositoryExtensions
+    public static class RepositoryCollectionExtensions
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {

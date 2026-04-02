@@ -2,7 +2,7 @@
 
 namespace ToDoFlow.API.Extensions
 {
-    public static class SwaggerExtensions
+    public static class SwaggerCollectionExtensions
     {
         public static IServiceCollection AddSwaggerWithJwt(this IServiceCollection services)
         {
