@@ -12,12 +12,12 @@ using ToDoFlow.Infrastructure.Repositories.Interfaces;
 
 namespace ToDoFlow.Application.Services
 {
-    public class AccountService(IConfiguration configuration, IBCryptPasswordService passwordService, ITokenService tokenService,
+    public class AccountService(IConfiguration configuration, IPasswordService passwordService, ITokenService tokenService,
         IEmailService emailService, IUserRepository userRepository, IMapper mapper, IUserRefreshTokenRepository userRefreshTokenRepository): IAccountService
     {
         
         private readonly IConfiguration _configuration = configuration;
-        private readonly IBCryptPasswordService _passwordService = passwordService;
+        private readonly IPasswordService _passwordService = passwordService;
         private readonly ITokenService _tokenService = tokenService;
         private readonly IMapper _mapper = mapper;
         private readonly IEmailService _emailService = emailService;

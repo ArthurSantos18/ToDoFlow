@@ -7,14 +7,14 @@ using ToDoFlow.Application.Services.Utils;
 
 namespace ToDoFlow.Application.Services
 {
-    public class UserService(IUserRepository userRepository, IMapper mapper, IBCryptPasswordService passwordService, 
+    public class UserService(IUserRepository userRepository, IMapper mapper, IPasswordService passwordService, 
         ICategoryRepository categoryRepository, ITaskItemRepository taskItemRepository) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly ICategoryRepository _categoryRepository = categoryRepository;
         private readonly ITaskItemRepository _taskItemRepository = taskItemRepository;
         private readonly IMapper _mapper = mapper;
-        private readonly IBCryptPasswordService _passwordService = passwordService;
+        private readonly IPasswordService _passwordService = passwordService;
 
         public async Task<ApiResponse<UserReadDto>> CreateUserAsync(UserCreateDto userCreateDto)
         {

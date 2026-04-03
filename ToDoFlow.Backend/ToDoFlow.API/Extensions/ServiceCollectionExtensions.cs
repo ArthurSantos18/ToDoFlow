@@ -16,7 +16,7 @@ namespace ToDoFlow.API.Extensions
             services.AddScoped<IEmailService, EmailService>();
 
             services.AddSingleton<ITokenService, TokenService>();
-            services.AddSingleton<IBCryptPasswordService, BCryptPasswordService>();
+            services.AddSingleton<IPasswordService, BCryptPasswordService>();
 
             return services;
         }
